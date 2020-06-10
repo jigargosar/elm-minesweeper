@@ -69,6 +69,10 @@ toF2 =
     Tuple.mapBoth toFloat toFloat
 
 
+translate x y =
+    "translate(" ++ fpx x ++ "," ++ fpx y ++ ")"
+
+
 viewTile p =
     let
         ( x, y ) =
@@ -78,6 +82,6 @@ viewTile p =
         [ sWidth cw
         , sHeight cw
         , absolute
-        , style "transform" ("translate(" ++ fpx (x * cw) ++ "," ++ fpx (y * cw) ++ ")")
+        , style "transform" (translate (x * cw) (y * cw))
         ]
-        [ text "0" ]
+        [ text (Debug.toString p) ]
