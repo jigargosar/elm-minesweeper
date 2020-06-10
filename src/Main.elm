@@ -74,7 +74,9 @@ viewTile p =
         , style "overflow" "hidden"
         , style "outline" "1px solid dodgerblue"
         ]
-        [ text (Debug.toString p)
+        [ text " "
+
+        --, text (Debug.toString p)
         , text " "
         , text
             (if List.member p mines then
