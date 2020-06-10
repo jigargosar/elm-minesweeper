@@ -236,11 +236,6 @@ viewTile m loc =
         ]
 
 
-isOpen : Model -> Loc -> Bool
-isOpen model loc =
-    Set.member loc model.open
-
-
 tileAt loc =
     if isMine loc then
         "*"
