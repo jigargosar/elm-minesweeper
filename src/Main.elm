@@ -29,15 +29,15 @@ mines =
 
 
 gridWidth =
-    10
+    6
 
 
 gridHeight =
-    20
+    12
 
 
 cellWidth =
-    50
+    70
 
 
 gps =
@@ -71,6 +71,7 @@ viewTile p =
         , styleHeight cellWidth
         , absolute
         , transforms [ translate sp ]
+        , style "overflow" "hidden"
         ]
         [ text (Debug.toString p)
         , text " "
