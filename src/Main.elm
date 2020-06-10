@@ -77,10 +77,10 @@ viewTile p =
         , text " "
         , text
             (if List.member p mines then
-                "Mine"
+                "***"
 
              else
-                "Empty"
+                "___"
             )
         ]
 
