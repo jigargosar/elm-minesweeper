@@ -30,7 +30,7 @@ init : Model
 init =
     let
         testOpenedLoc =
-            collectZeroNeighbours Set.empty ( 0, 0 ) Set.empty Set.empty
+            collectZeroNeighbours ( 0, 0 ) Set.empty Set.empty
                 |> Debug.log "debug"
 
         openTestLoc ts =
@@ -54,12 +54,11 @@ type alias Loc =
     ( Int, Int )
 
 
-collectZeroNeighbours ignored loc pending collected =
+collectZeroNeighbours loc pending collected =
     let
         shouldReject n =
             isInvalidLoc n
                 || (neighbourMineCount n /= 0)
-                || Set.member n ignored
                 || Set.member n collected
 
         shouldKeep =
@@ -81,7 +80,7 @@ collectZeroNeighbours ignored loc pending collected =
                 |> Set.foldl (\z -> Set.union (z |> neighbourLocations |> List.filter isValidLoc |> Set.fromList)) nCollected
 
         x :: xs ->
-            collectZeroNeighbours ignored x (Set.fromList xs) nCollected
+            collectZeroNeighbours x (Set.fromList xs) nCollected
 
 
 update : Msg -> Model -> Model
