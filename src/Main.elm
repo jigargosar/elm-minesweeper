@@ -72,7 +72,15 @@ viewTile p =
         , absolute
         , transforms [ translate sp ]
         ]
-        [ text (Debug.toString p) ]
+        [ text (Debug.toString p)
+        , text
+            (if List.member p mines then
+                "Mine"
+
+             else
+                "Empty"
+            )
+        ]
 
 
 

@@ -1,0 +1,15 @@
+{
+  "name": "minesweeper",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Jigar Gosar <jigar.gosar@gmail.com>",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "parcel": "^1.12.4"
+  }
+}
