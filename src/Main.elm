@@ -30,7 +30,7 @@ init : Model
 init =
     let
         testOpenedLoc =
-            collectZeroNeighbours 0 ( 0, 0 ) Set.empty Set.empty
+            collectZeroNeighbours Set.empty ( 0, 0 ) Set.empty Set.empty
                 |> Debug.log "debug"
 
         openTestLoc ts =
@@ -54,42 +54,34 @@ type alias Loc =
     ( Int, Int )
 
 
-collectZeroNeighbours ct loc pending collected =
+collectZeroNeighbours ignored loc pending collected =
     let
-        isCollected n =
-            Set.member n collected
+        shouldReject n =
+            isInvalidLoc n
+                || (neighbourMineCount n /= 0)
+                || Set.member n ignored
+                || Set.member n collected
+
+        shouldKeep =
+            shouldReject >> not
 
         toProcess =
             loc
                 |> neighbourLocations
                 |> Set.fromList
-                |> Set.filter isValidLoc
-                |> Set.filter isZero
-                |> setReject isCollected
+                |> Set.filter shouldKeep
                 |> Set.union pending
 
         nCollected =
             Set.insert loc collected
     in
-    --if ct > 100 then
-    --    collected
-    --
-    --else
     case Set.toList toProcess of
         [] ->
             nCollected
                 |> Set.foldl (\z -> Set.union (z |> neighbourLocations |> List.filter isValidLoc |> Set.fromList)) nCollected
 
         x :: xs ->
-            collectZeroNeighbours (ct + 1) x (Set.fromList xs) nCollected
-
-
-setReject f =
-    Set.filter (f >> not)
-
-
-isZero loc =
-    neighbourMineCount loc == 0
+            collectZeroNeighbours ignored x (Set.fromList xs) nCollected
 
 
 update : Msg -> Model -> Model
@@ -129,9 +121,13 @@ update msg model =
 
 
 isValidLoc : Loc -> Bool
-isValidLoc ( x, y ) =
-    (x < 0 || y < 0 || x >= gridWidth || y >= gridHeight)
-        |> not
+isValidLoc =
+    isInvalidLoc >> not
+
+
+isInvalidLoc : Loc -> Bool
+isInvalidLoc ( x, y ) =
+    x < 0 || y < 0 || x >= gridWidth || y >= gridHeight
 
 
 tsAt : Model -> Loc -> Maybe TileState
