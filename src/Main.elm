@@ -17,11 +17,11 @@ main =
 mines : List ( Int, Int )
 mines =
     let
-        l =
+        cellCount =
             List.length gridPS
 
         minesGenerator =
-            Random.list l (Random.weighted ( 20, True ) [ ( 80, False ) ])
+            Random.list cellCount (Random.weighted ( 20, True ) [ ( 80, False ) ])
                 |> Random.map (\bs -> List.map2 pair gridPS bs |> List.filter second |> List.map first)
     in
     Random.step minesGenerator (Random.initialSeed 100)
