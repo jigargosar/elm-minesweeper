@@ -57,10 +57,10 @@ update msg model =
                             model
 
                         Closed ->
-                            { model | ts = Dict.insert loc Flagged model.ts }
+                            { model | ts = Dict.insert loc Open model.ts }
 
                         Flagged ->
-                            { model | ts = Dict.insert loc Closed model.ts }
+                            model
 
                 Nothing ->
                     model
