@@ -2,7 +2,9 @@ module Main exposing (main)
 
 import Html exposing (div, text)
 import Html.Attributes exposing (style)
+import Random
 import String exposing (fromFloat)
+import Tuple exposing (first, pair, second)
 
 
 main =
@@ -10,6 +12,20 @@ main =
         [ div [] [ text "MineSweeper" ]
         , viewGrid
         ]
+
+
+mines : List ( Int, Int )
+mines =
+    let
+        l =
+            List.length gps
+
+        minesGenerator =
+            Random.list l (Random.weighted ( 10, True ) [ ( 90, False ) ])
+                |> Random.map (\bs -> List.map2 pair gps bs |> List.filter second |> List.map first)
+    in
+    Random.step minesGenerator (Random.initialSeed 100)
+        |> first
 
 
 gridWidth =
