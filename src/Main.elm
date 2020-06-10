@@ -37,7 +37,7 @@ gridHeight =
 
 
 cellWidth =
-    50
+    150
 
 
 gps =
@@ -73,6 +73,7 @@ viewTile p =
         , transforms [ translate sp ]
         ]
         [ text (Debug.toString p)
+        , text " "
         , text
             (if List.member p mines then
                 "Mine"
