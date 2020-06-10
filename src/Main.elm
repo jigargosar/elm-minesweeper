@@ -83,6 +83,13 @@ collectZeroNeighbours loc pending collected =
             collectZeroNeighbours x (Set.fromList xs) nCollected
 
 
+neighboursHavingZeroNeighbouringMines loc =
+    loc
+        |> neighbourLocations
+        |> Set.fromList
+        |> Set.filter (\n -> not (isInvalidLoc n || neighbourMineCount n /= 0))
+
+
 update : Msg -> Model -> Model
 update msg model =
     case msg of
