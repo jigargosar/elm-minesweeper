@@ -1,8 +1,10 @@
 module Main exposing (main)
 
 import Browser
+import Dict exposing (Dict)
 import Html exposing (div, text)
 import Html.Attributes exposing (style)
+import Html.Events exposing (onClick)
 import Random
 import String exposing (fromFloat)
 import Tuple exposing (first, pair, second)
@@ -16,18 +18,31 @@ main =
         }
 
 
+type alias Model =
+    { dict : Dict I2 Cover }
+
+
 init =
-    {}
+    { dict = Dict.empty }
+
+
+type Cover
+    = Open
 
 
 type Msg
-    = Click
+    = Click I2
 
 
+type alias I2 =
+    ( Int, Int )
+
+
+update : Msg -> Model -> Model
 update msg model =
     case msg of
-        Click ->
-            model
+        Click pos ->
+            { model | dict = Dict.insert pos Open model.dict }
 
 
 view _ =
@@ -96,6 +111,7 @@ viewTile p =
         , transforms [ translate sp ]
         , style "overflow" "hidden"
         , style "outline" "1px solid dodgerblue"
+        , onClick (Click p)
         ]
         [ text " "
 
