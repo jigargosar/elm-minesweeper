@@ -65,10 +65,6 @@ viewGrid =
         )
 
 
-toF2 =
-    Tuple.mapBoth toFloat toFloat
-
-
 translate x y =
     "translate(" ++ fpx x ++ "," ++ fpx y ++ ")"
 
