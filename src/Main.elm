@@ -30,15 +30,19 @@ type alias Model =
 init : Model
 init =
     let
-        _ =
+        testOpenedLoc =
             collectZeroNeighbours 0 ( 0, 0 ) Set.empty Set.empty Set.empty
                 |> Debug.log "debug"
+
+        openTestLoc ts =
+            Set.foldl (\l -> Dict.insert l Open) ts testOpenedLoc
     in
     { open = Set.empty
     , ts =
         gridPS
             |> List.map (\loc -> ( loc, Closed ))
             |> Dict.fromList
+            |> openTestLoc
     }
 
 
