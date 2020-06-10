@@ -50,7 +50,20 @@ update : Msg -> Model -> Model
 update msg model =
     case msg of
         Click loc ->
-            { model | open = Set.insert loc model.open }
+            case tsAt model loc of
+                Just s ->
+                    case s of
+                        Open ->
+                            model
+
+                        Closed ->
+                            { model | ts = Dict.insert loc Flagged model.ts }
+
+                        Flagged ->
+                            { model | ts = Dict.insert loc Closed model.ts }
+
+                Nothing ->
+                    model
 
         RightClick loc ->
             case tsAt model loc of
