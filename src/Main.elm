@@ -7,7 +7,7 @@ import Html.Attributes exposing (style)
 import Html.Events exposing (onClick)
 import Random
 import Set exposing (Set)
-import String exposing (fromFloat)
+import String exposing (fromFloat, fromInt)
 import Tuple exposing (first, pair, second)
 
 
@@ -122,11 +122,29 @@ viewTile m p =
 
 
 tileAt loc =
-    if List.member loc mines then
+    if isMine loc then
         "***"
 
     else
-        ""
+        let
+            mc =
+                neighbourMineCount loc
+        in
+        if mc > 0 then
+            fromInt mc
+
+        else
+            ""
+
+
+neighbourMineCount loc =
+    neighbourLocations loc
+        |> List.filter isMine
+        |> List.length
+
+
+isMine loc =
+    List.member loc mines
 
 
 neighbourLocations ( x, y ) =
