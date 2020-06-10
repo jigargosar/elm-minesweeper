@@ -31,7 +31,6 @@ init : Model
 init =
     let
         _ =
-            --1
             collectZeroNeighbours 0 ( 0, 0 ) Set.empty Set.empty Set.empty
                 |> Debug.log "debug"
     in
