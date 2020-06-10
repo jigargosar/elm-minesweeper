@@ -73,15 +73,19 @@ translate x y =
     "translate(" ++ fpx x ++ "," ++ fpx y ++ ")"
 
 
+toScreenCords ( x, y ) =
+    ( toFloat x * cw, toFloat y * cw )
+
+
 viewTile p =
     let
-        ( x, y ) =
-            toF2 p
+        ( sx, sy ) =
+            toScreenCords p
     in
     div
         [ sWidth cw
         , sHeight cw
         , absolute
-        , style "transform" (translate (x * cw) (y * cw))
+        , style "transform" (translate sx sy)
         ]
         [ text (Debug.toString p) ]
