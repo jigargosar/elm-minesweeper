@@ -54,6 +54,15 @@ openTileAt loc model =
                     model
 
                 Closed ->
+                    let
+                        _ =
+                            if neighbourMineCount loc == 0 then
+                                neighbourLocations loc
+                                    |> List.foldl (\nl nm -> openTileAt nl nm) { model | ts = Dict.insert loc Open model.ts }
+
+                            else
+                                { model | ts = Dict.insert loc Open model.ts }
+                    in
                     { model | ts = Dict.insert loc Open model.ts }
 
                 Flagged ->
@@ -67,21 +76,22 @@ update : Msg -> Model -> Model
 update msg model =
     case msg of
         Click loc ->
-            case tsAt model loc of
-                Just s ->
-                    case s of
-                        Open ->
-                            model
+            openTileAt loc model
 
-                        Closed ->
-                            { model | ts = Dict.insert loc Open model.ts }
-
-                        Flagged ->
-                            model
-
-                Nothing ->
-                    model
-
+        --case tsAt model loc of
+        --    Just s ->
+        --        case s of
+        --            Open ->
+        --                model
+        --
+        --            Closed ->
+        --                { model | ts = Dict.insert loc Open model.ts }
+        --
+        --            Flagged ->
+        --                model
+        --
+        --    Nothing ->
+        --        model
         RightClick loc ->
             case tsAt model loc of
                 Just s ->
