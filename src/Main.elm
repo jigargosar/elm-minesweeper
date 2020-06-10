@@ -32,8 +32,8 @@ gps =
 
 viewGrid =
     div
-        [ widthPx (gridWidth * cellWidth)
-        , heightPx (gridHeight * cellWidth)
+        [ styleWidth (gridWidth * cellWidth)
+        , styleHeight (gridHeight * cellWidth)
         , relative
         ]
         (gps
@@ -51,8 +51,8 @@ viewTile p =
             toScreenCords p
     in
     div
-        [ widthPx cellWidth
-        , heightPx cellWidth
+        [ styleWidth cellWidth
+        , styleHeight cellWidth
         , absolute
         , transforms [ translate sp ]
         ]
@@ -75,11 +75,11 @@ floatPx n =
     fromFloat n ++ "px"
 
 
-widthPx =
+styleWidth =
     stylePx "width"
 
 
-heightPx =
+styleHeight =
     stylePx "height"
 
 
