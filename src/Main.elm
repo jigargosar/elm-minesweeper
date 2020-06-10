@@ -72,6 +72,7 @@ viewTile p =
         , absolute
         , transforms [ translate sp ]
         , style "overflow" "hidden"
+        , style "outline" "1px solid dodgerblue"
         ]
         [ text (Debug.toString p)
         , text " "
