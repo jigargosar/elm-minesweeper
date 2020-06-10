@@ -81,24 +81,17 @@ collectZeroNeighbours ct loc pending ignore collected =
         nCollected =
             Set.insert loc collected
     in
-    if ct > 100 then
-        let
-            _ =
-                Debug.log "debug" ct
-        in
-        collected
+    --if ct > 100 then
+    --    collected
+    --
+    --else
+    case Set.toList toProcess of
+        [] ->
+            nCollected
+                |> Set.foldl (\z -> Set.union (z |> neighbourLocations |> List.filter isValidLoc |> Set.fromList)) nCollected
 
-    else
-        case Set.toList toProcess of
-            [] ->
-                let
-                    _ =
-                        Debug.log "debug" ct
-                in
-                nCollected
-
-            x :: xs ->
-                collectZeroNeighbours (ct + 1) x (Set.fromList xs) ignore nCollected
+        x :: xs ->
+            collectZeroNeighbours (ct + 1) x (Set.fromList xs) ignore nCollected
 
 
 setReject f =
