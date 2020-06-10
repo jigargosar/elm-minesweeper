@@ -47,14 +47,14 @@ toScreenCords ( x, y ) =
 
 viewTile p =
     let
-        ( sx, sy ) =
+        sp =
             toScreenCords p
     in
     div
         [ widthPx cw
         , heightPx cw
         , absolute
-        , transforms [ translate sx sy ]
+        , transforms [ translate sp ]
         ]
         [ text (Debug.toString p) ]
 
@@ -91,5 +91,5 @@ absolute =
     style "position" "absolute"
 
 
-translate x y =
+translate ( x, y ) =
     "translate(" ++ floatPx x ++ "," ++ floatPx y ++ ")"
