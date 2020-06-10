@@ -155,10 +155,10 @@ toScreenCords ( x, y ) =
 
 
 viewTile : Model -> ( Int, Int ) -> Html Msg
-viewTile m p =
+viewTile m loc =
     let
         sp =
-            toScreenCords p
+            toScreenCords loc
     in
     div
         [ styleWidth cellWidth
@@ -172,15 +172,19 @@ viewTile m p =
         , style "display" "flex"
         , style "align-items" "center"
         , style "justify-content" "center"
-        , onClick (Click p)
-        , E.preventDefaultOn "contextmenu" (JD.succeed ( RightClick p, True ))
+        , onClick (Click loc)
+        , E.preventDefaultOn "contextmenu" (JD.succeed ( RightClick loc, True ))
         , style "user-select" "none"
         ]
-        [ if isOpen m p then
-            text (tileAt p)
+        [ case tsAt m loc of
+            Just Open ->
+                text (tileAt loc)
 
-          else
-            text ""
+            Just Flagged ->
+                text "F"
+
+            _ ->
+                text ""
         ]
 
 
