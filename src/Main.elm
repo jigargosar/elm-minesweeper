@@ -54,7 +54,7 @@ viewTile p =
         [ widthPx cw
         , heightPx cw
         , absolute
-        , style "transform" (translatePx sx sy)
+        , transforms [ translate sx sy ]
         ]
         [ text (Debug.toString p) ]
 
@@ -91,5 +91,5 @@ absolute =
     style "position" "absolute"
 
 
-translatePx x y =
+translate x y =
     "translate(" ++ floatPx x ++ "," ++ floatPx y ++ ")"
