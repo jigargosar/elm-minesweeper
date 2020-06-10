@@ -134,7 +134,8 @@ tileAt loc =
             fromInt mc
 
         else
-            ""
+            --""
+            fromInt mc
 
 
 neighbourMineCount loc =
