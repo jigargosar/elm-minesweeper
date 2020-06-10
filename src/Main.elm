@@ -29,19 +29,20 @@ type alias Model =
 init : Model
 init =
     let
-        testOpenedLoc =
+        locationsToOpen =
             collectZeroNeighbours ( 0, 0 ) Set.empty Set.empty
+                |> includeNeighboursOfEveryMember
                 |> Debug.log "debug"
 
-        openTestLoc ts =
-            Set.foldl (\l -> Dict.insert l Open) ts testOpenedLoc
+        openLocations ts =
+            Set.foldl (\l -> Dict.insert l Open) ts locationsToOpen
     in
     { open = Set.empty
     , ts =
         gridPS
             |> List.map (\loc -> ( loc, Closed ))
             |> Dict.fromList
-            |> openTestLoc
+            |> openLocations
     }
 
 
@@ -66,10 +67,14 @@ collectZeroNeighbours loc pending collected =
     of
         [] ->
             nCollected
-                |> Set.foldl (\z -> Set.union (validNeighbours z)) nCollected
 
         x :: xs ->
             collectZeroNeighbours x (Set.fromList xs) nCollected
+
+
+includeNeighboursOfEveryMember locSet =
+    locSet
+        |> Set.foldl (validNeighbours >> Set.union) locSet
 
 
 neighboursHavingZeroNeighbouringMines loc =
