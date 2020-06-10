@@ -66,7 +66,7 @@ collectZeroNeighbours loc pending collected =
     of
         [] ->
             nCollected
-                |> Set.foldl (\z -> Set.union (z |> neighbourLocations |> List.filter isValidLoc |> Set.fromList)) nCollected
+                |> Set.foldl (\z -> Set.union (validNeighbours z)) nCollected
 
         x :: xs ->
             collectZeroNeighbours x (Set.fromList xs) nCollected
