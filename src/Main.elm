@@ -1,6 +1,7 @@
 module Main exposing (main)
 
 import Browser
+import Dict exposing (Dict)
 import Html exposing (Html, div, text)
 import Html.Attributes exposing (style)
 import Html.Events as E exposing (onClick)
@@ -21,12 +22,16 @@ main =
 
 
 type alias Model =
-    { open : Set I2 }
+    { open : Set I2
+    , ts : Dict I2 TileState
+    }
 
 
 init : Model
 init =
-    { open = Set.empty }
+    { open = Set.empty
+    , ts = Dict.empty
+    }
 
 
 type Msg
