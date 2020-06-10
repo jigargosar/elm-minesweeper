@@ -22,8 +22,8 @@ main =
 
 
 type alias Model =
-    { open : Set I2
-    , ts : Dict I2 TileState
+    { open : Set Loc
+    , ts : Dict Loc TileState
     }
 
 
@@ -35,11 +35,11 @@ init =
 
 
 type Msg
-    = Click I2
-    | RightClick I2
+    = Click Loc
+    | RightClick Loc
 
 
-type alias I2 =
+type alias Loc =
     ( Int, Int )
 
 
@@ -51,6 +51,12 @@ update msg model =
 
         RightClick pos ->
             model
+
+
+tsAt : Model -> Loc -> TileState
+tsAt model loc =
+    Dict.get loc model.ts
+        |> Maybe.withDefault Closed
 
 
 type TileState
@@ -144,7 +150,7 @@ viewTile m p =
         ]
 
 
-isOpen : Model -> I2 -> Bool
+isOpen : Model -> Loc -> Bool
 isOpen model loc =
     Set.member loc model.open
 
