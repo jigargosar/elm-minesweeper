@@ -56,25 +56,14 @@ type alias Loc =
 
 collectZeroNeighbours loc pending collected =
     let
-        shouldReject n =
-            isInvalidLoc n
-                || (neighbourMineCount n /= 0)
-                || Set.member n collected
-
-        shouldKeep =
-            shouldReject >> not
-
-        toProcess =
-            loc
-                |> neighbourLocations
-                |> Set.fromList
-                |> Set.filter shouldKeep
-                |> Set.union pending
-
         nCollected =
             Set.insert loc collected
     in
-    case Set.toList toProcess of
+    case
+        Set.diff (neighboursHavingZeroNeighbouringMines loc) collected
+            |> Set.union pending
+            |> Set.toList
+    of
         [] ->
             nCollected
                 |> Set.foldl (\z -> Set.union (z |> neighbourLocations |> List.filter isValidLoc |> Set.fromList)) nCollected
@@ -94,10 +83,6 @@ validNeighbours loc =
         |> neighbourLocations
         |> Set.fromList
         |> Set.filter isValidLoc
-
-
-hasZeroNeighbouringMines loc =
-    not (isInvalidLoc loc || neighbourMineCount loc /= 0)
 
 
 update : Msg -> Model -> Model
