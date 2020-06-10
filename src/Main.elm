@@ -30,7 +30,10 @@ type alias Model =
 init : Model
 init =
     { open = Set.empty
-    , ts = Dict.empty
+    , ts =
+        gridPS
+            |> List.map (\loc -> ( loc, Closed ))
+            |> Dict.fromList
     }
 
 
@@ -46,17 +49,35 @@ type alias Loc =
 update : Msg -> Model -> Model
 update msg model =
     case msg of
-        Click pos ->
-            { model | open = Set.insert pos model.open }
+        Click loc ->
+            { model | open = Set.insert loc model.open }
 
-        RightClick pos ->
-            model
+        RightClick loc ->
+            case tsAt model loc of
+                Just s ->
+                    case s of
+                        Open ->
+                            model
+
+                        Closed ->
+                            { model | ts = Dict.insert loc Flagged model.ts }
+
+                        Flagged ->
+                            { model | ts = Dict.insert loc Closed model.ts }
+
+                Nothing ->
+                    model
 
 
-tsAt : Model -> Loc -> TileState
+isValidLoc : Loc -> Bool
+isValidLoc loc =
+    (loc < ( 0, 0 ) || loc >= ( gridWidth, gridHeight ))
+        |> not
+
+
+tsAt : Model -> Loc -> Maybe TileState
 tsAt model loc =
     Dict.get loc model.ts
-        |> Maybe.withDefault Closed
 
 
 type TileState
