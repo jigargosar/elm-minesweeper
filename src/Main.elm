@@ -37,7 +37,7 @@ gridHeight =
 
 
 cellWidth =
-    150
+    50
 
 
 gps =
