@@ -1,7 +1,6 @@
 module Main exposing (main)
 
 import Browser
-import Dict exposing (Dict)
 import Html exposing (Html, div, text)
 import Html.Attributes exposing (style)
 import Html.Events exposing (onClick)
@@ -20,16 +19,12 @@ main =
 
 
 type alias Model =
-    {}
+    { open : Set I2 }
 
 
 init : Model
 init =
-    {}
-
-
-type Cover
-    = Open
+    { open = Set.empty }
 
 
 type Msg
@@ -44,7 +39,7 @@ update : Msg -> Model -> Model
 update msg model =
     case msg of
         Click pos ->
-            model
+            { model | open = Set.insert pos model.open }
 
 
 view m =
