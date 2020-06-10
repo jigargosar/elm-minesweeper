@@ -24,30 +24,6 @@ cw =
     100
 
 
-spx s n =
-    style s (fpx n)
-
-
-fpx n =
-    fromFloat n ++ "px"
-
-
-sWidth =
-    spx "width"
-
-
-sHeight =
-    spx "height"
-
-
-relative =
-    style "position" "relative"
-
-
-absolute =
-    style "position" "absolute"
-
-
 gps =
     List.range 0 (gw - 1)
         |> List.map (\x -> List.range 0 (gh - 1) |> List.map (\y -> ( x, y )))
@@ -56,8 +32,8 @@ gps =
 
 viewGrid =
     div
-        [ sWidth (gw * cw)
-        , sHeight (gh * cw)
+        [ widthPx (gw * cw)
+        , heightPx (gh * cw)
         , relative
         ]
         (gps
@@ -66,7 +42,7 @@ viewGrid =
 
 
 translate x y =
-    "translate(" ++ fpx x ++ "," ++ fpx y ++ ")"
+    "translate(" ++ floatPx x ++ "," ++ floatPx y ++ ")"
 
 
 toScreenCords ( x, y ) =
@@ -79,9 +55,37 @@ viewTile p =
             toScreenCords p
     in
     div
-        [ sWidth cw
-        , sHeight cw
+        [ widthPx cw
+        , heightPx cw
         , absolute
         , style "transform" (translate sx sy)
         ]
         [ text (Debug.toString p) ]
+
+
+
+-- Helpers
+
+
+stylePx s n =
+    style s (floatPx n)
+
+
+floatPx n =
+    fromFloat n ++ "px"
+
+
+widthPx =
+    stylePx "width"
+
+
+heightPx =
+    stylePx "height"
+
+
+relative =
+    style "position" "relative"
+
+
+absolute =
+    style "position" "absolute"
