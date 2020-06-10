@@ -115,6 +115,11 @@ viewTile m p =
         , transforms [ translate sp ]
         , style "overflow" "hidden"
         , style "outline" "1px solid dodgerblue"
+        , style "font-size" "3rem"
+        , style "font-family" "monospace"
+        , style "display" "flex"
+        , style "align-items" "center"
+        , style "justify-content" "center"
         , onClick (Click p)
         ]
         [ text (tileAt p)
@@ -123,7 +128,7 @@ viewTile m p =
 
 tileAt loc =
     if isMine loc then
-        "***"
+        "@"
 
     else
         let
