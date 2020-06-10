@@ -5,7 +5,6 @@ import Dict exposing (Dict)
 import Html exposing (Html, div, text)
 import Html.Attributes exposing (style)
 import Html.Events as E exposing (onClick)
-import Html.Events.Extra.Mouse as Mouse
 import Json.Decode as JD
 import Random
 import Set exposing (Set)
