@@ -3,7 +3,9 @@ module Main exposing (main)
 import Browser
 import Html exposing (Html, div, text)
 import Html.Attributes exposing (style)
-import Html.Events exposing (onClick)
+import Html.Events as E exposing (onClick)
+import Html.Events.Extra.Mouse as Mouse
+import Json.Decode as JD
 import Random
 import Set exposing (Set)
 import String exposing (fromFloat, fromInt)
@@ -29,6 +31,7 @@ init =
 
 type Msg
     = Click I2
+    | RightClick I2
 
 
 type alias I2 =
@@ -40,6 +43,9 @@ update msg model =
     case msg of
         Click pos ->
             { model | open = Set.insert pos model.open }
+
+        RightClick pos ->
+            model
 
 
 view m =
@@ -116,6 +122,7 @@ viewTile m p =
         , style "align-items" "center"
         , style "justify-content" "center"
         , onClick (Click p)
+        , E.preventDefaultOn "contextmenu" (JD.succeed ( RightClick p, True ))
         , style "user-select" "none"
         ]
         [ if isOpen m p then
