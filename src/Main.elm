@@ -21,7 +21,7 @@ mines =
             List.length gps
 
         minesGenerator =
-            Random.list l (Random.weighted ( 10, True ) [ ( 90, False ) ])
+            Random.list l (Random.weighted ( 20, True ) [ ( 80, False ) ])
                 |> Random.map (\bs -> List.map2 pair gps bs |> List.filter second |> List.map first)
     in
     Random.step minesGenerator (Random.initialSeed 100)
