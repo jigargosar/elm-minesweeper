@@ -2,7 +2,7 @@ module Main exposing (main)
 
 import Browser
 import Dict exposing (Dict)
-import Html exposing (div, text)
+import Html exposing (Html, div, text)
 import Html.Attributes exposing (style)
 import Html.Events exposing (onClick)
 import Random
@@ -45,10 +45,10 @@ update msg model =
             { model | dict = Dict.insert pos Open model.dict }
 
 
-view _ =
+view m =
     div []
         [ div [] [ text "MineSweeper" ]
-        , viewGrid
+        , viewGrid m
         ]
 
 
@@ -84,14 +84,15 @@ gridPS =
         |> List.concat
 
 
-viewGrid =
+viewGrid : Model -> Html Msg
+viewGrid m =
     div
         [ styleWidth (gridWidth * cellWidth)
         , styleHeight (gridHeight * cellWidth)
         , relative
         ]
         (gridPS
-            |> List.map viewTile
+            |> List.map (viewTile m)
         )
 
 
@@ -99,7 +100,8 @@ toScreenCords ( x, y ) =
     ( toFloat x * cellWidth, toFloat y * cellWidth )
 
 
-viewTile p =
+viewTile : Model -> ( Int, Int ) -> Html Msg
+viewTile m p =
     let
         sp =
             toScreenCords p
@@ -113,18 +115,23 @@ viewTile p =
         , style "outline" "1px solid dodgerblue"
         , onClick (Click p)
         ]
-        [ text " "
+        [ case Dict.get p m.dict of
+            Nothing ->
+                text ""
 
-        --, text (Debug.toString p)
-        , text " "
-        , text
-            (if List.member p mines then
-                "***"
+            Just Open ->
+                case isMine m p of
+                    True ->
+                        text "***"
 
-             else
-                "___"
-            )
+                    False ->
+                        text "N"
         ]
+
+
+isMine : Model -> I2 -> Bool
+isMine model loc =
+    List.member loc mines
 
 
 
