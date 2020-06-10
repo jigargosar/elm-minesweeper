@@ -64,7 +64,7 @@ viewTile p =
 
 
 
--- Helpers
+-- Style Helpers
 
 
 stylePx s n =
