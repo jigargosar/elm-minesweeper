@@ -128,7 +128,7 @@ viewTile m p =
 
 tileAt loc =
     if isMine loc then
-        "@"
+        "*"
 
     else
         let
