@@ -29,6 +29,12 @@ type alias Model =
 
 init : Model
 init =
+    let
+        _ =
+            --1
+            collectZeroNeighbours 0 ( 0, 0 ) Set.empty Set.empty Set.empty
+                |> Debug.log "debug"
+    in
     { open = Set.empty
     , ts =
         gridPS
@@ -46,30 +52,51 @@ type alias Loc =
     ( Int, Int )
 
 
-openTileAt loc model =
-    case tsAt model loc of
-        Just s ->
-            case s of
-                Open ->
-                    model
+collectZeroNeighbours ct loc pending ignore collected =
+    let
+        isIgnored n =
+            Set.member n ignore
 
-                Closed ->
-                    let
-                        _ =
-                            if neighbourMineCount loc == 0 then
-                                neighbourLocations loc
-                                    |> List.foldl (\nl nm -> openTileAt nl nm) { model | ts = Dict.insert loc Open model.ts }
+        isCollected n =
+            Set.member n collected
 
-                            else
-                                { model | ts = Dict.insert loc Open model.ts }
-                    in
-                    { model | ts = Dict.insert loc Open model.ts }
+        nIgnore =
+            loc
+                |> neighbourLocations
+                |> Set.fromList
+                |> Set.union ignore
 
-                Flagged ->
-                    model
+        toProcess =
+            loc
+                |> neighbourLocations
+                |> Set.fromList
+                |> Set.filter isValidLoc
+                |> Set.filter isZero
+                |> setReject isIgnored
+                |> setReject isCollected
+                |> Set.union pending
 
-        Nothing ->
-            model
+        nCollected =
+            Set.insert loc collected
+    in
+    if ct > 100 then
+        collected
+
+    else
+        case Set.toList toProcess of
+            [] ->
+                nCollected
+
+            x :: xs ->
+                collectZeroNeighbours (ct + 1) x (Set.fromList xs) nIgnore nCollected
+
+
+setReject f =
+    Set.filter (f >> not)
+
+
+isZero loc =
+    neighbourMineCount loc == 0
 
 
 update : Msg -> Model -> Model
@@ -109,8 +136,8 @@ update msg model =
 
 
 isValidLoc : Loc -> Bool
-isValidLoc loc =
-    (loc < ( 0, 0 ) || loc >= ( gridWidth, gridHeight ))
+isValidLoc ( x, y ) =
+    (x < 0 || y < 0 || x >= gridWidth || y >= gridHeight)
         |> not
 
 
