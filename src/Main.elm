@@ -116,6 +116,7 @@ viewTile m p =
         , style "align-items" "center"
         , style "justify-content" "center"
         , onClick (Click p)
+        , style "user-select" "none"
         ]
         [ if isOpen m p then
             text (tileAt p)
