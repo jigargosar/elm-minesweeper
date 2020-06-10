@@ -117,8 +117,17 @@ viewTile m p =
         , style "justify-content" "center"
         , onClick (Click p)
         ]
-        [ text (tileAt p)
+        [ if isOpen m p then
+            text (tileAt p)
+
+          else
+            text ""
         ]
+
+
+isOpen : Model -> I2 -> Bool
+isOpen model loc =
+    Set.member loc model.open
 
 
 tileAt loc =
