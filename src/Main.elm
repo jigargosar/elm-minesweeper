@@ -18,11 +18,11 @@ mines : List ( Int, Int )
 mines =
     let
         l =
-            List.length gps
+            List.length gridPS
 
         minesGenerator =
             Random.list l (Random.weighted ( 20, True ) [ ( 80, False ) ])
-                |> Random.map (\bs -> List.map2 pair gps bs |> List.filter second |> List.map first)
+                |> Random.map (\bs -> List.map2 pair gridPS bs |> List.filter second |> List.map first)
     in
     Random.step minesGenerator (Random.initialSeed 100)
         |> first
@@ -40,7 +40,7 @@ cellWidth =
     70
 
 
-gps =
+gridPS =
     List.range 0 (gridWidth - 1)
         |> List.map (\x -> List.range 0 (gridHeight - 1) |> List.map (\y -> ( x, y )))
         |> List.concat
@@ -52,7 +52,7 @@ viewGrid =
         , styleHeight (gridHeight * cellWidth)
         , relative
         ]
-        (gps
+        (gridPS
             |> List.map viewTile
         )
 
