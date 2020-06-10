@@ -12,28 +12,28 @@ main =
         ]
 
 
-gw =
+gridWidth =
     10
 
 
-gh =
+gridHeight =
     20
 
 
-cw =
+cellWidth =
     100
 
 
 gps =
-    List.range 0 (gw - 1)
-        |> List.map (\x -> List.range 0 (gh - 1) |> List.map (\y -> ( x, y )))
+    List.range 0 (gridWidth - 1)
+        |> List.map (\x -> List.range 0 (gridHeight - 1) |> List.map (\y -> ( x, y )))
         |> List.concat
 
 
 viewGrid =
     div
-        [ widthPx (gw * cw)
-        , heightPx (gh * cw)
+        [ widthPx (gridWidth * cellWidth)
+        , heightPx (gridHeight * cellWidth)
         , relative
         ]
         (gps
@@ -42,7 +42,7 @@ viewGrid =
 
 
 toScreenCords ( x, y ) =
-    ( toFloat x * cw, toFloat y * cw )
+    ( toFloat x * cellWidth, toFloat y * cellWidth )
 
 
 viewTile p =
@@ -51,8 +51,8 @@ viewTile p =
             toScreenCords p
     in
     div
-        [ widthPx cw
-        , heightPx cw
+        [ widthPx cellWidth
+        , heightPx cellWidth
         , absolute
         , transforms [ translate sp ]
         ]
