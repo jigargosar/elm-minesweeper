@@ -1,5 +1,6 @@
 module Main exposing (main)
 
+import Browser
 import Html exposing (div, text)
 import Html.Attributes exposing (style)
 import Random
@@ -8,6 +9,28 @@ import Tuple exposing (first, pair, second)
 
 
 main =
+    Browser.sandbox
+        { init = init
+        , view = view
+        , update = update
+        }
+
+
+init =
+    {}
+
+
+type Msg
+    = Click
+
+
+update msg model =
+    case msg of
+        Click ->
+            model
+
+
+view _ =
     div []
         [ div [] [ text "MineSweeper" ]
         , viewGrid
