@@ -41,10 +41,6 @@ viewGrid =
         )
 
 
-translate x y =
-    "translate(" ++ floatPx x ++ "," ++ floatPx y ++ ")"
-
-
 toScreenCords ( x, y ) =
     ( toFloat x * cw, toFloat y * cw )
 
@@ -58,13 +54,17 @@ viewTile p =
         [ widthPx cw
         , heightPx cw
         , absolute
-        , style "transform" (translate sx sy)
+        , style "transform" (translatePx sx sy)
         ]
         [ text (Debug.toString p) ]
 
 
 
 -- Style Helpers
+
+
+transforms xs =
+    style "transform" (String.join " " xs)
 
 
 stylePx s n =
@@ -89,3 +89,7 @@ relative =
 
 absolute =
     style "position" "absolute"
+
+
+translatePx x y =
+    "translate(" ++ floatPx x ++ "," ++ floatPx y ++ ")"
