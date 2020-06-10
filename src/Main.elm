@@ -129,6 +129,10 @@ tileAt loc =
         ""
 
 
+neighbourLocations ( x, y ) =
+    List.map (\( dx, dy ) -> ( x + dx, y + dy )) unitNeighbours
+
+
 unitNeighbours =
     [ [ ( -1, -1 ), ( 0, -1 ), ( 1, -1 ) ]
     , [ ( -1, 0 ), ( 1, 0 ) ]
