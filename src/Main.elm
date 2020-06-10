@@ -6,6 +6,7 @@ import Html exposing (Html, div, text)
 import Html.Attributes exposing (style)
 import Html.Events exposing (onClick)
 import Random
+import Set exposing (Set)
 import String exposing (fromFloat)
 import Tuple exposing (first, pair, second)
 
@@ -19,11 +20,12 @@ main =
 
 
 type alias Model =
-    { dict : Dict I2 Cover }
+    {}
 
 
+init : Model
 init =
-    { dict = Dict.empty }
+    {}
 
 
 type Cover
@@ -42,7 +44,7 @@ update : Msg -> Model -> Model
 update msg model =
     case msg of
         Click pos ->
-            { model | dict = Dict.insert pos Open model.dict }
+            model
 
 
 view m =
@@ -115,23 +117,16 @@ viewTile m p =
         , style "outline" "1px solid dodgerblue"
         , onClick (Click p)
         ]
-        [ case Dict.get p m.dict of
-            Nothing ->
-                text ""
-
-            Just Open ->
-                case isMine m p of
-                    True ->
-                        text "***"
-
-                    False ->
-                        text "N"
+        [ text (tileAt p)
         ]
 
 
-isMine : Model -> I2 -> Bool
-isMine model loc =
-    List.member loc mines
+tileAt loc =
+    if List.member loc mines then
+        "***"
+
+    else
+        ""
 
 
 
