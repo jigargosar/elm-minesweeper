@@ -76,22 +76,21 @@ update : Msg -> Model -> Model
 update msg model =
     case msg of
         Click loc ->
-            openTileAt loc model
+            case tsAt model loc of
+                Just s ->
+                    case s of
+                        Open ->
+                            model
 
-        --case tsAt model loc of
-        --    Just s ->
-        --        case s of
-        --            Open ->
-        --                model
-        --
-        --            Closed ->
-        --                { model | ts = Dict.insert loc Open model.ts }
-        --
-        --            Flagged ->
-        --                model
-        --
-        --    Nothing ->
-        --        model
+                        Closed ->
+                            { model | ts = Dict.insert loc Open model.ts }
+
+                        Flagged ->
+                            model
+
+                Nothing ->
+                    model
+
         RightClick loc ->
             case tsAt model loc of
                 Just s ->
