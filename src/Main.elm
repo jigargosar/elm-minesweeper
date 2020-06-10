@@ -46,6 +46,23 @@ type alias Loc =
     ( Int, Int )
 
 
+openTileAt loc model =
+    case tsAt model loc of
+        Just s ->
+            case s of
+                Open ->
+                    model
+
+                Closed ->
+                    { model | ts = Dict.insert loc Open model.ts }
+
+                Flagged ->
+                    model
+
+        Nothing ->
+            model
+
+
 update : Msg -> Model -> Model
 update msg model =
     case msg of
