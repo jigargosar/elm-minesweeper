@@ -80,11 +80,19 @@ collectZeroNeighbours ct loc pending ignore collected =
             Set.insert loc collected
     in
     if ct > 100 then
+        let
+            _ =
+                Debug.log "debug" ct
+        in
         collected
 
     else
         case Set.toList toProcess of
             [] ->
+                let
+                    _ =
+                        Debug.log "debug" ct
+                in
                 nCollected
 
             x :: xs ->
