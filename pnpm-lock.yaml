@@ -1,4 +1,6 @@
 dependencies:
+  elm-hot: 1.1.4
+  node-elm-compiler: 5.0.4
   parcel: 1.12.4
 lockfileVersion: 5.1
 packages:
@@ -2131,6 +2133,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-f4x70okzZbIQl/NSRLkI/+tteV/9WqL98zx+SQ69KbXxmVrmjwsNUPn/gYJJ0sHvEak24cZgHIPegRePAtA/xw==
+  /elm-hot/1.1.4:
+    dev: false
+    resolution:
+      integrity: sha512-qPDP/o/Fkifriaxaf3E7hHFB5L6Ijihyg8is4A6xna6/h/zebUiNssbQrxywI2oxNUkr6W/leEu/WlIC1tmVnw==
   /emoji-regex/7.0.3:
     dev: false
     resolution:
@@ -2390,6 +2396,16 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-1USBHUKPmOsGpj3EAtJAPDKMOPc=
+  /find-elm-dependencies/2.0.2:
+    dependencies:
+      firstline: 1.2.0
+      lodash: 4.17.15
+    dev: false
+    engines:
+      node: '>=4.0.0'
+    hasBin: true
+    resolution:
+      integrity: sha512-nM5UCbccD1G8CGK2GsM7ykG3ksOAl9E+34jiDfl07CAl2OPnLpBVWY2hlxEmIkSBfdJjSopEowWHrO0cI8RhxQ==
   /find-up/2.1.0:
     dependencies:
       locate-path: 2.0.0
@@ -2406,6 +2422,12 @@ packages:
       node: '>=6'
     resolution:
       integrity: sha512-1yD6RmLI1XBfxugvORwlck6f75tYL+iR0jqwsOrOxMZyGYqUuDhJ0l4AXdO1iX/FTs9cBAMEk1gWSEx1kSbylg==
+  /firstline/1.2.0:
+    dev: false
+    engines:
+      node: '>=4.0.0'
+    resolution:
+      integrity: sha1-yfSIbn9/vwr8EtcZQdzgaxkq6gU=
   /for-in/1.0.2:
     dev: false
     engines:
@@ -3428,6 +3450,17 @@ packages:
     dev: false
     resolution:
       integrity: sha512-ibPK3iA+vaY1eEjESkQkM0BbCqFOaZMiXRTtdB0u7b4djtY6JnsjvPdUHVMg6xQt3B8fpTTWHI9A+ADjM9frzg==
+  /node-elm-compiler/5.0.4:
+    dependencies:
+      cross-spawn: 6.0.5
+      find-elm-dependencies: 2.0.2
+      lodash: 4.17.15
+      temp: 0.9.1
+    dev: false
+    engines:
+      node: '>=4.0.0'
+    resolution:
+      integrity: sha512-VQsT8QSierYGkHzRed+b4MnccQVF1+qPHunE8jBoU7jD6YpuRqCDPzEoC2zfyEJS80qVnlMZrqobLnyjzX9lJg==
   /node-forge/0.7.6:
     dev: false
     resolution:
@@ -4569,6 +4602,13 @@ packages:
     dev: false
     resolution:
       integrity: sha1-QzdOLiyglosO8VI0YLfXMP8i7rM=
+  /rimraf/2.6.3:
+    dependencies:
+      glob: 7.1.6
+    dev: false
+    hasBin: true
+    resolution:
+      integrity: sha512-mwqeW5XsA2qAejG46gYdENaxXjx9onRNCfn7L0duuP4hCuTIi/QO7PDK07KJfp1d+izWPrzEJDcSqBa0OZQriA==
   /rimraf/2.7.1:
     dependencies:
       glob: 7.1.6
@@ -5026,6 +5066,14 @@ packages:
     dev: false
     resolution:
       integrity: sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw==
+  /temp/0.9.1:
+    dependencies:
+      rimraf: 2.6.3
+    dev: false
+    engines:
+      node: '>=6.0.0'
+    resolution:
+      integrity: sha512-WMuOgiua1xb5R56lE0eH6ivpVmg/lq2OHm4+LtT/xtEtPQ+sz6N3bBM6WZ5FvO1lO4IKIOb43qnhoc4qxP5OeA==
   /terser/3.17.0:
     dependencies:
       commander: 2.20.3
@@ -5458,4 +5506,6 @@ packages:
     resolution:
       integrity: sha512-ZbotRWhF+lkjijC/VhmOT9wSgyBQ7+zr13+YLkhfsSiTriYsMzkTUFP18pFhWwBeMa5gUc1MzbhrO6/VB7c9Xg==
 specifiers:
+  elm-hot: ^1.1.4
+  node-elm-compiler: ^5.0.4
   parcel: ^1.12.4
