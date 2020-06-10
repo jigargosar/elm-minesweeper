@@ -48,6 +48,12 @@ update msg model =
             model
 
 
+type TileState
+    = Open
+    | Closed
+    | Flagged
+
+
 view m =
     div []
         [ div [] [ text "MineSweeper" ]
