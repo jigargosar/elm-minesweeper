@@ -30,7 +30,7 @@ init : Model
 init =
     let
         testOpenedLoc =
-            collectZeroNeighbours 0 ( 0, 0 ) Set.empty Set.empty Set.empty
+            collectZeroNeighbours 0 ( 0, 0 ) Set.empty Set.empty
                 |> Debug.log "debug"
 
         openTestLoc ts =
@@ -54,19 +54,10 @@ type alias Loc =
     ( Int, Int )
 
 
-collectZeroNeighbours ct loc pending ignore collected =
+collectZeroNeighbours ct loc pending collected =
     let
-        isIgnored n =
-            Set.member n ignore
-
         isCollected n =
             Set.member n collected
-
-        nIgnore =
-            loc
-                |> neighbourLocations
-                |> Set.fromList
-                |> Set.union ignore
 
         toProcess =
             loc
@@ -74,7 +65,6 @@ collectZeroNeighbours ct loc pending ignore collected =
                 |> Set.fromList
                 |> Set.filter isValidLoc
                 |> Set.filter isZero
-                |> setReject isIgnored
                 |> setReject isCollected
                 |> Set.union pending
 
@@ -91,7 +81,7 @@ collectZeroNeighbours ct loc pending ignore collected =
                 |> Set.foldl (\z -> Set.union (z |> neighbourLocations |> List.filter isValidLoc |> Set.fromList)) nCollected
 
         x :: xs ->
-            collectZeroNeighbours (ct + 1) x (Set.fromList xs) ignore nCollected
+            collectZeroNeighbours (ct + 1) x (Set.fromList xs) nCollected
 
 
 setReject f =
