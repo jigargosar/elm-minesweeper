@@ -96,7 +96,7 @@ collectZeroNeighbours ct loc pending ignore collected =
                 nCollected
 
             x :: xs ->
-                collectZeroNeighbours (ct + 1) x (Set.fromList xs) nIgnore nCollected
+                collectZeroNeighbours (ct + 1) x (Set.fromList xs) ignore nCollected
 
 
 setReject f =
