@@ -21,8 +21,7 @@ main =
 
 
 type alias Model =
-    { open : Set Loc
-    , ts : Dict Loc TileState
+    { ts : Dict Loc TileState
     }
 
 
@@ -37,8 +36,7 @@ init =
         openLocations ts =
             Set.foldl (\l -> Dict.insert l Open) ts locationsToOpen
     in
-    { open = Set.empty
-    , ts =
+    { ts =
         gridPS
             |> List.map (\loc -> ( loc, Closed ))
             |> Dict.fromList
