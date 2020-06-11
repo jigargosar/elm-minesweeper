@@ -101,7 +101,10 @@ update msg model =
 
                         Closed ->
                             if isMine loc then
-                                { model | gameState = Lost }
+                                { model
+                                    | gameState = Lost
+                                    , tsDict = Dict.insert loc Open model.tsDict
+                                }
 
                             else if neighbourMineCount loc == 0 then
                                 let
@@ -122,7 +125,7 @@ update msg model =
                                 { model | tsDict = Dict.insert loc Open nts }
 
                             else
-                                model
+                                { model | tsDict = Dict.insert loc Open model.tsDict }
 
                         Flagged ->
                             model
