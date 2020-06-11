@@ -228,23 +228,34 @@ viewTile m loc =
     let
         sp =
             toScreenCords loc
+
+        isOpenMine =
+            tsAt m loc == Just Open && isMine loc
     in
     div
-        [ styleWidth cellWidth
-        , styleHeight cellWidth
-        , absolute
-        , transforms [ translate sp ]
-        , style "overflow" "hidden"
-        , style "outline" "1px solid dodgerblue"
-        , style "font-size" "3rem"
-        , style "font-family" "monospace"
-        , style "display" "flex"
-        , style "align-items" "center"
-        , style "justify-content" "center"
-        , onClick (Click loc)
-        , E.preventDefaultOn "contextmenu" (JD.succeed ( RightClick loc, True ))
-        , style "user-select" "none"
-        ]
+        ([ styleWidth cellWidth
+         , styleHeight cellWidth
+         , absolute
+         , transforms [ translate sp ]
+         , style "overflow" "hidden"
+         , style "outline" "1px solid dodgerblue"
+         , style "font-size" "3rem"
+         , style "font-family" "monospace"
+         , style "display" "flex"
+         , style "align-items" "center"
+         , style "justify-content" "center"
+         , onClick (Click loc)
+         , E.preventDefaultOn "contextmenu" (JD.succeed ( RightClick loc, True ))
+         , style "user-select" "none"
+         ]
+            ++ (if isOpenMine then
+                    [ style "background-color" "red"
+                    ]
+
+                else
+                    []
+               )
+        )
         [ case tsAt m loc of
             Just Open ->
                 text (tileAt loc)
