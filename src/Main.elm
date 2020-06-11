@@ -21,7 +21,7 @@ main =
 
 
 type alias Model =
-    { ts : Dict Loc TileState
+    { tsDict : Dict Loc TileState
     , gameState : GameState
     }
 
@@ -37,7 +37,7 @@ type alias Loc =
 
 init : Model
 init =
-    { ts =
+    { tsDict =
         gridPS
             |> List.map (\loc -> ( loc, Closed ))
             |> Dict.fromList
@@ -117,9 +117,9 @@ update msg model =
                                                         _ ->
                                                             ts
                                                 )
-                                                model.ts
+                                                model.tsDict
                                 in
-                                { model | ts = Dict.insert loc Open nts }
+                                { model | tsDict = Dict.insert loc Open nts }
 
                             else
                                 model
@@ -138,10 +138,10 @@ update msg model =
                             model
 
                         Closed ->
-                            { model | ts = Dict.insert loc Flagged model.ts }
+                            { model | tsDict = Dict.insert loc Flagged model.tsDict }
 
                         Flagged ->
-                            { model | ts = Dict.insert loc Closed model.ts }
+                            { model | tsDict = Dict.insert loc Closed model.tsDict }
 
                 Nothing ->
                     model
@@ -159,7 +159,7 @@ isInvalidLoc ( x, y ) =
 
 tsAt : Model -> Loc -> Maybe TileState
 tsAt model loc =
-    Dict.get loc model.ts
+    Dict.get loc model.tsDict
 
 
 type TileState
