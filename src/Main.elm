@@ -95,18 +95,22 @@ update msg model =
                         Closed ->
                             let
                                 nts =
-                                    collectZeroNeighbours loc
-                                        |> includeNeighboursOfEveryMember
-                                        |> Set.foldl
-                                            (\n ts ->
-                                                case Dict.get n ts of
-                                                    Just Closed ->
-                                                        Dict.insert n Open ts
+                                    if neighbourMineCount loc == 0 then
+                                        collectZeroNeighbours loc
+                                            |> includeNeighboursOfEveryMember
+                                            |> Set.foldl
+                                                (\n ts ->
+                                                    case Dict.get n ts of
+                                                        Just Closed ->
+                                                            Dict.insert n Open ts
 
-                                                    _ ->
-                                                        ts
-                                            )
-                                            model.ts
+                                                        _ ->
+                                                            ts
+                                                )
+                                                model.ts
+
+                                    else
+                                        model.ts
                             in
                             { model | ts = Dict.insert loc Open nts }
 
