@@ -25,11 +25,15 @@ type alias Model =
     }
 
 
+type alias Loc =
+    ( Int, Int )
+
+
 init : Model
 init =
     let
         locationsToOpen =
-            collectZeroNeighbours ( 0, 0 ) Set.empty Set.empty
+            collectZeroNeighboursHelp ( 0, 0 ) Set.empty Set.empty
                 |> includeNeighboursOfEveryMember
                 |> Debug.log "debug"
 
@@ -49,11 +53,11 @@ type Msg
     | RightClick Loc
 
 
-type alias Loc =
-    ( Int, Int )
+collectZeroNeighbours loc =
+    collectZeroNeighboursHelp loc Set.empty Set.empty
 
 
-collectZeroNeighbours loc pending collected =
+collectZeroNeighboursHelp loc pending collected =
     let
         nCollected =
             Set.insert loc collected
@@ -67,7 +71,7 @@ collectZeroNeighbours loc pending collected =
             nCollected
 
         x :: xs ->
-            collectZeroNeighbours x (Set.fromList xs) nCollected
+            collectZeroNeighboursHelp x (Set.fromList xs) nCollected
 
 
 includeNeighboursOfEveryMember locSet =
@@ -99,7 +103,22 @@ update msg model =
                             model
 
                         Closed ->
-                            { model | ts = Dict.insert loc Open model.ts }
+                            let
+                                nts =
+                                    collectZeroNeighbours loc
+                                        |> includeNeighboursOfEveryMember
+                                        |> Set.foldl
+                                            (\n ts ->
+                                                case Dict.get n ts of
+                                                    Just Closed ->
+                                                        Dict.insert n Open ts
+
+                                                    _ ->
+                                                        ts
+                                            )
+                                            model.ts
+                            in
+                            { model | ts = Dict.insert loc Open nts }
 
                         Flagged ->
                             model
