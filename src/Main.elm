@@ -31,20 +31,10 @@ type alias Loc =
 
 init : Model
 init =
-    let
-        locationsToOpen =
-            collectZeroNeighboursHelp ( 0, 0 ) Set.empty Set.empty
-                |> includeNeighboursOfEveryMember
-                |> Debug.log "debug"
-
-        openLocations ts =
-            Set.foldl (\l -> Dict.insert l Open) ts locationsToOpen
-    in
     { ts =
         gridPS
             |> List.map (\loc -> ( loc, Closed ))
             |> Dict.fromList
-            |> openLocations
     }
 
 
