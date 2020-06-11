@@ -100,33 +100,29 @@ update msg model =
                             model
 
                         Closed ->
-                            let
-                                nModel =
-                                    if isMine loc then
-                                        { model | gameState = Lost }
+                            if isMine loc then
+                                { model | gameState = Lost }
 
-                                    else if neighbourMineCount loc == 0 then
-                                        let
-                                            nts =
-                                                collectZeroNeighbours loc
-                                                    |> includeNeighboursOfEveryMember
-                                                    |> Set.foldl
-                                                        (\n ts ->
-                                                            case Dict.get n ts of
-                                                                Just Closed ->
-                                                                    Dict.insert n Open ts
+                            else if neighbourMineCount loc == 0 then
+                                let
+                                    nts =
+                                        collectZeroNeighbours loc
+                                            |> includeNeighboursOfEveryMember
+                                            |> Set.foldl
+                                                (\n ts ->
+                                                    case Dict.get n ts of
+                                                        Just Closed ->
+                                                            Dict.insert n Open ts
 
-                                                                _ ->
-                                                                    ts
-                                                        )
-                                                        model.ts
-                                        in
-                                        { model | ts = Dict.insert loc Open nts }
+                                                        _ ->
+                                                            ts
+                                                )
+                                                model.ts
+                                in
+                                { model | ts = Dict.insert loc Open nts }
 
-                                    else
-                                        model
-                            in
-                            nModel
+                            else
+                                model
 
                         Flagged ->
                             model
