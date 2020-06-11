@@ -22,7 +22,13 @@ main =
 
 type alias Model =
     { ts : Dict Loc TileState
+    , gameState : GameState
     }
+
+
+type GameState
+    = PlayerTurn
+    | Lost
 
 
 type alias Loc =
@@ -35,6 +41,7 @@ init =
         gridPS
             |> List.map (\loc -> ( loc, Closed ))
             |> Dict.fromList
+    , gameState = PlayerTurn
     }
 
 
