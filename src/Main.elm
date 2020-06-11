@@ -101,7 +101,7 @@ update msg model =
 
                         Closed ->
                             let
-                                nm =
+                                nModel =
                                     if isMine loc then
                                         { model | gameState = Lost }
 
@@ -126,7 +126,7 @@ update msg model =
                                     else
                                         model
                             in
-                            nm
+                            nModel
 
                         Flagged ->
                             model
