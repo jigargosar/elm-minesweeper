@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "elm-live src/Main.elm --open --start-page src/index.html -- --output=main.js"
   },
   "keywords": [],
   "author": "Jigar Gosar <jigar.gosar@gmail.com>",
