@@ -2,6 +2,7 @@ module MineField exposing (..)
 
 import Dict
 import Random exposing (Generator)
+import Set exposing (Set)
 
 
 type alias I2 =
@@ -27,12 +28,12 @@ generator size minePct =
         |> Random.map (initCellDict size >> MineField size)
 
 
-initCellDict : I2 -> List I2 -> CellDict
+initCellDict : I2 -> Set I2 -> CellDict
 initCellDict size minePositions =
     Debug.todo "impl"
 
 
-minePositionsGenerator : I2 -> Float -> Generator (List I2)
+minePositionsGenerator : I2 -> Float -> Generator (Set I2)
 minePositionsGenerator ( w, h ) minePct =
     let
         cellTotal =
@@ -49,4 +50,5 @@ minePositionsGenerator ( w, h ) minePct =
                 List.map2 Tuple.pair positions boolList
                     |> List.filter Tuple.second
                     |> List.map Tuple.first
+                    |> Set.fromList
             )
