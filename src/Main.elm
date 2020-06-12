@@ -115,16 +115,6 @@ update msg model =
                     model
 
 
-isValidLoc : Loc -> Bool
-isValidLoc =
-    isInvalidLoc >> not
-
-
-isInvalidLoc : Loc -> Bool
-isInvalidLoc ( x, y ) =
-    x < 0 || y < 0 || x >= gridWidth || y >= gridHeight
-
-
 tsAt : Model -> Loc -> Maybe TileState
 tsAt model loc =
     Dict.get loc model.tsDict
