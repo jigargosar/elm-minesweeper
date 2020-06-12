@@ -286,13 +286,6 @@ viewTile m loc =
         ]
 
 
-
---neighbourMineCount loc =
---    neighbourLocations loc
---        |> List.filter isMine
---        |> List.length
-
-
 neighbourLocations ( x, y ) =
     List.map (\( dx, dy ) -> ( x + dx, y + dy )) unitNeighbours
 
