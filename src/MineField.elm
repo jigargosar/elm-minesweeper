@@ -34,6 +34,7 @@ getAutoOpenPositionsFrom pos (MineField size grid) =
         |> includeNeighboursOfEveryMember size
 
 
+includeNeighboursOfEveryMember : IntSize -> Set ( Int, Int ) -> Set ( Int, Int )
 includeNeighboursOfEveryMember size posSet =
     posSet
         |> Set.foldl (\pos -> IntSize.neighbours size pos |> Set.fromList >> Set.union) posSet
