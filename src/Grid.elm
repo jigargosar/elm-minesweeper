@@ -1,4 +1,4 @@
-module Grid exposing (Grid, init, toDict)
+module Grid exposing (Grid, get, init, toDict)
 
 import Dict exposing (Dict)
 import More.Tuple as Tuple
@@ -17,3 +17,8 @@ init size f =
 toDict : Grid a -> Dict ( Int, Int ) a
 toDict (Grid d) =
     d
+
+
+get : ( Int, Int ) -> Grid a -> Maybe a
+get k (Grid d) =
+    Dict.get k d
