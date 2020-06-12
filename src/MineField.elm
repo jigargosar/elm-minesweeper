@@ -32,9 +32,9 @@ getAutoOpenPositionsFrom pos (MineField grid) =
         |> includeNeighboursOfEveryMember
 
 
-includeNeighboursOfEveryMember locSet =
-    locSet
-        |> Set.foldl (validNeighbours >> Set.union) locSet
+includeNeighboursOfEveryMember posSet =
+    posSet
+        |> Set.foldl (validNeighbours >> Set.union) posSet
 
 
 validNeighbours loc =
