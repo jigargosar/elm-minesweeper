@@ -3,6 +3,7 @@ module MineField exposing (Cell(..), MineField, generator, get, zeroNeighbours)
 import Dict
 import Grid
 import GridSize exposing (GridSize)
+import More.Tuple as Tuple
 import Random exposing (Generator)
 import Set exposing (Set)
 
@@ -46,21 +47,21 @@ zeroNeighbours : I2 -> MineField -> Set I2
 zeroNeighbours position (MineField size d) =
     let
         nPos =
-            neighbourPositionsOf position
+            Tuple.neighboursOf position
     in
-    Dict.filter (\k v -> Set.member k nPos && v == Empty 0) d
+    Dict.filter (\k v -> List.member k nPos && v == Empty 0) d
         |> Dict.keys
         |> Set.fromList
 
 
 initCellDict : GridSize -> Set I2 -> CellDict
-initCellDict size minePositions =
+initCellDict size minePosSet =
     let
         neighbourMineCount pos =
-            neighbourPositionsOf pos
-                |> Set.foldl
+            Tuple.neighboursOf pos
+                |> List.foldl
                     (\nPos count ->
-                        if Set.member nPos minePositions then
+                        if Set.member nPos minePosSet then
                             count + 1
 
                         else
@@ -70,7 +71,7 @@ initCellDict size minePositions =
     in
     Grid.init size
         (\pos ->
-            if Set.member pos minePositions then
+            if Set.member pos minePosSet then
                 Mine
 
             else
@@ -93,21 +94,3 @@ minePositionsGenerator size minePct =
                     |> List.map Tuple.first
                     |> Set.fromList
             )
-
-
-neighbourPositionsOf xy =
-    Set.map (tupleMap2 (+) xy) unitNeighbours
-
-
-tupleMap2 : (a -> b -> c) -> ( a, a ) -> ( b, b ) -> ( c, c )
-tupleMap2 f ( a1, a2 ) ( b1, b2 ) =
-    ( f a1 b1, f a2 b2 )
-
-
-unitNeighbours =
-    [ [ ( -1, -1 ), ( 0, -1 ), ( 1, -1 ) ]
-    , [ ( -1, 0 ), ( 1, 0 ) ]
-    , [ ( -1, 1 ), ( 0, 1 ), ( 1, 1 ) ]
-    ]
-        |> List.concat
-        |> Set.fromList
