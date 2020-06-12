@@ -6,10 +6,11 @@ import Html exposing (Html, div, text)
 import Html.Attributes exposing (style)
 import Html.Events as E exposing (onClick)
 import Json.Decode as JD
+import MineField exposing (MineField)
 import Random
 import Set exposing (Set)
 import String exposing (fromFloat, fromInt)
-import Tuple exposing (first, pair, second)
+import Tuple exposing (first)
 
 
 main =
@@ -58,9 +59,15 @@ collectZeroNeighboursHelp loc pending collected =
     let
         nCollected =
             Set.insert loc collected
+
+        neighboursHavingZeroNeighbouringMines =
+            MineField.neighbourDict loc mines
+                |> Dict.filter (\_ v -> v == MineField.Empty 0)
+                |> Dict.keys
+                |> Set.fromList
     in
     case
-        Set.diff (neighboursHavingZeroNeighbouringMines loc) collected
+        Set.diff neighboursHavingZeroNeighbouringMines collected
             |> Set.union pending
             |> Set.toList
     of
@@ -76,10 +83,11 @@ includeNeighboursOfEveryMember locSet =
         |> Set.foldl (validNeighbours >> Set.union) locSet
 
 
-neighboursHavingZeroNeighbouringMines loc =
-    loc
-        |> validNeighbours
-        |> Set.filter (\n -> neighbourMineCount n == 0)
+
+--neighboursHavingZeroNeighbouringMines loc =
+--    loc
+--        |> validNeighbours
+--        |> Set.filter (\n -> neighbourMineCount n == 0)
 
 
 validNeighbours loc =
@@ -100,32 +108,38 @@ update msg model =
                             model
 
                         Closed ->
-                            if isMine loc then
-                                { model
-                                    | gameState = Lost
-                                    , tsDict = Dict.insert loc Open model.tsDict
-                                }
+                            case MineField.get loc mines of
+                                Nothing ->
+                                    model
 
-                            else if neighbourMineCount loc == 0 then
-                                let
-                                    nts =
-                                        collectZeroNeighbours loc
-                                            |> includeNeighboursOfEveryMember
-                                            |> Set.foldl
-                                                (\n ts ->
-                                                    case Dict.get n ts of
-                                                        Just Closed ->
-                                                            Dict.insert n Open ts
+                                Just cell ->
+                                    case cell of
+                                        MineField.Mine ->
+                                            { model
+                                                | gameState = Lost
+                                                , tsDict = Dict.insert loc Open model.tsDict
+                                            }
 
-                                                        _ ->
-                                                            ts
-                                                )
-                                                model.tsDict
-                                in
-                                { model | tsDict = Dict.insert loc Open nts }
+                                        MineField.Empty 0 ->
+                                            let
+                                                nts =
+                                                    collectZeroNeighbours loc
+                                                        |> includeNeighboursOfEveryMember
+                                                        |> Set.foldl
+                                                            (\n ts ->
+                                                                case Dict.get n ts of
+                                                                    Just Closed ->
+                                                                        Dict.insert n Open ts
 
-                            else
-                                { model | tsDict = Dict.insert loc Open model.tsDict }
+                                                                    _ ->
+                                                                        ts
+                                                            )
+                                                            model.tsDict
+                                            in
+                                            { model | tsDict = Dict.insert loc Open nts }
+
+                                        MineField.Empty _ ->
+                                            { model | tsDict = Dict.insert loc Open model.tsDict }
 
                         Flagged ->
                             model
@@ -178,15 +192,16 @@ view m =
         ]
 
 
-mines : List ( Int, Int )
+mines : MineField
 mines =
     let
         minePct =
             0.1
 
         minesGenerator =
-            Random.list (List.length gridPS) (Random.weighted ( minePct, True ) [ ( 1 - minePct, False ) ])
-                |> Random.map (\bs -> List.map2 pair gridPS bs |> List.filter second |> List.map first)
+            --Random.list (List.length gridPS) (Random.weighted ( minePct, True ) [ ( 1 - minePct, False ) ])
+            --    |> Random.map (\bs -> List.map2 pair gridPS bs |> List.filter second |> List.map first)
+            MineField.generator ( gridWidth, gridHeight ) minePct
     in
     Random.step minesGenerator (Random.initialSeed 1)
         |> first
@@ -233,7 +248,7 @@ viewTile m loc =
             toScreenCords loc
 
         isOpenMine =
-            tsAt m loc == Just Open && isMine loc
+            tsAt m loc == Just Open && MineField.get loc mines == Just MineField.Mine
     in
     div
         ([ styleWidth cellWidth
@@ -272,30 +287,24 @@ viewTile m loc =
 
 
 tileAt loc =
-    if isMine loc then
-        "*"
+    case MineField.get loc mines of
+        Nothing ->
+            ""
 
-    else
-        let
-            mc =
-                neighbourMineCount loc
-        in
-        if mc > 0 then
-            fromInt mc
+        Just cell ->
+            case cell of
+                MineField.Mine ->
+                    "*"
 
-        else
-            --""
-            fromInt mc
+                MineField.Empty nmc ->
+                    fromInt nmc
 
 
-neighbourMineCount loc =
-    neighbourLocations loc
-        |> List.filter isMine
-        |> List.length
 
-
-isMine loc =
-    List.member loc mines
+--neighbourMineCount loc =
+--    neighbourLocations loc
+--        |> List.filter isMine
+--        |> List.length
 
 
 neighbourLocations ( x, y ) =

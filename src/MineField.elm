@@ -1,4 +1,4 @@
-module MineField exposing (MineField, generator)
+module MineField exposing (Cell(..), MineField, generator, get, neighbourDict)
 
 import Dict
 import Random exposing (Generator)
@@ -28,11 +28,25 @@ generator size minePct =
         |> Random.map (initCellDict size >> MineField size)
 
 
+get : I2 -> MineField -> Maybe Cell
+get pos (MineField size d) =
+    Dict.get pos d
+
+
+neighbourDict : I2 -> MineField -> CellDict
+neighbourDict position (MineField size d) =
+    let
+        nPos =
+            neighbourPositions position
+    in
+    Dict.filter (\k _ -> Set.member k nPos) d
+
+
 initCellDict : I2 -> Set I2 -> CellDict
 initCellDict size minePositions =
     let
         neighbourMineCount pos =
-            neighbourOf pos
+            neighbourPositions pos
                 |> Set.foldl
                     (\nPos count ->
                         if Set.member nPos minePositions then
@@ -70,7 +84,7 @@ initCellDict size minePositions =
 --
 
 
-neighbourOf ( x, y ) =
+neighbourPositions ( x, y ) =
     Set.map (\( dx, dy ) -> ( x + dx, y + dy )) unitNeighbours
 
 
