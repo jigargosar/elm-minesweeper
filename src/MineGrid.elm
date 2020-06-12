@@ -36,8 +36,8 @@ get k (MineGrid _ d) =
 
 
 getAutoOpenPosSetFrom : ( Int, Int ) -> MineGrid -> Set ( Int, Int )
-getAutoOpenPosSetFrom pos ((MineGrid size grid) as model) =
-    if hasNoSurroundingMines grid pos then
+getAutoOpenPosSetFrom pos ((MineGrid size dict) as model) =
+    if hasNoSurroundingMines dict pos then
         connectedPositionsWithZeroSurroundingMines model pos Set.empty Set.empty
             |> Size.includeNeighbours size
 
@@ -68,13 +68,13 @@ connectedPositionsWithZeroSurroundingMines model current pending acc =
             connectedPositionsWithZeroSurroundingMines model nCurrent (Set.fromList nPending) nAcc
 
 
-neighboursHavingZeroSurroundingMines (MineGrid size grid) pos =
+neighboursHavingZeroSurroundingMines (MineGrid size dict) pos =
     Size.neighbourSet size pos
-        |> Set.filter (hasNoSurroundingMines grid)
+        |> Set.filter (hasNoSurroundingMines dict)
 
 
-hasNoSurroundingMines grid pos =
-    Dict.get pos grid == Just (Empty 0)
+hasNoSurroundingMines dict pos =
+    Dict.get pos dict == Just (Empty 0)
 
 
 initCellDict : IntSize -> Set ( Int, Int ) -> PosDict Cell
