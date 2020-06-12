@@ -39,7 +39,7 @@ type alias Loc =
     ( Int, Int )
 
 
-init : () -> ( Model, Cmd Msg )
+init : { now : Int } -> ( Model, Cmd Msg )
 init _ =
     let
         minesGenerator =
