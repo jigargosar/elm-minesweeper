@@ -7,6 +7,7 @@ module IntSize exposing
     , isPosValid
     , neighbourSet
     , neighbours
+    , toPositions
     )
 
 import More.Tuple as Tuple
@@ -52,3 +53,8 @@ includeNeighboursOfEveryMember : IntSize -> Set ( Int, Int ) -> Set ( Int, Int )
 includeNeighboursOfEveryMember size posSet =
     posSet
         |> Set.foldl (neighbourSet size >> Set.union) posSet
+
+
+toPositions : IntSize -> List ( Int, Int )
+toPositions (IntSize size) =
+    Tuple.range size

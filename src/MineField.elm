@@ -1,9 +1,10 @@
 module MineField exposing (Cell(..), MineField, generator, get, getAutoOpenPositionsFrom)
 
-import Grid exposing (Grid)
+import Dict
 import IntSize exposing (IntSize)
 import List.Extra as List
 import More.Tuple as Tuple
+import PosDict exposing (PosDict)
 import Random exposing (Generator)
 import Set exposing (Set)
 
@@ -14,28 +15,32 @@ type Cell
 
 
 type MineField
-    = MineField IntSize (Grid Cell)
+    = MineField IntSize (PosDict Cell)
 
 
 generator : ( Int, Int ) -> Float -> Generator MineField
 generator size minePct =
+    let
+        intSize =
+            IntSize.fromTuple size
+    in
     minesGenerator size minePct
-        |> Random.map (initCellGrid size >> MineField (IntSize.fromTuple size))
+        |> Random.map (initCellDict intSize >> MineField intSize)
 
 
 get : ( Int, Int ) -> MineField -> Maybe Cell
 get k (MineField _ d) =
-    Grid.get k d
+    Dict.get k d
 
 
 getAutoOpenPositionsFrom : ( Int, Int ) -> MineField -> Set ( Int, Int )
-getAutoOpenPositionsFrom pos (MineField size grid) =
-    connectedPositionsWithZeroSurroundingMines grid pos Set.empty Set.empty
+getAutoOpenPositionsFrom pos (MineField size d) =
+    connectedPositionsWithZeroSurroundingMines d pos Set.empty Set.empty
         |> IntSize.includeNeighboursOfEveryMember size
 
 
 connectedPositionsWithZeroSurroundingMines :
-    Grid Cell
+    PosDict Cell
     -> ( Int, Int )
     -> Set ( Int, Int )
     -> Set ( Int, Int )
@@ -46,7 +51,7 @@ connectedPositionsWithZeroSurroundingMines grid current pending acc =
             Tuple.neighboursOf current
                 |> List.filter
                     (\neighbourPos ->
-                        Grid.get neighbourPos grid == Just (Empty 0)
+                        Dict.get neighbourPos grid == Just (Empty 0)
                     )
                 |> Set.fromList
 
@@ -65,8 +70,8 @@ connectedPositionsWithZeroSurroundingMines grid current pending acc =
             connectedPositionsWithZeroSurroundingMines grid nCurrent (Set.fromList nPending) nAcc
 
 
-initCellGrid : ( Int, Int ) -> Set ( Int, Int ) -> Grid Cell
-initCellGrid size minePosSet =
+initCellDict : IntSize -> Set ( Int, Int ) -> PosDict Cell
+initCellDict size minePosSet =
     let
         isMine pos =
             Set.member pos minePosSet
@@ -74,7 +79,7 @@ initCellGrid size minePosSet =
         neighbourMineCount pos =
             Tuple.neighboursOf pos |> List.count isMine
     in
-    Grid.init size
+    PosDict.init size
         (\pos ->
             if Set.member pos minePosSet then
                 Mine
