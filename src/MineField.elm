@@ -37,10 +37,10 @@ getConnectedZeroCellPositions pos (MineField g) =
     getConnectedZeroCellPositionsHelp g pos Set.empty Set.empty
 
 
-getConnectedZeroCellPositionsHelp grid pos pending acc =
+getConnectedZeroCellPositionsHelp grid current pending acc =
     let
         neighboursWithZeroSurroundingMines =
-            Tuple.neighboursOf pos
+            Tuple.neighboursOf current
                 |> List.filter
                     (\neighbourPos ->
                         Grid.get neighbourPos grid == Just (Empty 0)
@@ -48,7 +48,7 @@ getConnectedZeroCellPositionsHelp grid pos pending acc =
                 |> Set.fromList
 
         nAcc =
-            Set.insert pos acc
+            Set.insert current acc
     in
     case
         Set.diff neighboursWithZeroSurroundingMines acc
