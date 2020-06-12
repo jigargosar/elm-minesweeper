@@ -73,8 +73,13 @@ initCellDict size minePositions =
         (positionsFromSize size)
 
 
-neighbourPositions ( x, y ) =
-    Set.map (\( dx, dy ) -> ( x + dx, y + dy )) unitNeighbours
+neighbourPositions xy =
+    Set.map (tupleMap2 (+) xy) unitNeighbours
+
+
+tupleMap2 : (a -> b -> c) -> ( a, a ) -> ( b, b ) -> ( c, c )
+tupleMap2 f ( a1, a2 ) ( b1, b2 ) =
+    ( f a1 b1, f a2 b2 )
 
 
 unitNeighbours =
