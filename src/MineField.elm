@@ -24,14 +24,10 @@ type MineField
     = MineField IntSize (PosDict Cell)
 
 
-generator : ( Int, Int ) -> Float -> Generator MineField
+generator : IntSize -> Float -> Generator MineField
 generator size minePct =
-    let
-        intSize =
-            IntSize.fromTuple size
-    in
     minesGenerator size minePct
-        |> Random.map (initCellDict intSize >> MineField intSize)
+        |> Random.map (initCellDict size >> MineField size)
 
 
 get : ( Int, Int ) -> MineField -> Maybe Cell
@@ -42,7 +38,7 @@ get k (MineField _ d) =
 getAutoOpenPositionsFrom : ( Int, Int ) -> MineField -> Set ( Int, Int )
 getAutoOpenPositionsFrom pos (MineField size d) =
     connectedPositionsWithZeroSurroundingMines size d pos Set.empty Set.empty
-        |> IntSize.includeNeighbourPositions size
+        |> IntSize.includeNeighbours size
 
 
 connectedPositionsWithZeroSurroundingMines :
@@ -95,11 +91,11 @@ initCellDict size minePosSet =
         )
 
 
-minesGenerator : ( Int, Int ) -> Float -> Generator (Set ( Int, Int ))
+minesGenerator : IntSize -> Float -> Generator (Set ( Int, Int ))
 minesGenerator size minePct =
     let
         xs =
-            Tuple.range size
+            IntSize.positions size
     in
     Random.list (List.length xs) (Random.weighted ( minePct, True ) [ ( 1 - minePct, False ) ])
         |> Random.map

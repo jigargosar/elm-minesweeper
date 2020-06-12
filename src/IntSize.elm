@@ -1,13 +1,13 @@
 module IntSize exposing
     ( IntSize
     , fromTuple
-    , includeNeighbourPositions
+    , includeNeighbours
     , init
     , isPosInvalid
     , isPosValid
     , neighbourSet
     , neighbours
-    , toPositions
+    , positions
     )
 
 import More.Tuple as Tuple
@@ -49,12 +49,12 @@ neighbourSet size =
     neighbours size >> Set.fromList
 
 
-includeNeighbourPositions : IntSize -> Set ( Int, Int ) -> Set ( Int, Int )
-includeNeighbourPositions size posSet =
+includeNeighbours : IntSize -> Set ( Int, Int ) -> Set ( Int, Int )
+includeNeighbours size posSet =
     posSet
         |> Set.foldl (neighbourSet size >> Set.union) posSet
 
 
-toPositions : IntSize -> List ( Int, Int )
-toPositions (IntSize size) =
+positions : IntSize -> List ( Int, Int )
+positions (IntSize size) =
     Tuple.range size

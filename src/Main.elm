@@ -5,6 +5,7 @@ import Dict exposing (Dict)
 import Html exposing (Html, div, text)
 import Html.Attributes exposing (style)
 import Html.Events as E exposing (onClick)
+import IntSize as Size exposing (IntSize)
 import Json.Decode as JD
 import MineField exposing (MineField)
 import Random
@@ -152,10 +153,15 @@ mines =
             0.1
 
         minesGenerator =
-            MineField.generator ( gridWidth, gridHeight ) minePct
+            MineField.generator gridSize minePct
     in
     Random.step minesGenerator (Random.initialSeed 1)
         |> first
+
+
+gridSize : IntSize
+gridSize =
+    Size.init gridWidth gridHeight
 
 
 gridWidth =
