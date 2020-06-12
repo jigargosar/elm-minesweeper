@@ -1,4 +1,10 @@
-module MineField exposing (Cell(..), MineField, generator, get, getAutoOpenPositionsFrom)
+module MineField exposing
+    ( Cell(..)
+    , MineField
+    , generator
+    , get
+    , getAutoOpenPositionsFrom
+    )
 
 import Dict
 import IntSize exposing (IntSize)
