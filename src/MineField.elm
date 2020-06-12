@@ -1,4 +1,4 @@
-module MineField exposing (Cell(..), MineField, generator, get, zeroNeighbours)
+module MineField exposing (Cell(..), MineField, connectedZeroCells, generator, get, zeroNeighbours)
 
 import Dict exposing (Dict)
 import Grid exposing (Grid)
@@ -41,6 +41,7 @@ zeroNeighbours position (MineField d) =
         |> Set.fromList
 
 
+connectedZeroCells : ( Int, Int ) -> MineField -> Set ( Int, Int )
 connectedZeroCells pos (MineField g) =
     connectedZeroCellsHelp g pos Set.empty Set.empty
 

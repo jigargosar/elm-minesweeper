@@ -52,7 +52,7 @@ type Msg
 
 
 collectZeroNeighbours loc =
-    collectZeroNeighboursHelp loc Set.empty Set.empty
+    MineField.connectedZeroCells loc mines
 
 
 collectZeroNeighboursHelp loc pending collected =
