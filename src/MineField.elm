@@ -111,11 +111,3 @@ unitNeighbours =
     ]
         |> List.concat
         |> Set.fromList
-
-
-positionsFromSize : I2 -> Set I2
-positionsFromSize ( w, h ) =
-    List.range 0 (w - 1)
-        |> List.map (\x -> List.range 0 (h - 1) |> List.map (\y -> ( x, y )))
-        |> List.concat
-        |> Set.fromList
