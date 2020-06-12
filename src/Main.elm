@@ -55,6 +55,9 @@ update msg model =
     case msg of
         Click loc ->
             case tsAt model loc of
+                Nothing ->
+                    model
+
                 Just s ->
                     case s of
                         Open ->
@@ -92,9 +95,6 @@ update msg model =
 
                         Flagged ->
                             model
-
-                Nothing ->
-                    model
 
         RightClick loc ->
             case tsAt model loc of
