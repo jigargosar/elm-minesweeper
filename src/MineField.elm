@@ -30,6 +30,22 @@ get k (MineField d) =
 
 getAutoOpenPositionsFrom pos (MineField grid) =
     getConnectedZeroCellPositionsHelp grid pos Set.empty Set.empty
+        |> includeNeighboursOfEveryMember
+
+
+includeNeighboursOfEveryMember locSet =
+    locSet
+        |> Set.foldl (validNeighbours >> Set.union) locSet
+
+
+validNeighbours loc =
+    Tuple.neighboursOf loc
+        |> Set.fromList
+        |> Set.filter isValidPosition
+
+
+isValidPosition =
+    Debug.todo "impl"
 
 
 getConnectedZeroCellPositions : ( Int, Int ) -> MineField -> Set ( Int, Int )
@@ -58,8 +74,8 @@ getConnectedZeroCellPositionsHelp grid current pending acc =
         [] ->
             nAcc
 
-        x :: xs ->
-            getConnectedZeroCellPositionsHelp grid x (Set.fromList xs) nAcc
+        nCurrent :: nPending ->
+            getConnectedZeroCellPositionsHelp grid nCurrent (Set.fromList nPending) nAcc
 
 
 initCellGrid : ( Int, Int ) -> Set ( Int, Int ) -> Grid Cell
