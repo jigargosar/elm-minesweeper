@@ -31,13 +31,7 @@ get k (MineField _ d) =
 getAutoOpenPositionsFrom : ( Int, Int ) -> MineField -> Set ( Int, Int )
 getAutoOpenPositionsFrom pos (MineField size grid) =
     connectedZeroSurroundingMinesPositions grid pos Set.empty Set.empty
-        |> includeNeighboursOfEveryMember size
-
-
-includeNeighboursOfEveryMember : IntSize -> Set ( Int, Int ) -> Set ( Int, Int )
-includeNeighboursOfEveryMember size posSet =
-    posSet
-        |> Set.foldl (IntSize.neighbourSet size >> Set.union) posSet
+        |> IntSize.includeNeighboursOfEveryMember size
 
 
 connectedZeroSurroundingMinesPositions grid current pending acc =
