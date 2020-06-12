@@ -90,8 +90,8 @@ update msg model =
 
 
 tileAt : Model -> ( Int, Int ) -> Maybe ( Lid, MineGrid.Cell )
-tileAt model loc =
-    Maybe.map2 Tuple.pair (lidAt model loc) (mineCellAt model loc)
+tileAt model pos =
+    Maybe.map2 Tuple.pair (lidAt model pos) (mineCellAt model pos)
 
 
 lidAt : Model -> Pos -> Maybe Lid
