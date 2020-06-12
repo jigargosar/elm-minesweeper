@@ -1,4 +1,13 @@
-module IntSize exposing (IntSize, fromTuple, includeNeighboursOfEveryMember, init, isPosInvalid, isPosValid, neighbourSet, neighbours)
+module IntSize exposing
+    ( IntSize
+    , fromTuple
+    , includeNeighboursOfEveryMember
+    , init
+    , isPosInvalid
+    , isPosValid
+    , neighbourSet
+    , neighbours
+    )
 
 import More.Tuple as Tuple
 import Set exposing (Set)
