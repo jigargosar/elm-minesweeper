@@ -1,4 +1,4 @@
-module MineField exposing (Cell(..), MineField, generator, get, neighbourDict)
+module MineField exposing (Cell(..), MineField, generator, get, zeroNeighbours)
 
 import Dict
 import Random exposing (Generator)
@@ -33,13 +33,15 @@ get pos (MineField size d) =
     Dict.get pos d
 
 
-neighbourDict : I2 -> MineField -> CellDict
-neighbourDict position (MineField size d) =
+zeroNeighbours : I2 -> MineField -> Set I2
+zeroNeighbours position (MineField size d) =
     let
         nPos =
             neighbourPositions position
     in
-    Dict.filter (\k _ -> Set.member k nPos) d
+    Dict.filter (\k v -> Set.member k nPos && v == Empty 0) d
+        |> Dict.keys
+        |> Set.fromList
 
 
 initCellDict : I2 -> Set I2 -> CellDict
@@ -69,19 +71,6 @@ initCellDict size minePositions =
         )
         Dict.empty
         (positionsFromSize size)
-
-
-
---validNeighboursInSize : I2 -> I2 -> Set I2
---validNeighboursInSize size pos =
---    neighbourOf pos
---        |> Set.filter (isValidInSize size)
---
---
---isValidInSize : I2 -> I2 -> Bool
---isValidInSize ( w, h ) ( x, y ) =
---    not (x < 0 || y < 0 || x >= w || y >= h)
---
 
 
 neighbourPositions ( x, y ) =

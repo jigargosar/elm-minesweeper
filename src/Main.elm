@@ -61,10 +61,7 @@ collectZeroNeighboursHelp loc pending collected =
             Set.insert loc collected
 
         zeroNeighbours =
-            MineField.neighbourDict loc mines
-                |> Dict.filter (\_ v -> v == MineField.Empty 0)
-                |> Dict.keys
-                |> Set.fromList
+            MineField.zeroNeighbours loc mines
     in
     case
         Set.diff zeroNeighbours collected
