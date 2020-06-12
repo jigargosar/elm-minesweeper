@@ -7,7 +7,7 @@ module MineField exposing
     )
 
 import Dict
-import IntSize exposing (IntSize)
+import IntSize as Size exposing (IntSize)
 import List.Extra as List
 import More.Tuple as Tuple
 import PosDict exposing (PosDict)
@@ -38,7 +38,7 @@ get k (MineField _ d) =
 getAutoOpenPositionsFrom : ( Int, Int ) -> MineField -> Set ( Int, Int )
 getAutoOpenPositionsFrom pos (MineField size d) =
     connectedPositionsWithZeroSurroundingMines size d pos Set.empty Set.empty
-        |> IntSize.includeNeighbours size
+        |> Size.includeNeighbours size
 
 
 connectedPositionsWithZeroSurroundingMines :
@@ -51,7 +51,7 @@ connectedPositionsWithZeroSurroundingMines :
 connectedPositionsWithZeroSurroundingMines size grid current pending acc =
     let
         neighboursHavingZeroSurroundingMines =
-            IntSize.neighbourSet size current
+            Size.neighbourSet size current
                 |> Set.filter
                     (\neighbourPos ->
                         Dict.get neighbourPos grid == Just (Empty 0)
@@ -95,7 +95,7 @@ minesGenerator : IntSize -> Float -> Generator (Set ( Int, Int ))
 minesGenerator size minePct =
     let
         xs =
-            IntSize.positions size
+            Size.positions size
     in
     Random.list (List.length xs) (Random.weighted ( minePct, True ) [ ( 1 - minePct, False ) ])
         |> Random.map
