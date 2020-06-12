@@ -8,6 +8,7 @@ import Html.Events as E exposing (onClick)
 import IntSize as Size exposing (IntSize)
 import Json.Decode as JD
 import MineField exposing (MineField)
+import PosDict
 import Random
 import Set exposing (Set)
 import String exposing (fromFloat, fromInt)
@@ -39,10 +40,7 @@ type alias Loc =
 
 init : Model
 init =
-    { tsDict =
-        gridPS
-            |> List.map (\loc -> ( loc, Closed ))
-            |> Dict.fromList
+    { tsDict = PosDict.init gridSize (always Closed)
     , gameState = PlayerTurn
     }
 
@@ -163,12 +161,6 @@ cellWidth =
     70
 
 
-gridPS =
-    List.range 0 (gridWidth - 1)
-        |> List.map (\x -> List.range 0 (gridHeight - 1) |> List.map (\y -> ( x, y )))
-        |> List.concat
-
-
 viewGrid : Model -> Html Msg
 viewGrid m =
     div
@@ -176,7 +168,7 @@ viewGrid m =
         , styleHeight (gridHeight * cellWidth)
         , relative
         ]
-        (gridPS
+        (Size.positions gridSize
             |> List.map (viewTile m)
         )
 
