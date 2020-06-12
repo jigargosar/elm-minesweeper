@@ -105,6 +105,15 @@ setLid pos lid model =
     { model | lidGrid = Dict.update pos (Maybe.map (always lid)) model.lidGrid }
 
 
+lidGridOpenIfClosed pos lidGrid =
+    case Dict.get pos lidGrid of
+        Just Closed ->
+            Dict.insert pos Open lidGrid
+
+        _ ->
+            lidGrid
+
+
 tsAt : Model -> Loc -> Maybe Lid
 tsAt model loc =
     Dict.get loc model.lidGrid
