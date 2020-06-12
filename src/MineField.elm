@@ -34,7 +34,12 @@ getAutoOpenPositionsFrom pos (MineField size grid) =
         |> IntSize.includeNeighboursOfEveryMember size
 
 
-connectedPositionsWithZeroSurroundingMines : Grid Cell -> ( Int, Int ) -> Set ( Int, Int ) -> Set ( Int, Int ) -> Set ( Int, Int )
+connectedPositionsWithZeroSurroundingMines :
+    Grid Cell
+    -> ( Int, Int )
+    -> Set ( Int, Int )
+    -> Set ( Int, Int )
+    -> Set ( Int, Int )
 connectedPositionsWithZeroSurroundingMines grid current pending acc =
     let
         neighboursHavingZeroSurroundingMines =
