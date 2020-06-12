@@ -63,20 +63,20 @@ update msg model =
 
                 ( Just Closed, Just (MineField.Empty _) ) ->
                     let
-                        lidGrid =
+                        nLidGrid =
                             MineField.getAutoOpenPositionsFrom loc mines
                                 |> Set.foldl
-                                    (\n ts ->
-                                        case Dict.get n ts of
+                                    (\n lidGrid ->
+                                        case Dict.get n lidGrid of
                                             Just Closed ->
-                                                Dict.insert n Open ts
+                                                Dict.insert n Open lidGrid
 
                                             _ ->
-                                                ts
+                                                lidGrid
                                     )
                                     model.lidGrid
                     in
-                    { model | lidGrid = Dict.insert loc Open lidGrid }
+                    { model | lidGrid = Dict.insert loc Open nLidGrid }
 
                 _ ->
                     model
