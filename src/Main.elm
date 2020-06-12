@@ -1,7 +1,6 @@
 module Main exposing (main)
 
 import Browser
-import Dict exposing (Dict)
 import Html exposing (Html, div, text)
 import Html.Attributes exposing (style)
 import Html.Events as E exposing (onClick)
@@ -9,7 +8,6 @@ import IntSize as Size exposing (IntSize)
 import Json.Decode as JD
 import LidGrid exposing (Lid, LidGrid)
 import MineGrid exposing (MineGrid)
-import PosDict exposing (PosDict)
 import Random
 import Set exposing (Set)
 import String exposing (fromFloat, fromInt)
@@ -55,7 +53,7 @@ update : Msg -> Model -> Model
 update msg model =
     case msg of
         Click loc ->
-            case ( lidAt model loc, MineGrid.get loc mines ) of
+            case ( lidAt model loc, mineCellAt model loc ) of
                 ( Just LidGrid.Closed, Just MineGrid.Mine ) ->
                     { model
                         | gameState = Lost
@@ -80,6 +78,11 @@ update msg model =
 lidAt : Model -> Loc -> Maybe Lid
 lidAt model loc =
     LidGrid.get loc model.lidGrid
+
+
+mineCellAt : Model -> Loc -> Maybe MineGrid.Cell
+mineCellAt _ loc =
+    MineGrid.get loc mines
 
 
 view m =
@@ -142,7 +145,7 @@ viewTile m loc =
             toScreenCords loc
 
         isOpenMine =
-            lidAt m loc == Just LidGrid.Open && MineGrid.get loc mines == Just MineGrid.Mine
+            lidAt m loc == Just LidGrid.Open && mineCellAt m loc == Just MineGrid.Mine
     in
     div
         ([ styleWidth cellWidth
@@ -171,7 +174,7 @@ viewTile m loc =
         [ case lidAt m loc of
             Just LidGrid.Open ->
                 text
-                    (case MineGrid.get loc mines of
+                    (case mineCellAt m loc of
                         Nothing ->
                             ""
 
