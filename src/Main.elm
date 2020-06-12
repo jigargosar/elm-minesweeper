@@ -53,14 +53,14 @@ update : Msg -> Model -> Model
 update msg model =
     case msg of
         Click loc ->
-            case ( lidAt model loc, mineCellAt model loc ) of
-                ( Just LidGrid.Closed, Just MineGrid.Mine ) ->
+            case tileAt model loc of
+                Just ( LidGrid.Closed, MineGrid.Mine ) ->
                     { model
                         | gameState = Lost
                         , lidGrid = LidGrid.open loc model.lidGrid
                     }
 
-                ( Just LidGrid.Closed, Just (MineGrid.Empty _) ) ->
+                Just ( LidGrid.Closed, MineGrid.Empty _ ) ->
                     let
                         nLidGrid =
                             MineGrid.autoOpenPosSetFrom loc mines
