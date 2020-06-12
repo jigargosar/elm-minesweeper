@@ -1,4 +1,4 @@
-module MineField exposing (Cell(..), MineField, generator, get, getConnectedZeroCellPositions)
+module MineField exposing (Cell(..), MineField, generator, get, getAutoOpenPositionsFrom)
 
 import Grid exposing (Grid)
 import IntSize exposing (IntSize)
@@ -28,32 +28,18 @@ get k (MineField _ d) =
     Grid.get k d
 
 
-getAutoOpenPositionsFrom pos (MineField _ grid) =
-    getConnectedZeroCellPositionsHelp grid pos Set.empty Set.empty
-        |> includeNeighboursOfEveryMember
+getAutoOpenPositionsFrom : ( Int, Int ) -> MineField -> Set ( Int, Int )
+getAutoOpenPositionsFrom pos (MineField size grid) =
+    getConnectedZeroCellPositions grid pos Set.empty Set.empty
+        |> includeNeighboursOfEveryMember size
 
 
-includeNeighboursOfEveryMember posSet =
+includeNeighboursOfEveryMember size posSet =
     posSet
-        |> Set.foldl (validNeighbours >> Set.union) posSet
+        |> Set.foldl (\pos -> IntSize.neighbours size pos |> Set.fromList >> Set.union) posSet
 
 
-validNeighbours loc =
-    Tuple.neighboursOf loc
-        |> Set.fromList
-        |> Set.filter isValidPosition
-
-
-isValidPosition =
-    Debug.todo "impl"
-
-
-getConnectedZeroCellPositions : ( Int, Int ) -> MineField -> Set ( Int, Int )
-getConnectedZeroCellPositions pos (MineField _ g) =
-    getConnectedZeroCellPositionsHelp g pos Set.empty Set.empty
-
-
-getConnectedZeroCellPositionsHelp grid current pending acc =
+getConnectedZeroCellPositions grid current pending acc =
     let
         neighboursWithZeroSurroundingMines =
             Tuple.neighboursOf current
@@ -75,7 +61,7 @@ getConnectedZeroCellPositionsHelp grid current pending acc =
             nAcc
 
         nCurrent :: nPending ->
-            getConnectedZeroCellPositionsHelp grid nCurrent (Set.fromList nPending) nAcc
+            getConnectedZeroCellPositions grid nCurrent (Set.fromList nPending) nAcc
 
 
 initCellGrid : ( Int, Int ) -> Set ( Int, Int ) -> Grid Cell

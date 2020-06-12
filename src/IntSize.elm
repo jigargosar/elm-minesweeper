@@ -1,4 +1,6 @@
-module IntSize exposing (IntSize, fromTuple, init, isPosInvalid, isPosValid)
+module IntSize exposing (IntSize, fromTuple, init, isPosInvalid, isPosValid, neighbours)
+
+import More.Tuple as Tuple
 
 
 type IntSize
@@ -23,3 +25,9 @@ isPosInvalid (IntSize ( w, h )) ( x, y ) =
 isPosValid : IntSize -> ( Int, Int ) -> Bool
 isPosValid s =
     isPosInvalid s >> not
+
+
+neighbours : IntSize -> ( Int, Int ) -> List ( Int, Int )
+neighbours size pos =
+    Tuple.neighboursOf pos
+        |> List.filter (isPosValid size)

@@ -51,30 +51,6 @@ type Msg
     | RightClick Loc
 
 
-includeNeighboursOfEveryMember locSet =
-    locSet
-        |> Set.foldl (validNeighbours >> Set.union) locSet
-
-
-validNeighbours loc =
-    loc
-        |> neighbourLocations
-        |> Set.fromList
-        |> Set.filter isValidLoc
-
-
-neighbourLocations ( x, y ) =
-    List.map (\( dx, dy ) -> ( x + dx, y + dy )) unitNeighbours
-
-
-unitNeighbours =
-    [ [ ( -1, -1 ), ( 0, -1 ), ( 1, -1 ) ]
-    , [ ( -1, 0 ), ( 1, 0 ) ]
-    , [ ( -1, 1 ), ( 0, 1 ), ( 1, 1 ) ]
-    ]
-        |> List.concat
-
-
 update : Msg -> Model -> Model
 update msg model =
     case msg of
@@ -101,8 +77,7 @@ update msg model =
                                         MineField.Empty 0 ->
                                             let
                                                 nts =
-                                                    MineField.getConnectedZeroCellPositions loc mines
-                                                        |> includeNeighboursOfEveryMember
+                                                    MineField.getAutoOpenPositionsFrom loc mines
                                                         |> Set.foldl
                                                             (\n ts ->
                                                                 case Dict.get n ts of
