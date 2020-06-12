@@ -28,3 +28,9 @@ add =
 neighboursOf : ( number, number ) -> List ( number, number )
 neighboursOf xy =
     List.map (add xy) neighbours
+
+
+range : ( Int, Int ) -> List ( Int, Int )
+range ( w, h ) =
+    List.range 0 (w - 1)
+        |> List.concatMap (\x -> List.range 0 (h - 1) |> List.map (\y -> ( x, y )))
