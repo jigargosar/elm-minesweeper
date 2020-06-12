@@ -75,6 +75,11 @@ update msg model =
             { model | lidGrid = LidGrid.cycleLabel loc model.lidGrid }
 
 
+tileStateAt : Model -> ( Int, Int ) -> Maybe ( Lid, MineGrid.Cell )
+tileStateAt model loc =
+    Maybe.map2 Tuple.pair (lidAt model loc) (mineCellAt model loc)
+
+
 lidAt : Model -> Loc -> Maybe Lid
 lidAt model =
     LidGrid.get model.lidGrid
