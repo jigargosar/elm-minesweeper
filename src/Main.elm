@@ -54,7 +54,7 @@ update : Msg -> Model -> Model
 update msg model =
     case msg of
         Click loc ->
-            case ( tsAt model loc, MineField.get loc mines ) of
+            case ( lidAt model loc, MineField.get loc mines ) of
                 ( Just Closed, Just MineField.Mine ) ->
                     { model
                         | gameState = Lost
@@ -75,7 +75,7 @@ update msg model =
         RightClick loc ->
             let
                 maybeNewLid =
-                    case tsAt model loc of
+                    case lidAt model loc of
                         Just Closed ->
                             Just Flagged
 
@@ -108,8 +108,8 @@ lidGridOpenIfClosed pos lidGrid =
             lidGrid
 
 
-tsAt : Model -> Loc -> Maybe Lid
-tsAt model loc =
+lidAt : Model -> Loc -> Maybe Lid
+lidAt model loc =
     Dict.get loc model.lidGrid
 
 
@@ -179,7 +179,7 @@ viewTile m loc =
             toScreenCords loc
 
         isOpenMine =
-            tsAt m loc == Just Open && MineField.get loc mines == Just MineField.Mine
+            lidAt m loc == Just Open && MineField.get loc mines == Just MineField.Mine
     in
     div
         ([ styleWidth cellWidth
@@ -205,7 +205,7 @@ viewTile m loc =
                     []
                )
         )
-        [ case tsAt m loc of
+        [ case lidAt m loc of
             Just Open ->
                 text
                     (case MineField.get loc mines of
