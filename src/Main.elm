@@ -108,7 +108,8 @@ update msg model =
                                 |> setLid loc Flagged
 
                         Flagged ->
-                            { model | lidGrid = Dict.insert loc Closed model.lidGrid }
+                            model
+                                |> setLid loc Closed
 
                 Nothing ->
                     model
