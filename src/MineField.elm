@@ -35,7 +35,7 @@ connectedZeroCells pos (MineField g) =
 
 connectedZeroCellsHelp grid pos pending acc =
     let
-        zeroNeighbours_ =
+        neighboursWithZeroSurroundingMines =
             let
                 ns =
                     Tuple.neighboursOf pos
@@ -50,7 +50,7 @@ connectedZeroCellsHelp grid pos pending acc =
             Set.insert pos acc
     in
     case
-        Set.diff zeroNeighbours_ acc
+        Set.diff neighboursWithZeroSurroundingMines acc
             |> Set.union pending
             |> Set.toList
     of
