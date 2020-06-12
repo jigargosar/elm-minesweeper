@@ -3,6 +3,7 @@ module MineField exposing (Cell(..), MineField, generator, get, zeroNeighbours)
 import Dict
 import Grid
 import GridSize exposing (GridSize)
+import List.Extra as List
 import More.Tuple as Tuple
 import Random exposing (Generator)
 import Set exposing (Set)
@@ -34,7 +35,7 @@ generator ( w, h ) minePct =
         size =
             GridSize.init w h
     in
-    minePositionsGenerator size minePct
+    minePositionsGenerator size_ minePct
         |> Random.map (initCellDict size >> MineField size_)
 
 
@@ -54,20 +55,14 @@ zeroNeighbours position (MineField size d) =
         |> Set.fromList
 
 
-initCellDict : GridSize -> Set I2 -> CellDict
+initCellDict : I2 -> Set I2 -> CellDict
 initCellDict size minePosSet =
     let
-        neighbourMineCount pos =
-            Tuple.neighboursOf pos
-                |> List.foldl
-                    (\nPos count ->
-                        if Set.member nPos minePosSet then
-                            count + 1
+        isMine pos =
+            Set.member pos minePosSet
 
-                        else
-                            count
-                    )
-                    0
+        neighbourMineCount pos =
+            Tuple.neighboursOf pos |> List.count isMine
     in
     Grid.init size
         (\pos ->
@@ -80,16 +75,16 @@ initCellDict size minePosSet =
         |> Grid.toDict
 
 
-minePositionsGenerator : GridSize -> Float -> Generator (Set I2)
+minePositionsGenerator : I2 -> Float -> Generator (Set I2)
 minePositionsGenerator size minePct =
     let
-        posSet =
-            GridSize.posSet size
+        xs =
+            Tuple.range size
     in
-    Random.list (Set.size posSet) (Random.weighted ( minePct, True ) [ ( 1 - minePct, False ) ])
+    Random.list (List.length xs) (Random.weighted ( minePct, True ) [ ( 1 - minePct, False ) ])
         |> Random.map
             (\boolList ->
-                List.map2 Tuple.pair (Set.toList posSet) boolList
+                List.map2 Tuple.pair xs boolList
                     |> List.filter Tuple.second
                     |> List.map Tuple.first
                     |> Set.fromList
