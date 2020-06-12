@@ -51,10 +51,6 @@ type Msg
     | RightClick Loc
 
 
-collectZeroNeighbours loc =
-    MineField.getConnectedZeroCellPositions loc mines
-
-
 includeNeighboursOfEveryMember locSet =
     locSet
         |> Set.foldl (validNeighbours >> Set.union) locSet
@@ -105,7 +101,7 @@ update msg model =
                                         MineField.Empty 0 ->
                                             let
                                                 nts =
-                                                    collectZeroNeighbours loc
+                                                    MineField.getConnectedZeroCellPositions loc mines
                                                         |> includeNeighboursOfEveryMember
                                                         |> Set.foldl
                                                             (\n ts ->
