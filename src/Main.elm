@@ -74,20 +74,15 @@ update msg model =
 
         RightClick loc ->
             case tsAt model loc of
-                Just s ->
-                    case s of
-                        Open ->
-                            model
+                Just Closed ->
+                    model
+                        |> setLid loc Flagged
 
-                        Closed ->
-                            model
-                                |> setLid loc Flagged
+                Just Flagged ->
+                    model
+                        |> setLid loc Closed
 
-                        Flagged ->
-                            model
-                                |> setLid loc Closed
-
-                Nothing ->
+                _ ->
                     model
 
 
