@@ -1,4 +1,4 @@
-module MineField exposing (..)
+module MineField exposing (MineField, generator)
 
 import Dict
 import Random exposing (Generator)
