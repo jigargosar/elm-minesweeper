@@ -1,6 +1,7 @@
 module MineField exposing (Cell(..), MineField, generator, get, zeroNeighbours)
 
 import Dict
+import GridSize exposing (GridSize)
 import Random exposing (Generator)
 import Set exposing (Set)
 
@@ -23,8 +24,8 @@ type MineField
 
 
 generator : I2 -> Float -> Generator MineField
-generator size minePct =
-    minePositionsGenerator size minePct
+generator (( w, h ) as size) minePct =
+    minePositionsGenerator (GridSize.init w h) minePct
         |> Random.map (initCellDict size >> MineField size)
 
 
@@ -73,21 +74,16 @@ initCellDict size minePositions =
         (positionsFromSize size)
 
 
-minePositionsGenerator : I2 -> Float -> Generator (Set I2)
-minePositionsGenerator ( w, h ) minePct =
+minePositionsGenerator : GridSize -> Float -> Generator (Set I2)
+minePositionsGenerator size minePct =
     let
-        cellTotal =
-            w * h
-
-        positions =
-            List.range 0 (w - 1)
-                |> List.map (\x -> List.range 0 (h - 1) |> List.map (\y -> ( x, y )))
-                |> List.concat
+        posSet =
+            GridSize.posSet size
     in
-    Random.list cellTotal (Random.weighted ( minePct, True ) [ ( 1 - minePct, False ) ])
+    Random.list (Set.size posSet) (Random.weighted ( minePct, True ) [ ( 1 - minePct, False ) ])
         |> Random.map
             (\boolList ->
-                List.map2 Tuple.pair positions boolList
+                List.map2 Tuple.pair (Set.toList posSet) boolList
                     |> List.filter Tuple.second
                     |> List.map Tuple.first
                     |> Set.fromList
