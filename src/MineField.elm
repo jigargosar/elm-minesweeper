@@ -41,6 +41,37 @@ zeroNeighbours position (MineField d) =
         |> Set.fromList
 
 
+connectedZeroCells pos (MineField g) =
+    connectedZeroCellsHelp (Grid.toDict g) pos Set.empty Set.empty
+
+
+connectedZeroCellsHelp dict pos pending acc =
+    let
+        zeroNeighbours_ =
+            let
+                ns =
+                    Tuple.neighboursOf pos
+            in
+            dict
+                |> Dict.filter (\k v -> List.member k ns && v == Empty 0)
+                |> Dict.keys
+                |> Set.fromList
+
+        nAcc =
+            Set.insert pos acc
+    in
+    case
+        Set.diff zeroNeighbours_ acc
+            |> Set.union pending
+            |> Set.toList
+    of
+        [] ->
+            nAcc
+
+        x :: xs ->
+            connectedZeroCellsHelp x (Set.fromList xs) nAcc
+
+
 initCellGrid : ( Int, Int ) -> Set ( Int, Int ) -> Grid Cell
 initCellGrid size minePosSet =
     let
