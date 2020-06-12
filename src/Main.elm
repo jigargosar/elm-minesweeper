@@ -40,6 +40,19 @@ type alias Loc =
 
 init : Model
 init =
+    let
+        mines_ : MineGrid
+        mines_ =
+            let
+                minePct =
+                    0.1
+
+                minesGenerator =
+                    MineGrid.generator gridSize minePct
+            in
+            Random.step minesGenerator (Random.initialSeed 1)
+                |> first
+    in
     { lids = LidGrid.fillClosed gridSize
     , mines = mines_
     , gameState = PlayerTurn
@@ -97,19 +110,6 @@ view m =
         [ div [] [ text "MineSweeper" ]
         , viewGrid m
         ]
-
-
-mines_ : MineGrid
-mines_ =
-    let
-        minePct =
-            0.1
-
-        minesGenerator =
-            MineGrid.generator gridSize minePct
-    in
-    Random.step minesGenerator (Random.initialSeed 1)
-        |> first
 
 
 gridSize : IntSize
