@@ -7,6 +7,7 @@ import Html.Attributes exposing (style)
 import Html.Events as E exposing (onClick)
 import IntSize as Size exposing (IntSize)
 import Json.Decode as JD
+import LidGrid exposing (Lid, LidGrid)
 import MineGrid exposing (MineGrid)
 import PosDict exposing (PosDict)
 import Random
@@ -24,7 +25,7 @@ main =
 
 
 type alias Model =
-    { lidGrid : PosDict Lid
+    { lidGrid : LidGrid
     , gameState : GameState
     }
 
@@ -40,7 +41,7 @@ type alias Loc =
 
 init : Model
 init =
-    { lidGrid = PosDict.init gridSize (always Closed)
+    { lidGrid = LidGrid.fillClosed gridSize
     , gameState = PlayerTurn
     }
 
@@ -55,68 +56,30 @@ update msg model =
     case msg of
         Click loc ->
             case ( lidAt model loc, MineGrid.get loc mines ) of
-                ( Just Closed, Just MineGrid.Mine ) ->
+                ( Just LidGrid.Closed, Just MineGrid.Mine ) ->
                     { model
                         | gameState = Lost
-                        , lidGrid = Dict.insert loc Open model.lidGrid
+                        , lidGrid = LidGrid.open loc model.lidGrid
                     }
 
-                ( Just Closed, Just (MineGrid.Empty _) ) ->
+                ( Just LidGrid.Closed, Just (MineGrid.Empty _) ) ->
                     let
                         nLidGrid =
                             MineGrid.autoOpenPosSetFrom loc mines
-                                |> Set.foldl lidGridOpenIfClosed model.lidGrid
+                                |> Set.foldl LidGrid.openIfClosed model.lidGrid
                     in
-                    { model | lidGrid = Dict.insert loc Open nLidGrid }
+                    { model | lidGrid = LidGrid.open loc nLidGrid }
 
                 _ ->
                     model
 
         RightClick loc ->
-            let
-                maybeNewLid =
-                    case lidAt model loc of
-                        Just Closed ->
-                            Just Flagged
-
-                        Just Flagged ->
-                            Just Closed
-
-                        _ ->
-                            Nothing
-            in
-            case maybeNewLid of
-                Just nLid ->
-                    model
-                        |> setLid loc nLid
-
-                Nothing ->
-                    model
-
-
-setLid : ( Int, Int ) -> Lid -> Model -> Model
-setLid pos lid model =
-    { model | lidGrid = Dict.update pos (Maybe.map (always lid)) model.lidGrid }
-
-
-lidGridOpenIfClosed pos lidGrid =
-    case Dict.get pos lidGrid of
-        Just Closed ->
-            Dict.insert pos Open lidGrid
-
-        _ ->
-            lidGrid
+            { model | lidGrid = LidGrid.cycleLabel loc model.lidGrid }
 
 
 lidAt : Model -> Loc -> Maybe Lid
 lidAt model loc =
-    Dict.get loc model.lidGrid
-
-
-type Lid
-    = Open
-    | Closed
-    | Flagged
+    LidGrid.get loc model.lidGrid
 
 
 view m =
@@ -179,7 +142,7 @@ viewTile m loc =
             toScreenCords loc
 
         isOpenMine =
-            lidAt m loc == Just Open && MineGrid.get loc mines == Just MineGrid.Mine
+            lidAt m loc == Just LidGrid.Open && MineGrid.get loc mines == Just MineGrid.Mine
     in
     div
         ([ styleWidth cellWidth
@@ -206,7 +169,7 @@ viewTile m loc =
                )
         )
         [ case lidAt m loc of
-            Just Open ->
+            Just LidGrid.Open ->
                 text
                     (case MineGrid.get loc mines of
                         Nothing ->
@@ -221,7 +184,7 @@ viewTile m loc =
                                     fromInt nmc
                     )
 
-            Just Flagged ->
+            Just LidGrid.Flagged ->
                 text "F"
 
             _ ->
