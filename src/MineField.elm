@@ -57,15 +57,17 @@ initCellDict size minePositions =
         (positionsFromSize size)
 
 
-validNeighboursInSize : I2 -> I2 -> Set I2
-validNeighboursInSize size pos =
-    neighbourOf pos
-        |> Set.filter (isValidInSize size)
 
-
-isValidInSize : I2 -> I2 -> Bool
-isValidInSize ( w, h ) ( x, y ) =
-    not (x < 0 || y < 0 || x >= w || y >= h)
+--validNeighboursInSize : I2 -> I2 -> Set I2
+--validNeighboursInSize size pos =
+--    neighbourOf pos
+--        |> Set.filter (isValidInSize size)
+--
+--
+--isValidInSize : I2 -> I2 -> Bool
+--isValidInSize ( w, h ) ( x, y ) =
+--    not (x < 0 || y < 0 || x >= w || y >= h)
+--
 
 
 neighbourOf ( x, y ) =
