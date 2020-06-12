@@ -65,16 +65,7 @@ update msg model =
                     let
                         nLidGrid =
                             MineField.getAutoOpenPosSetFrom loc mines
-                                |> Set.foldl
-                                    (\n lidGrid ->
-                                        case Dict.get n lidGrid of
-                                            Just Closed ->
-                                                Dict.insert n Open lidGrid
-
-                                            _ ->
-                                                lidGrid
-                                    )
-                                    model.lidGrid
+                                |> Set.foldl lidGridOpenIfClosed model.lidGrid
                     in
                     { model | lidGrid = Dict.insert loc Open nLidGrid }
 
