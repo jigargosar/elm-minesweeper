@@ -113,6 +113,10 @@ update msg model =
                     model
 
 
+setLid pos lid model =
+    { model | lidGrid = Dict.update pos (Maybe.map (always <| Just lid)) model.lidGrid }
+
+
 tsAt : Model -> Loc -> Maybe Lid
 tsAt model loc =
     Dict.get loc model.lidGrid
