@@ -1,4 +1,4 @@
-module MineField exposing (Cell(..), MineField, connectedZeroCells, generator, get, zeroNeighbours)
+module MineField exposing (Cell(..), MineField, connectedZeroCells, generator, get)
 
 import Dict exposing (Dict)
 import Grid exposing (Grid)
@@ -26,19 +26,6 @@ generator size minePct =
 get : ( Int, Int ) -> MineField -> Maybe Cell
 get k (MineField d) =
     Grid.get k d
-
-
-zeroNeighbours : ( Int, Int ) -> MineField -> Set ( Int, Int )
-zeroNeighbours position (MineField d) =
-    let
-        nPos =
-            Tuple.neighboursOf position
-    in
-    d
-        |> Grid.toDict
-        |> Dict.filter (\k v -> List.member k nPos && v == Empty 0)
-        |> Dict.keys
-        |> Set.fromList
 
 
 connectedZeroCells : ( Int, Int ) -> MineField -> Set ( Int, Int )
