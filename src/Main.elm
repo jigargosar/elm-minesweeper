@@ -60,14 +60,14 @@ collectZeroNeighboursHelp loc pending collected =
         nCollected =
             Set.insert loc collected
 
-        neighboursHavingZeroNeighbouringMines =
+        zeroNeighbours =
             MineField.neighbourDict loc mines
                 |> Dict.filter (\_ v -> v == MineField.Empty 0)
                 |> Dict.keys
                 |> Set.fromList
     in
     case
-        Set.diff neighboursHavingZeroNeighbouringMines collected
+        Set.diff zeroNeighbours collected
             |> Set.union pending
             |> Set.toList
     of
