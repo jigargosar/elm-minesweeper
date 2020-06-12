@@ -3,7 +3,7 @@ module MineField exposing
     , MineField
     , generator
     , get
-    , getAutoOpenPositionsFrom
+    , getAutoOpenPosSetFrom
     )
 
 import Dict
@@ -35,8 +35,8 @@ get k (MineField _ d) =
     Dict.get k d
 
 
-getAutoOpenPositionsFrom : ( Int, Int ) -> MineField -> Set ( Int, Int )
-getAutoOpenPositionsFrom pos ((MineField size grid) as model) =
+getAutoOpenPosSetFrom : ( Int, Int ) -> MineField -> Set ( Int, Int )
+getAutoOpenPosSetFrom pos ((MineField size grid) as model) =
     if hasNoSurroundingMines grid pos then
         connectedPositionsWithZeroSurroundingMines model pos Set.empty Set.empty
             |> Size.includeNeighbours size
