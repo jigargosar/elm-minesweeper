@@ -1,6 +1,7 @@
 module MineField exposing (Cell(..), MineField, generator, get, getConnectedZeroCellPositions)
 
 import Grid exposing (Grid)
+import IntSize exposing (IntSize)
 import List.Extra as List
 import More.Tuple as Tuple
 import Random exposing (Generator)
@@ -13,21 +14,21 @@ type Cell
 
 
 type MineField
-    = MineField (Grid Cell)
+    = MineField IntSize (Grid Cell)
 
 
 generator : ( Int, Int ) -> Float -> Generator MineField
 generator size minePct =
     minesGenerator size minePct
-        |> Random.map (initCellGrid size >> MineField)
+        |> Random.map (initCellGrid size >> MineField (IntSize.fromTuple size))
 
 
 get : ( Int, Int ) -> MineField -> Maybe Cell
-get k (MineField d) =
+get k (MineField _ d) =
     Grid.get k d
 
 
-getAutoOpenPositionsFrom pos (MineField grid) =
+getAutoOpenPositionsFrom pos (MineField _ grid) =
     getConnectedZeroCellPositionsHelp grid pos Set.empty Set.empty
         |> includeNeighboursOfEveryMember
 
@@ -48,7 +49,7 @@ isValidPosition =
 
 
 getConnectedZeroCellPositions : ( Int, Int ) -> MineField -> Set ( Int, Int )
-getConnectedZeroCellPositions pos (MineField g) =
+getConnectedZeroCellPositions pos (MineField _ g) =
     getConnectedZeroCellPositionsHelp g pos Set.empty Set.empty
 
 
