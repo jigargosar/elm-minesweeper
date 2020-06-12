@@ -75,7 +75,7 @@ update msg model =
                                                 , tsDict = Dict.insert loc Open model.tsDict
                                             }
 
-                                        MineField.Empty 0 ->
+                                        MineField.Empty _ ->
                                             let
                                                 nts =
                                                     MineField.getAutoOpenPositionsFrom loc mines
@@ -91,9 +91,6 @@ update msg model =
                                                             model.tsDict
                                             in
                                             { model | tsDict = Dict.insert loc Open nts }
-
-                                        MineField.Empty _ ->
-                                            { model | tsDict = Dict.insert loc Open model.tsDict }
 
                         Flagged ->
                             model
