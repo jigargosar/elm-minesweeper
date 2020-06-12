@@ -7,7 +7,7 @@ import Html.Attributes exposing (style)
 import Html.Events as E exposing (onClick)
 import IntSize as Size exposing (IntSize)
 import Json.Decode as JD
-import MineField exposing (MineField)
+import MineGrid exposing (MineGrid)
 import PosDict exposing (PosDict)
 import Random
 import Set exposing (Set)
@@ -54,17 +54,17 @@ update : Msg -> Model -> Model
 update msg model =
     case msg of
         Click loc ->
-            case ( lidAt model loc, MineField.get loc mines ) of
-                ( Just Closed, Just MineField.Mine ) ->
+            case ( lidAt model loc, MineGrid.get loc mines ) of
+                ( Just Closed, Just MineGrid.Mine ) ->
                     { model
                         | gameState = Lost
                         , lidGrid = Dict.insert loc Open model.lidGrid
                     }
 
-                ( Just Closed, Just (MineField.Empty _) ) ->
+                ( Just Closed, Just (MineGrid.Empty _) ) ->
                     let
                         nLidGrid =
-                            MineField.getAutoOpenPosSetFrom loc mines
+                            MineGrid.getAutoOpenPosSetFrom loc mines
                                 |> Set.foldl lidGridOpenIfClosed model.lidGrid
                     in
                     { model | lidGrid = Dict.insert loc Open nLidGrid }
@@ -126,14 +126,14 @@ view m =
         ]
 
 
-mines : MineField
+mines : MineGrid
 mines =
     let
         minePct =
             0.1
 
         minesGenerator =
-            MineField.generator gridSize minePct
+            MineGrid.generator gridSize minePct
     in
     Random.step minesGenerator (Random.initialSeed 1)
         |> first
@@ -179,7 +179,7 @@ viewTile m loc =
             toScreenCords loc
 
         isOpenMine =
-            lidAt m loc == Just Open && MineField.get loc mines == Just MineField.Mine
+            lidAt m loc == Just Open && MineGrid.get loc mines == Just MineGrid.Mine
     in
     div
         ([ styleWidth cellWidth
@@ -208,16 +208,16 @@ viewTile m loc =
         [ case lidAt m loc of
             Just Open ->
                 text
-                    (case MineField.get loc mines of
+                    (case MineGrid.get loc mines of
                         Nothing ->
                             ""
 
                         Just cell ->
                             case cell of
-                                MineField.Mine ->
+                                MineGrid.Mine ->
                                     "*"
 
-                                MineField.Empty nmc ->
+                                MineGrid.Empty nmc ->
                                     fromInt nmc
                     )
 

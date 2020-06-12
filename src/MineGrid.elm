@@ -1,6 +1,6 @@
-module MineField exposing
+module MineGrid exposing
     ( Cell(..)
-    , MineField
+    , MineGrid
     , generator
     , get
     , getAutoOpenPosSetFrom
@@ -20,23 +20,23 @@ type Cell
     | Empty Int
 
 
-type MineField
-    = MineField IntSize (PosDict Cell)
+type MineGrid
+    = MineGrid IntSize (PosDict Cell)
 
 
-generator : IntSize -> Float -> Generator MineField
+generator : IntSize -> Float -> Generator MineGrid
 generator size minePct =
     minesGenerator size minePct
-        |> Random.map (initCellDict size >> MineField size)
+        |> Random.map (initCellDict size >> MineGrid size)
 
 
-get : ( Int, Int ) -> MineField -> Maybe Cell
-get k (MineField _ d) =
+get : ( Int, Int ) -> MineGrid -> Maybe Cell
+get k (MineGrid _ d) =
     Dict.get k d
 
 
-getAutoOpenPosSetFrom : ( Int, Int ) -> MineField -> Set ( Int, Int )
-getAutoOpenPosSetFrom pos ((MineField size grid) as model) =
+getAutoOpenPosSetFrom : ( Int, Int ) -> MineGrid -> Set ( Int, Int )
+getAutoOpenPosSetFrom pos ((MineGrid size grid) as model) =
     if hasNoSurroundingMines grid pos then
         connectedPositionsWithZeroSurroundingMines model pos Set.empty Set.empty
             |> Size.includeNeighbours size
@@ -46,7 +46,7 @@ getAutoOpenPosSetFrom pos ((MineField size grid) as model) =
 
 
 connectedPositionsWithZeroSurroundingMines :
-    MineField
+    MineGrid
     -> ( Int, Int )
     -> Set ( Int, Int )
     -> Set ( Int, Int )
@@ -68,7 +68,7 @@ connectedPositionsWithZeroSurroundingMines model current pending acc =
             connectedPositionsWithZeroSurroundingMines model nCurrent (Set.fromList nPending) nAcc
 
 
-neighboursHavingZeroSurroundingMines (MineField size grid) pos =
+neighboursHavingZeroSurroundingMines (MineGrid size grid) pos =
     Size.neighbourSet size pos
         |> Set.filter (hasNoSurroundingMines grid)
 
