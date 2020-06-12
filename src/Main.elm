@@ -269,7 +269,19 @@ viewTile m loc =
         )
         [ case tsAt m loc of
             Just Open ->
-                text (tileAt loc)
+                text
+                    (case MineField.get loc mines of
+                        Nothing ->
+                            ""
+
+                        Just cell ->
+                            case cell of
+                                MineField.Mine ->
+                                    "*"
+
+                                MineField.Empty nmc ->
+                                    fromInt nmc
+                    )
 
             Just Flagged ->
                 text "F"
@@ -277,20 +289,6 @@ viewTile m loc =
             _ ->
                 text ""
         ]
-
-
-tileAt loc =
-    case MineField.get loc mines of
-        Nothing ->
-            ""
-
-        Just cell ->
-            case cell of
-                MineField.Mine ->
-                    "*"
-
-                MineField.Empty nmc ->
-                    fromInt nmc
 
 
 
