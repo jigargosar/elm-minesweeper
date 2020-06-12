@@ -30,7 +30,7 @@ get k (MineField _ d) =
 
 getAutoOpenPositionsFrom : ( Int, Int ) -> MineField -> Set ( Int, Int )
 getAutoOpenPositionsFrom pos (MineField size grid) =
-    getConnectedZeroCellPositions grid pos Set.empty Set.empty
+    connectedZeroSurroundingMinesPositions grid pos Set.empty Set.empty
         |> includeNeighboursOfEveryMember size
 
 
@@ -39,7 +39,7 @@ includeNeighboursOfEveryMember size posSet =
         |> Set.foldl (\pos -> IntSize.neighbours size pos |> Set.fromList >> Set.union) posSet
 
 
-getConnectedZeroCellPositions grid current pending acc =
+connectedZeroSurroundingMinesPositions grid current pending acc =
     let
         neighboursHavingZeroSurroundingMines =
             Tuple.neighboursOf current
@@ -61,7 +61,7 @@ getConnectedZeroCellPositions grid current pending acc =
             nAcc
 
         nCurrent :: nPending ->
-            getConnectedZeroCellPositions grid nCurrent (Set.fromList nPending) nAcc
+            connectedZeroSurroundingMinesPositions grid nCurrent (Set.fromList nPending) nAcc
 
 
 initCellGrid : ( Int, Int ) -> Set ( Int, Int ) -> Grid Cell
