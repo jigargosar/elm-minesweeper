@@ -189,8 +189,6 @@ mines =
             0.1
 
         minesGenerator =
-            --Random.list (List.length gridPS) (Random.weighted ( minePct, True ) [ ( 1 - minePct, False ) ])
-            --    |> Random.map (\bs -> List.map2 pair gridPS bs |> List.filter second |> List.map first)
             MineField.generator ( gridWidth, gridHeight ) minePct
     in
     Random.step minesGenerator (Random.initialSeed 1)
