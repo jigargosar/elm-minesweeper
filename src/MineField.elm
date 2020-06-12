@@ -41,7 +41,7 @@ includeNeighboursOfEveryMember size posSet =
 
 getConnectedZeroCellPositions grid current pending acc =
     let
-        neighboursWithZeroSurroundingMines =
+        neighboursHavingZeroSurroundingMines =
             Tuple.neighboursOf current
                 |> List.filter
                     (\neighbourPos ->
@@ -53,7 +53,7 @@ getConnectedZeroCellPositions grid current pending acc =
             Set.insert current acc
     in
     case
-        Set.diff neighboursWithZeroSurroundingMines acc
+        Set.diff neighboursHavingZeroSurroundingMines acc
             |> Set.union pending
             |> Set.toList
     of
