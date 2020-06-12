@@ -23,7 +23,8 @@ main =
 
 
 type alias Model =
-    { lidGrid : LidGrid
+    { lids : LidGrid
+    , mines : MineGrid
     , gameState : GameState
     }
 
@@ -39,7 +40,8 @@ type alias Loc =
 
 init : Model
 init =
-    { lidGrid = LidGrid.fillClosed gridSize
+    { lids = LidGrid.fillClosed gridSize
+    , mines = mines_
     , gameState = PlayerTurn
     }
 
@@ -57,22 +59,22 @@ update msg model =
                 Just ( LidGrid.Closed, MineGrid.Mine ) ->
                     { model
                         | gameState = Lost
-                        , lidGrid = LidGrid.open loc model.lidGrid
+                        , lids = LidGrid.open loc model.lids
                     }
 
                 Just ( LidGrid.Closed, MineGrid.Empty _ ) ->
                     let
                         nLidGrid =
-                            MineGrid.autoOpenPosSetFrom loc mines
-                                |> Set.foldl LidGrid.openIfClosed model.lidGrid
+                            MineGrid.autoOpenPosSetFrom loc model.mines
+                                |> Set.foldl LidGrid.openIfClosed model.lids
                     in
-                    { model | lidGrid = LidGrid.open loc nLidGrid }
+                    { model | lids = LidGrid.open loc nLidGrid }
 
                 _ ->
                     model
 
         RightClick loc ->
-            { model | lidGrid = LidGrid.cycleLabel loc model.lidGrid }
+            { model | lids = LidGrid.cycleLabel loc model.lids }
 
 
 tileAt : Model -> ( Int, Int ) -> Maybe ( Lid, MineGrid.Cell )
@@ -82,12 +84,12 @@ tileAt model loc =
 
 lidAt : Model -> Loc -> Maybe Lid
 lidAt model =
-    LidGrid.get model.lidGrid
+    LidGrid.get model.lids
 
 
 mineCellAt : Model -> Loc -> Maybe MineGrid.Cell
-mineCellAt _ =
-    MineGrid.get mines
+mineCellAt model =
+    MineGrid.get model.mines
 
 
 view m =
@@ -97,8 +99,8 @@ view m =
         ]
 
 
-mines : MineGrid
-mines =
+mines_ : MineGrid
+mines_ =
     let
         minePct =
             0.1
