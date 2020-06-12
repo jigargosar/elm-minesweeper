@@ -55,26 +55,6 @@ collectZeroNeighbours loc =
     MineField.connectedZeroCells loc mines
 
 
-collectZeroNeighboursHelp loc pending collected =
-    let
-        nCollected =
-            Set.insert loc collected
-
-        zeroNeighbours =
-            MineField.zeroNeighbours loc mines
-    in
-    case
-        Set.diff zeroNeighbours collected
-            |> Set.union pending
-            |> Set.toList
-    of
-        [] ->
-            nCollected
-
-        x :: xs ->
-            collectZeroNeighboursHelp x (Set.fromList xs) nCollected
-
-
 includeNeighboursOfEveryMember locSet =
     locSet
         |> Set.foldl (validNeighbours >> Set.union) locSet
