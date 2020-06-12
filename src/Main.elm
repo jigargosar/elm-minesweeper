@@ -44,13 +44,13 @@ init =
         minesGenerator =
             MineGrid.generator gridSize 0.1
 
-        mines_ : MineGrid
-        mines_ =
+        mines : MineGrid
+        mines =
             Random.step minesGenerator (Random.initialSeed 1)
                 |> first
     in
     { lids = LidGrid.fillClosed gridSize
-    , mines = mines_
+    , mines = mines
     , gameState = PlayerTurn
     }
 
