@@ -64,7 +64,7 @@ update msg model =
                 ( Just Closed, Just (MineGrid.Empty _) ) ->
                     let
                         nLidGrid =
-                            MineGrid.getAutoOpenPosSetFrom loc mines
+                            MineGrid.autoOpenPosSetFrom loc mines
                                 |> Set.foldl lidGridOpenIfClosed model.lidGrid
                     in
                     { model | lidGrid = Dict.insert loc Open nLidGrid }

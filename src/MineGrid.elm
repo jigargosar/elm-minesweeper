@@ -1,9 +1,9 @@
 module MineGrid exposing
     ( Cell(..)
     , MineGrid
+    , autoOpenPosSetFrom
     , generator
     , get
-    , getAutoOpenPosSetFrom
     )
 
 import Dict
@@ -35,8 +35,8 @@ get k (MineGrid _ d) =
     Dict.get k d
 
 
-getAutoOpenPosSetFrom : ( Int, Int ) -> MineGrid -> Set ( Int, Int )
-getAutoOpenPosSetFrom pos ((MineGrid size dict) as model) =
+autoOpenPosSetFrom : ( Int, Int ) -> MineGrid -> Set ( Int, Int )
+autoOpenPosSetFrom pos ((MineGrid size dict) as model) =
     if hasNoSurroundingMines dict pos then
         connectedPositionsWithZeroSurroundingMines model pos Set.empty Set.empty
             |> Size.includeNeighbours size
