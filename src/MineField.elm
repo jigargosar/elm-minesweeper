@@ -37,7 +37,7 @@ zeroNeighbours : I2 -> MineField -> Set I2
 zeroNeighbours position (MineField size d) =
     let
         nPos =
-            neighbourPositions position
+            neighbourPositionsOf position
     in
     Dict.filter (\k v -> Set.member k nPos && v == Empty 0) d
         |> Dict.keys
@@ -48,7 +48,7 @@ initCellDict : I2 -> Set I2 -> CellDict
 initCellDict size minePositions =
     let
         neighbourMineCount pos =
-            neighbourPositions pos
+            neighbourPositionsOf pos
                 |> Set.foldl
                     (\nPos count ->
                         if Set.member nPos minePositions then
@@ -73,7 +73,7 @@ initCellDict size minePositions =
         (positionsFromSize size)
 
 
-neighbourPositions xy =
+neighbourPositionsOf xy =
     Set.map (tupleMap2 (+) xy) unitNeighbours
 
 
