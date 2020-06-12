@@ -41,25 +41,25 @@ get k (MineField _ d) =
 
 getAutoOpenPositionsFrom : ( Int, Int ) -> MineField -> Set ( Int, Int )
 getAutoOpenPositionsFrom pos (MineField size d) =
-    connectedPositionsWithZeroSurroundingMines d pos Set.empty Set.empty
+    connectedPositionsWithZeroSurroundingMines size d pos Set.empty Set.empty
         |> IntSize.includeNeighbourPositions size
 
 
 connectedPositionsWithZeroSurroundingMines :
-    PosDict Cell
+    IntSize
+    -> Dict.Dict ( Int, Int ) Cell
     -> ( Int, Int )
     -> Set ( Int, Int )
     -> Set ( Int, Int )
     -> Set ( Int, Int )
-connectedPositionsWithZeroSurroundingMines grid current pending acc =
+connectedPositionsWithZeroSurroundingMines size grid current pending acc =
     let
         neighboursHavingZeroSurroundingMines =
-            Tuple.neighboursOf current
-                |> List.filter
+            IntSize.neighbourSet size current
+                |> Set.filter
                     (\neighbourPos ->
                         Dict.get neighbourPos grid == Just (Empty 0)
                     )
-                |> Set.fromList
 
         nAcc =
             Set.insert current acc
@@ -73,7 +73,7 @@ connectedPositionsWithZeroSurroundingMines grid current pending acc =
             nAcc
 
         nCurrent :: nPending ->
-            connectedPositionsWithZeroSurroundingMines grid nCurrent (Set.fromList nPending) nAcc
+            connectedPositionsWithZeroSurroundingMines size grid nCurrent (Set.fromList nPending) nAcc
 
 
 initCellDict : IntSize -> Set ( Int, Int ) -> PosDict Cell
