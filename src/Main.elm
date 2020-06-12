@@ -104,7 +104,8 @@ update msg model =
                             model
 
                         Closed ->
-                            { model | lidGrid = Dict.insert loc Flagged model.lidGrid }
+                            model
+                                |> setLid loc Flagged
 
                         Flagged ->
                             { model | lidGrid = Dict.insert loc Closed model.lidGrid }
@@ -113,8 +114,9 @@ update msg model =
                     model
 
 
+setLid : ( Int, Int ) -> Lid -> Model -> Model
 setLid pos lid model =
-    { model | lidGrid = Dict.update pos (Maybe.map (always <| Just lid)) model.lidGrid }
+    { model | lidGrid = Dict.update pos (Maybe.map (always lid)) model.lidGrid }
 
 
 tsAt : Model -> Loc -> Maybe Lid
