@@ -52,7 +52,7 @@ type Msg
 
 
 collectZeroNeighbours loc =
-    MineField.connectedZeroCells loc mines
+    MineField.getConnectedZeroCellPositions loc mines
 
 
 includeNeighboursOfEveryMember locSet =

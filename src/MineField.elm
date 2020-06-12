@@ -1,4 +1,4 @@
-module MineField exposing (Cell(..), MineField, connectedZeroCells, generator, get)
+module MineField exposing (Cell(..), MineField, generator, get, getConnectedZeroCellPositions)
 
 import Dict exposing (Dict)
 import Grid exposing (Grid)
@@ -28,12 +28,16 @@ get k (MineField d) =
     Grid.get k d
 
 
-connectedZeroCells : ( Int, Int ) -> MineField -> Set ( Int, Int )
-connectedZeroCells pos (MineField g) =
-    connectedZeroCellsHelp g pos Set.empty Set.empty
+getAutoOpenPositionsFrom pos (MineField grid) =
+    getConnectedZeroCellPositionsHelp grid pos Set.empty Set.empty
 
 
-connectedZeroCellsHelp grid pos pending acc =
+getConnectedZeroCellPositions : ( Int, Int ) -> MineField -> Set ( Int, Int )
+getConnectedZeroCellPositions pos (MineField g) =
+    getConnectedZeroCellPositionsHelp g pos Set.empty Set.empty
+
+
+getConnectedZeroCellPositionsHelp grid pos pending acc =
     let
         neighboursWithZeroSurroundingMines =
             Tuple.neighboursOf pos
@@ -55,7 +59,7 @@ connectedZeroCellsHelp grid pos pending acc =
             nAcc
 
         x :: xs ->
-            connectedZeroCellsHelp grid x (Set.fromList xs) nAcc
+            getConnectedZeroCellPositionsHelp grid x (Set.fromList xs) nAcc
 
 
 initCellGrid : ( Int, Int ) -> Set ( Int, Int ) -> Grid Cell
