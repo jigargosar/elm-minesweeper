@@ -1,6 +1,7 @@
 module MineField exposing (Cell(..), MineField, generator, get, zeroNeighbours)
 
 import Dict
+import Grid
 import GridSize exposing (GridSize)
 import Random exposing (Generator)
 import Set exposing (Set)
@@ -24,9 +25,16 @@ type MineField
 
 
 generator : I2 -> Float -> Generator MineField
-generator (( w, h ) as size) minePct =
-    minePositionsGenerator (GridSize.init w h) minePct
-        |> Random.map (initCellDict size >> MineField size)
+generator ( w, h ) minePct =
+    let
+        size_ =
+            ( w, h )
+
+        size =
+            GridSize.init w h
+    in
+    minePositionsGenerator size minePct
+        |> Random.map (initCellDict size >> MineField size_)
 
 
 get : I2 -> MineField -> Maybe Cell
@@ -45,7 +53,7 @@ zeroNeighbours position (MineField size d) =
         |> Set.fromList
 
 
-initCellDict : I2 -> Set I2 -> CellDict
+initCellDict : GridSize -> Set I2 -> CellDict
 initCellDict size minePositions =
     let
         neighbourMineCount pos =
@@ -60,18 +68,15 @@ initCellDict size minePositions =
                     )
                     0
     in
-    Set.foldl
+    Grid.init size
         (\pos ->
-            Dict.insert pos
-                (if Set.member pos minePositions then
-                    Mine
+            if Set.member pos minePositions then
+                Mine
 
-                 else
-                    Empty (neighbourMineCount pos)
-                )
+            else
+                Empty (neighbourMineCount pos)
         )
-        Dict.empty
-        (positionsFromSize size)
+        |> Grid.toDict
 
 
 minePositionsGenerator : GridSize -> Float -> Generator (Set I2)

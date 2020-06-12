@@ -1,4 +1,4 @@
-module Grid exposing (Grid, filled, init)
+module Grid exposing (Grid, filled, init, toDict)
 
 import Dict exposing (Dict)
 import GridSize exposing (GridSize)
@@ -27,3 +27,8 @@ init : GridSize -> (( Int, Int ) -> a) -> Grid a
 init size f =
     Set.foldl (\pos -> Dict.insert pos (f pos)) Dict.empty (GridSize.posSet size)
         |> Grid size
+
+
+toDict : Grid a -> Dict ( Int, Int ) a
+toDict (Grid _ d) =
+    d
