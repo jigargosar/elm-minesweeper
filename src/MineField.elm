@@ -73,6 +73,27 @@ initCellDict size minePositions =
         (positionsFromSize size)
 
 
+minePositionsGenerator : I2 -> Float -> Generator (Set I2)
+minePositionsGenerator ( w, h ) minePct =
+    let
+        cellTotal =
+            w * h
+
+        positions =
+            List.range 0 (w - 1)
+                |> List.map (\x -> List.range 0 (h - 1) |> List.map (\y -> ( x, y )))
+                |> List.concat
+    in
+    Random.list cellTotal (Random.weighted ( minePct, True ) [ ( 1 - minePct, False ) ])
+        |> Random.map
+            (\boolList ->
+                List.map2 Tuple.pair positions boolList
+                    |> List.filter Tuple.second
+                    |> List.map Tuple.first
+                    |> Set.fromList
+            )
+
+
 neighbourPositionsOf xy =
     Set.map (tupleMap2 (+) xy) unitNeighbours
 
@@ -97,24 +118,3 @@ positionsFromSize ( w, h ) =
         |> List.map (\x -> List.range 0 (h - 1) |> List.map (\y -> ( x, y )))
         |> List.concat
         |> Set.fromList
-
-
-minePositionsGenerator : I2 -> Float -> Generator (Set I2)
-minePositionsGenerator ( w, h ) minePct =
-    let
-        cellTotal =
-            w * h
-
-        positions =
-            List.range 0 (w - 1)
-                |> List.map (\x -> List.range 0 (h - 1) |> List.map (\y -> ( x, y )))
-                |> List.concat
-    in
-    Random.list cellTotal (Random.weighted ( minePct, True ) [ ( 1 - minePct, False ) ])
-        |> Random.map
-            (\boolList ->
-                List.map2 Tuple.pair positions boolList
-                    |> List.filter Tuple.second
-                    |> List.map Tuple.first
-                    |> Set.fromList
-            )
