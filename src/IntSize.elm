@@ -1,6 +1,5 @@
 module IntSize exposing
     ( IntSize
-    , fromTuple
     , includeNeighbours
     , init
     , isPosInvalid
@@ -21,11 +20,6 @@ type IntSize
 init : Int -> Int -> IntSize
 init w h =
     IntSize ( w, h )
-
-
-fromTuple : ( Int, Int ) -> IntSize
-fromTuple =
-    IntSize
 
 
 isPosInvalid : IntSize -> ( Int, Int ) -> Bool
