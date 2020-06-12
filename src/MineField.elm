@@ -1,16 +1,11 @@
 module MineField exposing (Cell(..), MineField, generator, get, zeroNeighbours)
 
-import Dict
+import Dict exposing (Dict)
 import Grid
-import GridSize exposing (GridSize)
 import List.Extra as List
 import More.Tuple as Tuple
 import Random exposing (Generator)
 import Set exposing (Set)
-
-
-type alias I2 =
-    ( Int, Int )
 
 
 type Cell
@@ -19,33 +14,26 @@ type Cell
 
 
 type alias CellDict =
-    Dict.Dict I2 Cell
+    Dict ( Int, Int ) Cell
 
 
 type MineField
-    = MineField I2 CellDict
+    = MineField CellDict
 
 
-generator : I2 -> Float -> Generator MineField
-generator ( w, h ) minePct =
-    let
-        size_ =
-            ( w, h )
-
-        size =
-            GridSize.init w h
-    in
-    minePositionsGenerator size_ minePct
-        |> Random.map (initCellDict size >> MineField size_)
+generator : ( Int, Int ) -> Float -> Generator MineField
+generator size minePct =
+    minePositionsGenerator size minePct
+        |> Random.map (initCellDict size >> MineField)
 
 
-get : I2 -> MineField -> Maybe Cell
-get pos (MineField size d) =
+get : ( Int, Int ) -> MineField -> Maybe Cell
+get pos (MineField d) =
     Dict.get pos d
 
 
-zeroNeighbours : I2 -> MineField -> Set I2
-zeroNeighbours position (MineField size d) =
+zeroNeighbours : ( Int, Int ) -> MineField -> Set ( Int, Int )
+zeroNeighbours position (MineField d) =
     let
         nPos =
             Tuple.neighboursOf position
@@ -55,7 +43,7 @@ zeroNeighbours position (MineField size d) =
         |> Set.fromList
 
 
-initCellDict : I2 -> Set I2 -> CellDict
+initCellDict : ( Int, Int ) -> Set ( Int, Int ) -> CellDict
 initCellDict size minePosSet =
     let
         isMine pos =
@@ -75,7 +63,7 @@ initCellDict size minePosSet =
         |> Grid.toDict
 
 
-minePositionsGenerator : I2 -> Float -> Generator (Set I2)
+minePositionsGenerator : ( Int, Int ) -> Float -> Generator (Set ( Int, Int ))
 minePositionsGenerator size minePct =
     let
         xs =
