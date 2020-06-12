@@ -117,15 +117,15 @@ gridSize =
 
 
 gridWidth =
-    6
+    16
 
 
 gridHeight =
-    12
+    16
 
 
 cellWidth =
-    70
+    40
 
 
 viewGrid : Model -> Html Msg
