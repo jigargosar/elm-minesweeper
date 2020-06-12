@@ -1,6 +1,7 @@
-module IntSize exposing (IntSize, fromTuple, init, isPosInvalid, isPosValid, neighbours)
+module IntSize exposing (IntSize, fromTuple, init, isPosInvalid, isPosValid, neighbourSet, neighbours)
 
 import More.Tuple as Tuple
+import Set
 
 
 type IntSize
@@ -31,3 +32,8 @@ neighbours : IntSize -> ( Int, Int ) -> List ( Int, Int )
 neighbours size pos =
     Tuple.neighboursOf pos
         |> List.filter (isPosValid size)
+
+
+neighbourSet : IntSize -> ( Int, Int ) -> Set.Set ( Int, Int )
+neighbourSet size =
+    neighbours size >> Set.fromList
