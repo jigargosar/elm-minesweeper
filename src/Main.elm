@@ -150,7 +150,7 @@ viewTile m loc =
             toScreenCords loc
 
         isOpenMine =
-            lidAt m loc == Just LidGrid.Open && mineCellAt m loc == Just MineGrid.Mine
+            tileAt m loc == Just ( LidGrid.Open, MineGrid.Mine )
     in
     div
         ([ styleWidth cellWidth
