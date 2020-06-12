@@ -42,7 +42,7 @@ get k (MineField _ d) =
 getAutoOpenPositionsFrom : ( Int, Int ) -> MineField -> Set ( Int, Int )
 getAutoOpenPositionsFrom pos (MineField size d) =
     connectedPositionsWithZeroSurroundingMines d pos Set.empty Set.empty
-        |> IntSize.includeNeighboursOfEveryMember size
+        |> IntSize.includeNeighbourPositions size
 
 
 connectedPositionsWithZeroSurroundingMines :

@@ -1,7 +1,7 @@
 module IntSize exposing
     ( IntSize
     , fromTuple
-    , includeNeighboursOfEveryMember
+    , includeNeighbourPositions
     , init
     , isPosInvalid
     , isPosValid
@@ -49,8 +49,8 @@ neighbourSet size =
     neighbours size >> Set.fromList
 
 
-includeNeighboursOfEveryMember : IntSize -> Set ( Int, Int ) -> Set ( Int, Int )
-includeNeighboursOfEveryMember size posSet =
+includeNeighbourPositions : IntSize -> Set ( Int, Int ) -> Set ( Int, Int )
+includeNeighbourPositions size posSet =
     posSet
         |> Set.foldl (neighbourSet size >> Set.union) posSet
 
