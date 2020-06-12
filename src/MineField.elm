@@ -19,7 +19,7 @@ type MineField
 
 generator : ( Int, Int ) -> Float -> Generator MineField
 generator size minePct =
-    minePositionsGenerator size minePct
+    minesGenerator size minePct
         |> Random.map (initCellGrid size >> MineField)
 
 
@@ -60,8 +60,8 @@ initCellGrid size minePosSet =
         )
 
 
-minePositionsGenerator : ( Int, Int ) -> Float -> Generator (Set ( Int, Int ))
-minePositionsGenerator size minePct =
+minesGenerator : ( Int, Int ) -> Float -> Generator (Set ( Int, Int ))
+minesGenerator size minePct =
     let
         xs =
             Tuple.range size
