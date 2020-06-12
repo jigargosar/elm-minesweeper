@@ -41,15 +41,11 @@ type alias Loc =
 init : Model
 init =
     let
+        minesGenerator =
+            MineGrid.generator gridSize 0.1
+
         mines_ : MineGrid
         mines_ =
-            let
-                minePct =
-                    0.1
-
-                minesGenerator =
-                    MineGrid.generator gridSize minePct
-            in
             Random.step minesGenerator (Random.initialSeed 1)
                 |> first
     in
