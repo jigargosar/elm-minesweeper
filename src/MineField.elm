@@ -1,6 +1,5 @@
 module MineField exposing (Cell(..), MineField, generator, get, getConnectedZeroCellPositions)
 
-import Dict exposing (Dict)
 import Grid exposing (Grid)
 import List.Extra as List
 import More.Tuple as Tuple
