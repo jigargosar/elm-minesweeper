@@ -83,13 +83,6 @@ includeNeighboursOfEveryMember locSet =
         |> Set.foldl (validNeighbours >> Set.union) locSet
 
 
-
---neighboursHavingZeroNeighbouringMines loc =
---    loc
---        |> validNeighbours
---        |> Set.filter (\n -> neighbourMineCount n == 0)
-
-
 validNeighbours loc =
     loc
         |> neighbourLocations
