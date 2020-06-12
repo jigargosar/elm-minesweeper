@@ -36,14 +36,11 @@ connectedZeroCells pos (MineField g) =
 connectedZeroCellsHelp grid pos pending acc =
     let
         neighboursWithZeroSurroundingMines =
-            let
-                ns =
-                    Tuple.neighboursOf pos
-            in
-            grid
-                |> Grid.toDict
-                |> Dict.filter (\k v -> List.member k ns && v == Empty 0)
-                |> Dict.keys
+            Tuple.neighboursOf pos
+                |> List.filter
+                    (\neighbourPos ->
+                        Grid.get neighbourPos grid == Just (Empty 0)
+                    )
                 |> Set.fromList
 
         nAcc =
