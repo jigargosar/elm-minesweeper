@@ -176,23 +176,14 @@ viewTile m loc =
                     []
                )
         )
-        [ case lidAt m loc of
-            Just LidGrid.Open ->
-                text
-                    (case mineCellAt m loc of
-                        Nothing ->
-                            ""
+        [ case tileAt m loc of
+            Just ( LidGrid.Open, MineGrid.Mine ) ->
+                text "*"
 
-                        Just cell ->
-                            case cell of
-                                MineGrid.Mine ->
-                                    "*"
+            Just ( LidGrid.Open, MineGrid.Empty n ) ->
+                text (fromInt n)
 
-                                MineGrid.Empty nmc ->
-                                    fromInt nmc
-                    )
-
-            Just LidGrid.Flagged ->
+            Just ( LidGrid.Flagged, _ ) ->
                 text "F"
 
             _ ->
