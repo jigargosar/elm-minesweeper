@@ -35,7 +35,7 @@ type GameState
     | Lost
 
 
-type alias Loc =
+type alias Pos =
     ( Int, Int )
 
 
@@ -59,8 +59,8 @@ init _ =
 
 
 type Msg
-    = Click Loc
-    | RightClick Loc
+    = Click Pos
+    | RightClick Pos
 
 
 update : Msg -> Model -> Model
@@ -94,12 +94,12 @@ tileAt model loc =
     Maybe.map2 Tuple.pair (lidAt model loc) (mineCellAt model loc)
 
 
-lidAt : Model -> Loc -> Maybe Lid
+lidAt : Model -> Pos -> Maybe Lid
 lidAt model =
     LidGrid.get model.lids
 
 
-mineCellAt : Model -> Loc -> Maybe MineGrid.Cell
+mineCellAt : Model -> Pos -> Maybe MineGrid.Cell
 mineCellAt model =
     MineGrid.get model.mines
 
