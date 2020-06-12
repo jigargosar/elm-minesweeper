@@ -8,7 +8,7 @@ import Html.Events as E exposing (onClick)
 import IntSize as Size exposing (IntSize)
 import Json.Decode as JD
 import MineField exposing (MineField)
-import PosDict
+import PosDict exposing (PosDict)
 import Random
 import Set exposing (Set)
 import String exposing (fromFloat, fromInt)
@@ -24,7 +24,7 @@ main =
 
 
 type alias Model =
-    { tsDict : Dict Loc TileState
+    { tsDict : PosDict TileState
     , gameState : GameState
     }
 
