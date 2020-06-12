@@ -73,16 +73,24 @@ update msg model =
                     model
 
         RightClick loc ->
-            case tsAt model loc of
-                Just Closed ->
-                    model
-                        |> setLid loc Flagged
+            let
+                maybeNewLid =
+                    case tsAt model loc of
+                        Just Closed ->
+                            Just Flagged
 
-                Just Flagged ->
-                    model
-                        |> setLid loc Closed
+                        Just Flagged ->
+                            Just Closed
 
-                _ ->
+                        _ ->
+                            Nothing
+            in
+            case maybeNewLid of
+                Just nLid ->
+                    model
+                        |> setLid loc nLid
+
+                Nothing ->
                     model
 
 
