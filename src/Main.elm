@@ -87,6 +87,18 @@ validNeighbours loc =
         |> Set.filter isValidLoc
 
 
+neighbourLocations ( x, y ) =
+    List.map (\( dx, dy ) -> ( x + dx, y + dy )) unitNeighbours
+
+
+unitNeighbours =
+    [ [ ( -1, -1 ), ( 0, -1 ), ( 1, -1 ) ]
+    , [ ( -1, 0 ), ( 1, 0 ) ]
+    , [ ( -1, 1 ), ( 0, 1 ), ( 1, 1 ) ]
+    ]
+        |> List.concat
+
+
 update : Msg -> Model -> Model
 update msg model =
     case msg of
@@ -284,18 +296,6 @@ viewTile m loc =
             _ ->
                 text ""
         ]
-
-
-neighbourLocations ( x, y ) =
-    List.map (\( dx, dy ) -> ( x + dx, y + dy )) unitNeighbours
-
-
-unitNeighbours =
-    [ [ ( -1, -1 ), ( 0, -1 ), ( 1, -1 ) ]
-    , [ ( -1, 0 ), ( 1, 0 ) ]
-    , [ ( -1, 1 ), ( 0, 1 ), ( 1, 1 ) ]
-    ]
-        |> List.concat
 
 
 
