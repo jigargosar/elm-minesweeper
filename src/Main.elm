@@ -55,30 +55,28 @@ update msg model =
     case msg of
         Click loc ->
             case ( tsAt model loc, MineField.get loc mines ) of
-                ( Just Closed, Just cell ) ->
-                    case cell of
-                        MineField.Mine ->
-                            { model
-                                | gameState = Lost
-                                , lidGrid = Dict.insert loc Open model.lidGrid
-                            }
+                ( Just Closed, Just MineField.Mine ) ->
+                    { model
+                        | gameState = Lost
+                        , lidGrid = Dict.insert loc Open model.lidGrid
+                    }
 
-                        MineField.Empty _ ->
-                            let
-                                nts =
-                                    MineField.getAutoOpenPositionsFrom loc mines
-                                        |> Set.foldl
-                                            (\n ts ->
-                                                case Dict.get n ts of
-                                                    Just Closed ->
-                                                        Dict.insert n Open ts
+                ( Just Closed, Just (MineField.Empty _) ) ->
+                    let
+                        lidGrid =
+                            MineField.getAutoOpenPositionsFrom loc mines
+                                |> Set.foldl
+                                    (\n ts ->
+                                        case Dict.get n ts of
+                                            Just Closed ->
+                                                Dict.insert n Open ts
 
-                                                    _ ->
-                                                        ts
-                                            )
-                                            model.lidGrid
-                            in
-                            { model | lidGrid = Dict.insert loc Open nts }
+                                            _ ->
+                                                ts
+                                    )
+                                    model.lidGrid
+                    in
+                    { model | lidGrid = Dict.insert loc Open lidGrid }
 
                 _ ->
                     model
