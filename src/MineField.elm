@@ -36,8 +36,8 @@ get k (MineField _ d) =
 
 
 getAutoOpenPositionsFrom : ( Int, Int ) -> MineField -> Set ( Int, Int )
-getAutoOpenPositionsFrom pos (MineField size d) =
-    connectedPositionsWithZeroSurroundingMines size d pos Set.empty Set.empty
+getAutoOpenPositionsFrom pos ((MineField size _) as model) =
+    connectedPositionsWithZeroSurroundingMines model pos Set.empty Set.empty
         |> Size.includeNeighbours size
 
 
