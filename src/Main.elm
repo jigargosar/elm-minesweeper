@@ -40,14 +40,14 @@ type alias Pos =
 
 
 init : { now : Int } -> ( Model, Cmd Msg )
-init _ =
+init flags =
     let
         minesGenerator =
             MineGrid.generator gridSize 0.1
 
         mines : MineGrid
         mines =
-            Random.step minesGenerator (Random.initialSeed 1)
+            Random.step minesGenerator (Random.initialSeed flags.now)
                 |> first
     in
     ( { lids = LidGrid.fillClosed gridSize
