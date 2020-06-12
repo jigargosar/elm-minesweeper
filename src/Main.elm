@@ -24,7 +24,7 @@ main =
 
 
 type alias Model =
-    { tsDict : PosDict TileState
+    { lidGrid : PosDict Lid
     , gameState : GameState
     }
 
@@ -40,7 +40,7 @@ type alias Loc =
 
 init : Model
 init =
-    { tsDict = PosDict.init gridSize (always Closed)
+    { lidGrid = PosDict.init gridSize (always Closed)
     , gameState = PlayerTurn
     }
 
@@ -70,7 +70,7 @@ update msg model =
                                         MineField.Mine ->
                                             { model
                                                 | gameState = Lost
-                                                , tsDict = Dict.insert loc Open model.tsDict
+                                                , lidGrid = Dict.insert loc Open model.lidGrid
                                             }
 
                                         MineField.Empty _ ->
@@ -86,9 +86,9 @@ update msg model =
                                                                     _ ->
                                                                         ts
                                                             )
-                                                            model.tsDict
+                                                            model.lidGrid
                                             in
-                                            { model | tsDict = Dict.insert loc Open nts }
+                                            { model | lidGrid = Dict.insert loc Open nts }
 
                         Flagged ->
                             model
@@ -104,21 +104,21 @@ update msg model =
                             model
 
                         Closed ->
-                            { model | tsDict = Dict.insert loc Flagged model.tsDict }
+                            { model | lidGrid = Dict.insert loc Flagged model.lidGrid }
 
                         Flagged ->
-                            { model | tsDict = Dict.insert loc Closed model.tsDict }
+                            { model | lidGrid = Dict.insert loc Closed model.lidGrid }
 
                 Nothing ->
                     model
 
 
-tsAt : Model -> Loc -> Maybe TileState
+tsAt : Model -> Loc -> Maybe Lid
 tsAt model loc =
-    Dict.get loc model.tsDict
+    Dict.get loc model.lidGrid
 
 
-type TileState
+type Lid
     = Open
     | Closed
     | Flagged
