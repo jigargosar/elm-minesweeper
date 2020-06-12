@@ -54,47 +54,34 @@ update : Msg -> Model -> Model
 update msg model =
     case msg of
         Click loc ->
-            case tsAt model loc of
-                Nothing ->
+            case ( tsAt model loc, MineField.get loc mines ) of
+                ( Just Closed, Just cell ) ->
+                    case cell of
+                        MineField.Mine ->
+                            { model
+                                | gameState = Lost
+                                , lidGrid = Dict.insert loc Open model.lidGrid
+                            }
+
+                        MineField.Empty _ ->
+                            let
+                                nts =
+                                    MineField.getAutoOpenPositionsFrom loc mines
+                                        |> Set.foldl
+                                            (\n ts ->
+                                                case Dict.get n ts of
+                                                    Just Closed ->
+                                                        Dict.insert n Open ts
+
+                                                    _ ->
+                                                        ts
+                                            )
+                                            model.lidGrid
+                            in
+                            { model | lidGrid = Dict.insert loc Open nts }
+
+                _ ->
                     model
-
-                Just s ->
-                    case s of
-                        Open ->
-                            model
-
-                        Closed ->
-                            case MineField.get loc mines of
-                                Nothing ->
-                                    model
-
-                                Just cell ->
-                                    case cell of
-                                        MineField.Mine ->
-                                            { model
-                                                | gameState = Lost
-                                                , lidGrid = Dict.insert loc Open model.lidGrid
-                                            }
-
-                                        MineField.Empty _ ->
-                                            let
-                                                nts =
-                                                    MineField.getAutoOpenPositionsFrom loc mines
-                                                        |> Set.foldl
-                                                            (\n ts ->
-                                                                case Dict.get n ts of
-                                                                    Just Closed ->
-                                                                        Dict.insert n Open ts
-
-                                                                    _ ->
-                                                                        ts
-                                                            )
-                                                            model.lidGrid
-                                            in
-                                            { model | lidGrid = Dict.insert loc Open nts }
-
-                        Flagged ->
-                            model
 
         RightClick loc ->
             case tsAt model loc of
