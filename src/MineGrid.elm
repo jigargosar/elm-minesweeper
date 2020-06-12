@@ -30,8 +30,8 @@ generator size minePct =
         |> Random.map (initCellDict size >> MineGrid size)
 
 
-get : ( Int, Int ) -> MineGrid -> Maybe Cell
-get k (MineGrid _ d) =
+get : MineGrid -> ( Int, Int ) -> Maybe Cell
+get (MineGrid _ d) k =
     Dict.get k d
 
 

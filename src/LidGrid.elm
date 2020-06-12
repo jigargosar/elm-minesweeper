@@ -31,8 +31,8 @@ mapAt pos f (LidGrid s d) =
     LidGrid s (Dict.update pos (Maybe.map f) d)
 
 
-get : ( Int, Int ) -> LidGrid -> Maybe Lid
-get pos (LidGrid _ d) =
+get : LidGrid -> ( Int, Int ) -> Maybe Lid
+get (LidGrid _ d) pos =
     Dict.get pos d
 
 

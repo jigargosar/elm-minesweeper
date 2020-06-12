@@ -76,13 +76,13 @@ update msg model =
 
 
 lidAt : Model -> Loc -> Maybe Lid
-lidAt model loc =
-    LidGrid.get loc model.lidGrid
+lidAt model =
+    LidGrid.get model.lidGrid
 
 
 mineCellAt : Model -> Loc -> Maybe MineGrid.Cell
-mineCellAt _ loc =
-    MineGrid.get loc mines
+mineCellAt _ =
+    MineGrid.get mines
 
 
 view m =
