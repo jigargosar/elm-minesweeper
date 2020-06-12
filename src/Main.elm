@@ -15,10 +15,11 @@ import Tuple exposing (first)
 
 
 main =
-    Browser.sandbox
+    Browser.element
         { init = init
         , view = view
-        , update = update
+        , update = \msg -> update msg >> (\mo -> ( mo, Cmd.none ))
+        , subscriptions = always Sub.none
         }
 
 
@@ -38,8 +39,8 @@ type alias Loc =
     ( Int, Int )
 
 
-init : Model
-init =
+init : () -> ( Model, Cmd Msg )
+init _ =
     let
         minesGenerator =
             MineGrid.generator gridSize 0.1
@@ -49,10 +50,12 @@ init =
             Random.step minesGenerator (Random.initialSeed 1)
                 |> first
     in
-    { lids = LidGrid.fillClosed gridSize
-    , mines = mines
-    , gameState = PlayerTurn
-    }
+    ( { lids = LidGrid.fillClosed gridSize
+      , mines = mines
+      , gameState = PlayerTurn
+      }
+    , Cmd.none
+    )
 
 
 type Msg
