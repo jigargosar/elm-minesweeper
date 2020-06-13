@@ -229,7 +229,7 @@ emptyCoverTile pos =
             ++ [ style "border-style" "outset"
                , style "border-width" "4px"
                , style "border-color" "unset"
-               , style "background-color" (whitePct 80)
+               , backgroundColor (whitePct 80)
                ]
         )
         []
