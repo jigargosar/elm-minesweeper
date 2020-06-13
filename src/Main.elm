@@ -312,7 +312,13 @@ tickTile pos =
 
 
 mineTile pos =
-    stringTile pos "💣" [ opacity 0.8 ]
+    stringTile pos
+        "💣"
+        [ opacity 0.8
+        , borderSolid
+        , borderWidth 0.5
+        , borderColor (whitePct 80)
+        ]
 
 
 flagTile pos =
