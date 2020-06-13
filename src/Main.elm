@@ -254,9 +254,9 @@ outerAttrs pos =
     , style "display" "flex"
     , style "align-items" "stretch"
     , style "justify-content" "center"
+    , style "user-select" "none"
     , onClick (Click pos)
     , E.preventDefaultOn "contextmenu" (JD.succeed ( RightClick pos, True ))
-    , style "user-select" "none"
     ]
 
 
