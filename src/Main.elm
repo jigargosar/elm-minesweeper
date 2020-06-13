@@ -208,7 +208,11 @@ viewBaseTile pos string =
 
 viewCoverTile pos string =
     div
-        (commonTileAttrs pos ++ [ style "border-style" "outset" ])
+        (commonTileAttrs pos
+            ++ [ style "border-style" "outset"
+               , style "background-color" "#C4AFAF8A"
+               ]
+        )
         [ text string ]
 
 
