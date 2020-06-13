@@ -263,10 +263,6 @@ viewBaseTile pos string xs =
         ]
 
 
-whitePct pct =
-    "hsl(0,0%," ++ String.fromInt pct ++ "%)"
-
-
 viewCoverTile pos string xs =
     div (outerAttrs pos)
         [ div
@@ -294,7 +290,7 @@ outerAttrs pos =
     , style "overflow" "hidden"
 
     --, style "outline" "1px solid dodgerblue"
-    , style "font-size" (String.fromFloat (cellWidth * 0.6) ++ "px")
+    , style "font-size" (floatPx (cellWidth * 0.6))
     , style "font-family" "monospace"
     , style "display" "flex"
     , style "align-items" "stretch"
@@ -368,3 +364,7 @@ absolute =
 
 translate ( x, y ) =
     "translate(" ++ floatPx x ++ "," ++ floatPx y ++ ")"
+
+
+whitePct pct =
+    "hsl(0,0%," ++ String.fromInt pct ++ "%)"
