@@ -229,7 +229,9 @@ emptyBaseTile pos xs =
 emptyCoverTile pos =
     div (outerAttrs pos)
         [ div
-            ([ style "flex" "1 1 auto" ]
+            ([ style "flex" "1 0 auto"
+             , style "align-self" "stretch"
+             ]
                 ++ [ style "border-style" "outset"
                    , style "border-width" "4px"
                    , style "border-color" "unset"
