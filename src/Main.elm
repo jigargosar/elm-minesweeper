@@ -277,7 +277,7 @@ renderTileView pos tv =
 
         ExplodingMineView ->
             div []
-                [ emptyBaseTile pos [ backgroundColor "red" ], stringTile pos "💣" [] ]
+                [ emptyBaseTile pos [ backgroundColor "red" ], mineTile pos ]
 
         SuccessMineView ->
             div []
@@ -318,7 +318,7 @@ tickTile pos =
 
 
 mineTile pos =
-    stringTile pos "💣" [ opacity 0.5 ]
+    stringTile pos "💣" [ opacity 0.8 ]
 
 
 emptyBaseTile pos xs =
