@@ -203,7 +203,7 @@ viewTile ( pos, ( lid, cell ) ) =
 viewBaseTile pos string =
     let
         bc =
-            grayPct 90
+            whitePct 90
     in
     div
         (commonTileAttrs pos
@@ -215,7 +215,7 @@ viewBaseTile pos string =
         [ text string ]
 
 
-grayPct pct =
+whitePct pct =
     "hsl(0,0%," ++ String.fromInt pct ++ "%)"
 
 
@@ -228,7 +228,7 @@ viewCoverTile pos string =
         [ div
             (innerTileAttrs
                 ++ [ style "border-style" "outset"
-                   , style "background-color" (grayPct 80)
+                   , style "background-color" (whitePct 80)
                    ]
             )
             [ text string ]
