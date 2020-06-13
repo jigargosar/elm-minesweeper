@@ -210,6 +210,41 @@ viewTile ( pos, ( lid, cell ) ) =
                 ]
 
 
+type TileView
+    = MineView
+    | ExplodingMineView
+    | EmptyView
+    | NumView Int
+    | ClosedView
+    | FlaggedView
+
+
+renderTileView pos tv =
+    case tv of
+        MineView ->
+            div []
+                [ emptyBaseTile pos [], stringTile pos "💣" [] ]
+
+        ExplodingMineView ->
+            div []
+                [ emptyBaseTile pos [ backgroundColor "red" ], stringTile pos "💣" [] ]
+
+        EmptyView ->
+            div [] [ emptyBaseTile pos [] ]
+
+        NumView n ->
+            div [] [ emptyBaseTile pos [], stringTile pos (String.fromInt n) [ bold ] ]
+
+        ClosedView ->
+            div [] [ emptyCoverTile pos ]
+
+        FlaggedView ->
+            div []
+                [ emptyCoverTile pos
+                , stringTile pos "⛳" [ color "blue" ]
+                ]
+
+
 emptyBaseTile pos xs =
     div
         (commonAttrs pos
