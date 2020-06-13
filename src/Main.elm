@@ -31,7 +31,7 @@ type alias Model =
 
 type GameState
     = PlayerTurn
-    | Lost
+    | Lost ( Int, Int )
 
 
 type alias Pos =
@@ -92,7 +92,7 @@ update msg model =
             case tileAt model loc of
                 Just ( LG.Closed, MG.Mine ) ->
                     { model
-                        | gameState = Lost
+                        | gameState = Lost loc
                         , lids = LG.open loc model.lids
                     }
 
@@ -110,7 +110,7 @@ update msg model =
         ( PlayerTurn, RightClick loc ) ->
             { model | lids = LG.cycleLabel loc model.lids }
 
-        ( Lost, Click _ ) ->
+        ( Lost _, Click _ ) ->
             reset model
 
         ( _, ResetClicked ) ->
