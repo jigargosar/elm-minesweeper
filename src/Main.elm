@@ -241,7 +241,7 @@ emptyCoverTile pos =
 
 
 stringTile pos string xs =
-    div (outerAttrs pos ++ [ style "align-items" "center" ] ++ xs) [ text string ]
+    div (outerAttrs pos ++ [ itemsCenter ] ++ xs) [ text string ]
 
 
 outerAttrs pos =
@@ -350,3 +350,7 @@ noSelection =
 
 overflowHidden =
     style "overflow" "hidden"
+
+
+itemsCenter =
+    alignItems "center"
