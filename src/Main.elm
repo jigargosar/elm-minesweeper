@@ -212,7 +212,7 @@ viewTile ( pos, ( lid, cell ) ) =
 
 emptyBaseTile pos xs =
     div
-        (outerAttrs pos
+        (commonAttrs pos
             ++ [ style "border-style" "solid"
                , style "border-width" "0.5px"
                , style "border-color" (whitePct 80)
@@ -225,7 +225,7 @@ emptyBaseTile pos xs =
 
 emptyCoverTile pos =
     div
-        (outerAttrs pos
+        (commonAttrs pos
             ++ [ style "border-style" "outset"
                , style "border-width" "4px"
                , style "border-color" "unset"
@@ -236,10 +236,10 @@ emptyCoverTile pos =
 
 
 stringTile pos string xs =
-    div (outerAttrs pos ++ [ itemsCenter ] ++ xs) [ text string ]
+    div (commonAttrs pos ++ [ itemsCenter ] ++ xs) [ text string ]
 
 
-outerAttrs pos =
+commonAttrs pos =
     let
         sp =
             toScreenCords pos
