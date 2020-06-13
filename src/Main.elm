@@ -227,7 +227,7 @@ emptyBaseTile pos xs =
 
 
 emptyCoverTile pos =
-    div (outerAttrs pos)
+    div (outerAttrs pos ++ [ itemsStretch ])
         [ div
             ([ style "flex-grow" "1"
              ]
