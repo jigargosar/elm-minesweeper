@@ -214,7 +214,7 @@ emptyBaseTile pos xs =
     div
         (outerAttrs pos
             ++ [ style "border-style" "solid"
-               , style "border-width" "1px"
+               , style "border-width" "0.5px"
                , style "border-color" (whitePct 80)
                , backgroundColor (whitePct 90)
                ]
