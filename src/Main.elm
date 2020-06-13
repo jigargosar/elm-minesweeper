@@ -284,6 +284,7 @@ innerAttrs =
 
 
 -- Style Helpers
+--noinspection ElmUnusedSymbol
 
 
 backgroundColorTransparent =
