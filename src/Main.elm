@@ -214,7 +214,8 @@ viewBaseTile pos string =
         [ div
             (innerTileAttrs
                 ++ [ style "border-style" "solid"
-                   , style "border-color" bc
+                   , style "border-width" "1px"
+                   , style "border-color" (whitePct 80)
                    , style "background-color" bc
                    ]
             )
@@ -231,6 +232,7 @@ viewCoverTile pos string =
         [ div
             (innerTileAttrs
                 ++ [ style "border-style" "outset"
+                   , style "border-width" "1px"
                    , style "border-color" "unset"
                    , style "background-color" (whitePct 80)
                    ]
@@ -268,35 +270,6 @@ innerTileAttrs =
     , style "display" "flex"
     , style "align-items" "center"
     , style "justify-content" "center"
-    ]
-
-
-commonTileAttrs : ( Int, Int ) -> List (Attribute Msg)
-commonTileAttrs pos =
-    let
-        sp =
-            toScreenCords pos
-
-        bwPx =
-            2
-    in
-    [ styleWidth (cellWidth - bwPx * 2)
-    , styleHeight (cellWidth - bwPx * 2)
-    , absolute
-    , transforms [ translate sp ]
-    , style "overflow" "hidden"
-
-    --, style "outline" "1px solid dodgerblue"
-    , style "font-size" "3rem"
-    , style "font-family" "monospace"
-    , style "display" "flex"
-    , style "align-items" "center"
-    , style "justify-content" "center"
-    , onClick (Click pos)
-    , E.preventDefaultOn "contextmenu" (JD.succeed ( RightClick pos, True ))
-    , style "user-select" "none"
-    , style "border-width" (fromFloat bwPx ++ "px")
-    , style "background-color" "white"
     ]
 
 
