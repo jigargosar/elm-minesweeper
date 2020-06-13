@@ -202,7 +202,15 @@ viewTile ( pos, ( lid, cell ) ) =
             viewCoverTile pos "" []
 
         LG.Flagged ->
-            viewCoverTile pos "F" [ style "color" "red" ]
+            viewCoverTile pos "F" [ color "red" ]
+
+
+backgroundColor =
+    style "background-color"
+
+
+color =
+    style "color"
 
 
 viewBaseTile pos string xs =
@@ -213,7 +221,7 @@ viewBaseTile pos string xs =
                    , style "border-style" "solid"
                    , style "border-width" "1px"
                    , style "border-color" (whitePct 80)
-                   , style "background-color" (whitePct 90)
+                   , backgroundColor (whitePct 90)
                    ]
                 ++ xs
             )
