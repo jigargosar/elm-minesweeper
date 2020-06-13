@@ -47,7 +47,13 @@ init flags =
             MG.generator gridSize 0.1
 
         ( mines, seed ) =
-            Random.step minesGenerator (Random.initialSeed (flags.now |> always 2))
+            let
+                initialSeed =
+                    flags.now
+                        |> always 2
+                        |> Random.initialSeed
+            in
+            Random.step minesGenerator initialSeed
     in
     ( { lids = LG.fillClosed gridSize
       , mines = mines
