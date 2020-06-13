@@ -185,19 +185,13 @@ viewTile ( pos, ( lid, cell ) ) =
         LG.Open ->
             case cell of
                 MG.Mine ->
-                    div
-                        (baseTileAttrs pos)
-                        [ text "*" ]
+                    viewBaseTile pos "*"
 
                 MG.Empty 0 ->
-                    div
-                        (baseTileAttrs pos)
-                        [ text "" ]
+                    viewBaseTile pos ""
 
                 MG.Empty n ->
-                    div
-                        (baseTileAttrs pos)
-                        [ text (String.fromInt n) ]
+                    viewBaseTile pos (String.fromInt n)
 
         LG.Closed ->
             div
@@ -208,6 +202,12 @@ viewTile ( pos, ( lid, cell ) ) =
             div
                 (coverTileAttrs pos)
                 [ text "F" ]
+
+
+viewBaseTile pos string =
+    div
+        (baseTileAttrs pos)
+        [ text string ]
 
 
 baseTileAttrs pos =
