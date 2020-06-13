@@ -246,21 +246,6 @@ stringTile pos string xs =
     div (outerAttrs pos ++ [ style "align-items" "center" ] ++ xs) [ text string ]
 
 
-viewCoverTile pos string xs =
-    div (outerAttrs pos)
-        [ div
-            (innerAttrs
-                ++ [ style "border-style" "outset"
-                   , style "border-width" "4px"
-                   , style "border-color" "unset"
-                   , style "background-color" (whitePct 80)
-                   ]
-                ++ xs
-            )
-            [ text string ]
-        ]
-
-
 outerAttrs pos =
     let
         sp =
