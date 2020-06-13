@@ -192,14 +192,10 @@ viewTile ( pos, ( lid, cell ) ) =
         LG.Open ->
             case cell of
                 MG.Mine ->
-                    if True then
-                        viewBaseTile pos "💣" [ backgroundColor "red" ]
-
-                    else
-                        div []
-                            [ emptyBaseTile pos [ backgroundColor "red" ]
-                            , stringTile pos "💣" []
-                            ]
+                    div []
+                        [ emptyBaseTile pos [ backgroundColor "red" ]
+                        , stringTile pos "💣" []
+                        ]
 
                 MG.Empty 0 ->
                     div [] [ emptyBaseTile pos [] ]
