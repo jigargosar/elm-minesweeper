@@ -350,7 +350,7 @@ coverTile pos =
 
 
 stringTile pos string xs =
-    div (commonAttrs pos ++ [ itemsCenter ] ++ xs) [ text string ]
+    div (commonAttrs pos ++ xs) [ text string ]
 
 
 commonAttrs pos =
