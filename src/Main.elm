@@ -65,8 +65,8 @@ type Msg
 
 update : Msg -> Model -> Model
 update msg model =
-    case msg of
-        Click loc ->
+    case ( model.gameState, msg ) of
+        ( PlayerTurn, Click loc ) ->
             case tileAt model loc of
                 Just ( LidGrid.Closed, MineGrid.Mine ) ->
                     { model
@@ -85,8 +85,11 @@ update msg model =
                 _ ->
                     model
 
-        RightClick loc ->
+        ( PlayerTurn, RightClick loc ) ->
             { model | lids = LidGrid.cycleLabel loc model.lids }
+
+        _ ->
+            model
 
 
 tileAt : Model -> ( Int, Int ) -> Maybe ( Lid, MineGrid.Cell )
