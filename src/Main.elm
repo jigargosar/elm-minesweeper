@@ -180,78 +180,31 @@ toScreenCords ( x, y ) =
 viewTile ( pos, ( lid, cell ) ) =
     case lid of
         LG.Open ->
+            let
+                openTileAttrs =
+                    commonTileAttrs pos ++ [ style "border-style" "inset" ]
+            in
             case cell of
                 MG.Mine ->
-                    viewMineTile pos
+                    div
+                        openTileAttrs
+                        [ text "*" ]
 
                 MG.Empty 0 ->
-                    viewEmptyTile pos
+                    div
+                        openTileAttrs
+                        [ text "" ]
 
                 MG.Empty n ->
-                    viewNumTile pos n
+                    div
+                        openTileAttrs
+                        [ text (String.fromInt n) ]
 
         LG.Closed ->
             viewClosedTile pos
 
         LG.Flagged ->
             viewFlaggedTile pos
-
-
-viewTile_ ( pos, tile ) =
-    let
-        isOpenMine =
-            tile == ( LG.Open, MG.Mine )
-    in
-    div
-        (commonTileAttrs pos
-            ++ (if isOpenMine then
-                    [ style "background-color" "red"
-                    ]
-
-                else
-                    []
-               )
-        )
-        [ case tile of
-            ( LG.Open, MG.Mine ) ->
-                text "*"
-
-            ( LG.Open, MG.Empty n ) ->
-                text (fromInt n)
-
-            ( LG.Flagged, _ ) ->
-                text "F"
-
-            _ ->
-                text ""
-        ]
-
-
-viewExplodedMineTile pos =
-    div
-        (commonTileAttrs pos
-            ++ [ style "background-color" "red"
-               ]
-        )
-        [ text "*" ]
-
-
-viewMineTile pos =
-    div
-        (commonTileAttrs pos ++ [ style "border-style" "inset" ])
-        [ text "*" ]
-
-
-viewNumTile pos n =
-    div
-        (commonTileAttrs pos ++ [ style "border-style" "inset" ])
-        [ text (String.fromInt n) ]
-
-
-viewEmptyTile pos =
-    div
-        (commonTileAttrs pos ++ [ style "border-style" "inset" ])
-        [ text "" ]
 
 
 viewClosedTile pos =
