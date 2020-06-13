@@ -272,8 +272,7 @@ type TileView
 renderTileView pos tv =
     case tv of
         MineView ->
-            div []
-                [ baseTile pos [], mineTile pos ]
+            div [] [ baseTile pos [], mineTile pos ]
 
         ExplodingMineView ->
             div []
