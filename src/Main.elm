@@ -371,7 +371,7 @@ commonAttrs pos =
     , style "box-sizing" "border-box"
 
     --, style "outline" "1px solid dodgerblue"
-    , stylePx "font-size" (cellWidth * 0.6)
+    , stylePx "font-size" cellWidth
     , style "font-family" "monospace"
     , displayFlex
     , itemsCenter
