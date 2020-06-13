@@ -306,7 +306,7 @@ renderTileView pos tv =
 
         SuccessMineView ->
             div []
-                [ emptyBaseTile pos [], stringTile pos "💣" [], stringTile pos "✔" [ color "green" ] ]
+                [ emptyBaseTile pos [], stringTile pos "💣" [], tickTile pos ]
 
         FailureEmptyView ->
             div [] [ emptyBaseTile pos [], crossTile pos ]
@@ -336,6 +336,10 @@ numTile pos n =
 
 crossTile pos =
     stringTile pos "❌" [ color "red", bold, opacity 0.6 ]
+
+
+tickTile pos =
+    stringTile pos "✔" [ color "green" ]
 
 
 emptyBaseTile pos xs =
