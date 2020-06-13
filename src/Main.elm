@@ -208,7 +208,7 @@ viewTile ( pos, ( lid, cell ) ) =
 
 
 baseTileAttrs pos =
-    commonTileAttrs pos ++ [ style "border-style" "inset" ]
+    commonTileAttrs pos ++ [ style "border-style" "solid", style "border-color" "transparent" ]
 
 
 coverTileAttrs pos =
@@ -220,9 +220,12 @@ commonTileAttrs pos =
     let
         sp =
             toScreenCords pos
+
+        bwPx =
+            2
     in
-    [ styleWidth cellWidth
-    , styleHeight cellWidth
+    [ styleWidth (cellWidth - bwPx * 2)
+    , styleHeight (cellWidth - bwPx * 2)
     , absolute
     , transforms [ translate sp ]
     , style "overflow" "hidden"
@@ -236,7 +239,7 @@ commonTileAttrs pos =
     , onClick (Click pos)
     , E.preventDefaultOn "contextmenu" (JD.succeed ( RightClick pos, True ))
     , style "user-select" "none"
-    , style "border-width" "2px"
+    , style "border-width" (fromFloat bwPx ++ "px")
     , style "background-color" "white"
     ]
 
