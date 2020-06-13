@@ -213,8 +213,7 @@ viewTile ( pos, ( lid, cell ) ) =
 emptyBaseTile pos xs =
     div (outerAttrs pos)
         [ div
-            (innerAttrs
-                ++ [ style "flex" "1 1 auto" ]
+            ([ style "flex" "1 1 auto" ]
                 ++ [ style "" ""
                    , style "border-style" "solid"
                    , style "border-width" "1px"
@@ -230,8 +229,7 @@ emptyBaseTile pos xs =
 emptyCoverTile pos =
     div (outerAttrs pos)
         [ div
-            (innerAttrs
-                ++ [ style "flex" "1 1 auto" ]
+            ([ style "flex" "1 1 auto" ]
                 ++ [ style "border-style" "outset"
                    , style "border-width" "4px"
                    , style "border-color" "unset"
@@ -266,19 +264,6 @@ outerAttrs pos =
     , noSelection
     , onClick (Click pos)
     , E.preventDefaultOn "contextmenu" (JD.succeed ( RightClick pos, True ))
-    ]
-
-
-innerAttrs =
-    [ style "" ""
-
-    --, style "width" "100%"
-    --, style "height" "100%"
-    , style "flex" "1 1 auto"
-    , style "overflow" "hidden"
-    , style "display" "flex"
-    , style "align-items" "center"
-    , style "justify-content" "center"
     ]
 
 
