@@ -360,8 +360,6 @@ commonAttrs pos =
     , transforms [ translate sp ]
     , overflowHidden
     , style "box-sizing" "border-box"
-
-    --, style "outline" "1px solid dodgerblue"
     , stylePx "font-size" cellWidth
     , style "font-family" "monospace"
     , displayFlex
