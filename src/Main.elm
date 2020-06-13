@@ -31,7 +31,7 @@ type alias Model =
 
 type GameState
     = PlayerTurn
-    | Lost ( Int, Int )
+    | Lost
 
 
 type alias Pos =
@@ -92,7 +92,7 @@ update msg model =
             case tileAt model loc of
                 Just ( LG.Closed, MG.Mine ) ->
                     { model
-                        | gameState = Lost loc
+                        | gameState = Lost
                         , lids = LG.open loc model.lids
                     }
 
@@ -110,7 +110,7 @@ update msg model =
         ( PlayerTurn, RightClick loc ) ->
             { model | lids = LG.cycleLabel loc model.lids }
 
-        ( Lost _, Click _ ) ->
+        ( Lost, Click _ ) ->
             reset model
 
         ( _, ResetClicked ) ->
@@ -187,7 +187,7 @@ viewGrid model =
                             renderTileView pos (toPlayerTurnTileView lid cell)
                         )
 
-            Lost _ ->
+            Lost ->
                 model
                     |> tileEntries
                     |> List.concatMap
