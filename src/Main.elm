@@ -11,7 +11,7 @@ import MineGrid exposing (MineGrid)
 import Random exposing (Seed)
 import Set exposing (Set)
 import String exposing (fromFloat, fromInt)
-import Tuple exposing (first)
+import Tuple
 
 
 main =
@@ -171,9 +171,6 @@ toScreenCords ( x, y ) =
 viewTile : Model -> ( Int, Int ) -> Html Msg
 viewTile m loc =
     let
-        sp =
-            toScreenCords loc
-
         isOpenMine =
             tileAt m loc == Just ( LidGrid.Open, MineGrid.Mine )
     in
