@@ -221,13 +221,13 @@ type TileView
 viewTile2 pos tile =
     case tile of
         EmptyTile ->
-            viewBaseTile pos "" []
+            emptyBaseTile pos
 
         NumTile n ->
             viewBaseTile pos (String.fromInt n) [ bold ]
 
         ClosedTile ->
-            viewCoverTile pos "" []
+            emptyCoverTile pos
 
         FlaggedTile ->
             viewCoverTile pos "⛳" [ color "red" ]
