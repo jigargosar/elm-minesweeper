@@ -177,13 +177,13 @@ toScreenCords ( x, y ) =
     ( toFloat x * cellWidth, toFloat y * cellWidth )
 
 
-viewTile ( loc, tile ) =
+viewTile ( pos, tile ) =
     let
         isOpenMine =
             tile == ( LidGrid.Open, MineGrid.Mine )
     in
     div
-        (commonTileAttrs loc
+        (commonTileAttrs pos
             ++ (if isOpenMine then
                     [ style "background-color" "red"
                     ]
@@ -205,6 +205,21 @@ viewTile ( loc, tile ) =
             _ ->
                 text ""
         ]
+
+
+viewExplodedMineTile pos =
+    div
+        (commonTileAttrs pos
+            ++ [ style "background-color" "red"
+               ]
+        )
+        [ text "*" ]
+
+
+viewMineTile pos =
+    div
+        (commonTileAttrs pos)
+        [ text "*" ]
 
 
 commonTileAttrs : ( Int, Int ) -> List (Attribute Msg)
