@@ -335,7 +335,7 @@ numTile pos n =
 
 
 crossTile pos =
-    stringTile pos "X" [ color "red", bold, opacity 0.8 ]
+    stringTile pos "❌" [ color "red", bold, opacity 0.6 ]
 
 
 emptyBaseTile pos xs =
