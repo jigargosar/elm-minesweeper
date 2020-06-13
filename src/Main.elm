@@ -287,7 +287,7 @@ outerAttrs pos =
     , styleHeight cellWidth
     , absolute
     , transforms [ translate sp ]
-    , style "overflow" "hidden"
+    , overflowHidden
 
     --, style "outline" "1px solid dodgerblue"
     , stylePx "font-size" (cellWidth * 0.6)
@@ -392,3 +392,7 @@ justifyContent =
 
 noSelection =
     style "user-select" "none"
+
+
+overflowHidden =
+    style "overflow" "hidden"
