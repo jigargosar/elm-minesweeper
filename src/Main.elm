@@ -199,10 +199,10 @@ viewTile ( pos, ( lid, cell ) ) =
                     viewBaseTile pos (String.fromInt n)
 
         LG.Closed ->
-            viewCoverTile pos ""
+            viewCoverTile pos "" []
 
         LG.Flagged ->
-            viewCoverTile pos "F"
+            viewCoverTile pos "F" []
 
 
 viewBaseTile pos string =
@@ -224,7 +224,7 @@ whitePct pct =
     "hsl(0,0%," ++ String.fromInt pct ++ "%)"
 
 
-viewCoverTile pos string =
+viewCoverTile pos string xs =
     div (outerAttrs pos)
         [ div
             (innerAttrs
@@ -233,6 +233,7 @@ viewCoverTile pos string =
                    , style "border-color" "unset"
                    , style "background-color" (whitePct 80)
                    ]
+                ++ xs
             )
             [ text string ]
         ]
