@@ -47,13 +47,14 @@ init flags =
             MG.generator gridSize 0.1
 
         ( mines, seed ) =
-            Random.step minesGenerator (Random.initialSeed flags.now)
+            Random.step minesGenerator (Random.initialSeed (flags.now |> always 2))
     in
     ( { lids = LG.fillClosed gridSize
       , mines = mines
       , gameState = PlayerTurn
       , seed = seed
       }
+        |> update (Click ( 0, 0 ))
     , Cmd.none
     )
 
