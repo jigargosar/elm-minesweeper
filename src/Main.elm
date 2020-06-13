@@ -10,8 +10,6 @@ import LidGrid as LG exposing (Lid, LidGrid)
 import MineGrid as MG exposing (MineGrid)
 import Random exposing (Seed)
 import Set exposing (Set)
-import String exposing (fromFloat)
-import Tuple
 
 
 main =
@@ -213,22 +211,6 @@ viewTile ( pos, ( lid, cell ) ) =
                 ]
 
 
-backgroundColorTransparent =
-    backgroundColor "transparent"
-
-
-bold =
-    style "font-weight" "bold"
-
-
-backgroundColor =
-    style "background-color"
-
-
-color =
-    style "color"
-
-
 emptyBaseTile pos xs =
     div (outerAttrs pos)
         [ div
@@ -340,6 +322,22 @@ innerAttrs =
 -- Style Helpers
 
 
+backgroundColorTransparent =
+    backgroundColor "transparent"
+
+
+bold =
+    style "font-weight" "bold"
+
+
+backgroundColor =
+    style "background-color"
+
+
+color =
+    style "color"
+
+
 transforms xs =
     style "transform" (String.join " " xs)
 
@@ -349,7 +347,7 @@ stylePx s n =
 
 
 floatPx n =
-    fromFloat n ++ "px"
+    String.fromFloat n ++ "px"
 
 
 styleWidth =
