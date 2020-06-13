@@ -117,6 +117,17 @@ tileAt model pos =
     Maybe.map2 Tuple.pair (lidAt model pos) (mineCellAt model pos)
 
 
+tileEntryAt : Model -> ( Int, Int ) -> Maybe ( ( Int, Int ), ( Lid, MineGrid.Cell ) )
+tileEntryAt model pos =
+    tileAt model pos |> Maybe.map (Tuple.pair pos)
+
+
+tileEntries : Model -> List ( ( Int, Int ), ( Lid, MineGrid.Cell ) )
+tileEntries model =
+    Size.positions gridSize
+        |> List.filterMap (tileEntryAt model)
+
+
 lidAt : Model -> Pos -> Maybe Lid
 lidAt model =
     LidGrid.get model.lids
@@ -153,35 +164,23 @@ cellWidth =
 
 
 viewGrid : Model -> Html Msg
-viewGrid m =
-    let
-        viewTileHelp pos =
-            case tileAt m pos of
-                Just tile ->
-                    Just (viewTile m pos)
-
-                Nothing ->
-                    Nothing
-    in
+viewGrid model =
     div
         [ styleWidth (gridWidth * cellWidth)
         , styleHeight (gridHeight * cellWidth)
         , relative
         ]
-        (Size.positions gridSize
-            |> List.filterMap viewTileHelp
-        )
+        (model |> tileEntries |> List.map viewTile)
 
 
 toScreenCords ( x, y ) =
     ( toFloat x * cellWidth, toFloat y * cellWidth )
 
 
-viewTile : Model -> ( Int, Int ) -> Html Msg
-viewTile m loc =
+viewTile ( loc, tile ) =
     let
         isOpenMine =
-            tileAt m loc == Just ( LidGrid.Open, MineGrid.Mine )
+            tile == ( LidGrid.Open, MineGrid.Mine )
     in
     div
         (commonTileAttrs loc
@@ -193,14 +192,14 @@ viewTile m loc =
                     []
                )
         )
-        [ case tileAt m loc of
-            Just ( LidGrid.Open, MineGrid.Mine ) ->
+        [ case tile of
+            ( LidGrid.Open, MineGrid.Mine ) ->
                 text "*"
 
-            Just ( LidGrid.Open, MineGrid.Empty n ) ->
+            ( LidGrid.Open, MineGrid.Empty n ) ->
                 text (fromInt n)
 
-            Just ( LidGrid.Flagged, _ ) ->
+            ( LidGrid.Flagged, _ ) ->
                 text "F"
 
             _ ->
