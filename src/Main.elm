@@ -198,12 +198,12 @@ viewTile ( pos, ( lid, cell ) ) =
 
         LG.Closed ->
             div
-                (lidTileAttrs pos)
+                (coverTileAttrs pos)
                 [ text "" ]
 
         LG.Flagged ->
             div
-                (lidTileAttrs pos)
+                (coverTileAttrs pos)
                 [ text "F" ]
 
 
@@ -211,7 +211,7 @@ baseTileAttrs pos =
     commonTileAttrs pos ++ [ style "border-style" "inset" ]
 
 
-lidTileAttrs pos =
+coverTileAttrs pos =
     commonTileAttrs pos ++ [ style "border-style" "outset" ]
 
 
