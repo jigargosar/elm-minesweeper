@@ -251,6 +251,35 @@ color =
     style "color"
 
 
+emptyBaseTile pos =
+    div (outerAttrs pos)
+        [ div
+            (innerAttrs
+                ++ [ style "" ""
+                   , style "border-style" "solid"
+                   , style "border-width" "1px"
+                   , style "border-color" (whitePct 80)
+                   , backgroundColor (whitePct 90)
+                   ]
+            )
+            []
+        ]
+
+
+emptyCoverTile pos =
+    div (outerAttrs pos)
+        [ div
+            (innerAttrs
+                ++ [ style "border-style" "outset"
+                   , style "border-width" "4px"
+                   , style "border-color" "unset"
+                   , style "background-color" (whitePct 80)
+                   ]
+            )
+            []
+        ]
+
+
 viewBaseTile pos string xs =
     div (outerAttrs pos)
         [ div
