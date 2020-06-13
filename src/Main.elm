@@ -255,6 +255,7 @@ emptyBaseTile pos =
     div (outerAttrs pos)
         [ div
             (innerAttrs
+                ++ [ style "flex" "1 1 auto" ]
                 ++ [ style "" ""
                    , style "border-style" "solid"
                    , style "border-width" "1px"
@@ -270,6 +271,7 @@ emptyCoverTile pos =
     div (outerAttrs pos)
         [ div
             (innerAttrs
+                ++ [ style "flex" "1 1 auto" ]
                 ++ [ style "border-style" "outset"
                    , style "border-width" "4px"
                    , style "border-color" "unset"
