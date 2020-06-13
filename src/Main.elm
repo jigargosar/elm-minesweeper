@@ -238,19 +238,19 @@ viewExplodedMineTile pos =
 
 viewMineTile pos =
     div
-        (commonTileAttrs pos)
+        (commonTileAttrs pos ++ [ style "border-style" "inset" ])
         [ text "*" ]
 
 
 viewNumTile pos n =
     div
-        (commonTileAttrs pos)
+        (commonTileAttrs pos ++ [ style "border-style" "inset" ])
         [ text (String.fromInt n) ]
 
 
 viewEmptyTile pos =
     div
-        (commonTileAttrs pos)
+        (commonTileAttrs pos ++ [ style "border-style" "inset" ])
         [ text "" ]
 
 
@@ -262,7 +262,7 @@ viewClosedTile pos =
 
 viewFlaggedTile pos =
     div
-        (commonTileAttrs pos)
+        (commonTileAttrs pos ++ [ style "color" "red" ])
         [ text "F" ]
 
 
@@ -277,7 +277,8 @@ commonTileAttrs loc =
     , absolute
     , transforms [ translate sp ]
     , style "overflow" "hidden"
-    , style "outline" "1px solid dodgerblue"
+
+    --, style "outline" "1px solid dodgerblue"
     , style "font-size" "3rem"
     , style "font-family" "monospace"
     , style "display" "flex"
@@ -286,6 +287,8 @@ commonTileAttrs loc =
     , onClick (Click loc)
     , E.preventDefaultOn "contextmenu" (JD.succeed ( RightClick loc, True ))
     , style "user-select" "none"
+    , style "border-style" "outset"
+    , style "background-color" "white"
     ]
 
 
