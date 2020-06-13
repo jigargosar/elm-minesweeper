@@ -306,7 +306,7 @@ renderTileView pos tv =
 
 
 numTile pos n =
-    stringTile pos (String.fromInt n) [ bold ]
+    stringTile pos (String.fromInt n) []
 
 
 crossTile pos =
@@ -368,7 +368,7 @@ commonAttrs pos =
     , itemsCenter
     , justifyCenter
     , noSelection
-    , color (whitePct 30)
+    , color (whitePct 20)
     , onClick (Click pos)
     , E.preventDefaultOn "contextmenu" (JD.succeed ( RightClick pos, True ))
     ]
