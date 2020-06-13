@@ -202,7 +202,7 @@ viewTile ( pos, ( lid, cell ) ) =
             viewCoverTile pos "" []
 
         LG.Flagged ->
-            viewCoverTile pos "F" []
+            viewCoverTile pos "F" [ style "color" "red" ]
 
 
 viewBaseTile pos string =
