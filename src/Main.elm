@@ -290,7 +290,7 @@ outerAttrs pos =
     , style "overflow" "hidden"
 
     --, style "outline" "1px solid dodgerblue"
-    , style "font-size" (floatPx (cellWidth * 0.6))
+    , stylePx "font-size" (cellWidth * 0.6)
     , style "font-family" "monospace"
     , style "display" "flex"
     , style "align-items" "stretch"
