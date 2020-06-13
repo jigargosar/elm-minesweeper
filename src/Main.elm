@@ -278,8 +278,7 @@ renderTileView pos tv =
             div [] [ baseTile pos [ backgroundColor "red", opacity 0.5 ], mineTile pos ]
 
         SuccessMineView ->
-            div []
-                [ baseTile pos [], mineTile pos, tickTile pos ]
+            div [] [ baseTile pos [], mineTile pos, tickTile pos ]
 
         FailureEmptyView ->
             div [] [ baseTile pos [], crossTile pos ]
