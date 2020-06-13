@@ -277,7 +277,7 @@ renderTileView pos tv =
 
         ExplodingMineView ->
             div []
-                [ emptyBaseTile pos [ backgroundColor "red" ], mineTile pos ]
+                [ emptyBaseTile pos [ backgroundColor "red", opacity 0.5 ], mineTile pos ]
 
         SuccessMineView ->
             div []
