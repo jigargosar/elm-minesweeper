@@ -314,24 +314,27 @@ tickTile pos =
 mineTile pos =
     stringTile pos
         "💣"
-        [ opacity 0.8
-        , borderSolid
-        , borderWidth 0.5
-        , borderColor (whitePct 80)
-        ]
+        (opacity 0.8
+            :: baseTileBorderStyles
+        )
 
 
 flagTile pos =
     stringTile pos "⛳" []
 
 
+baseTileBorderStyles =
+    [ borderSolid
+    , borderWidth 0.5
+    , borderColor (whitePct 80)
+    ]
+
+
 baseTile pos xs =
     div
         (commonAttrs pos
-            ++ [ borderSolid
-               , borderWidth 0.5
-               , borderColor (whitePct 80)
-               , backgroundColor (whitePct 90)
+            ++ baseTileBorderStyles
+            ++ [ backgroundColor (whitePct 90)
                ]
             ++ xs
         )
