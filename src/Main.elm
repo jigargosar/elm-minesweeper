@@ -252,8 +252,9 @@ outerAttrs pos =
     , style "font-size" "3rem"
     , style "font-family" "monospace"
     , style "display" "flex"
-    , style "align-items" "stretch"
-    , style "justify-content" "center"
+
+    --, style "align-items" "stretch"
+    --, style "justify-content" "center"
     , style "user-select" "none"
     , onClick (Click pos)
     , E.preventDefaultOn "contextmenu" (JD.succeed ( RightClick pos, True ))
