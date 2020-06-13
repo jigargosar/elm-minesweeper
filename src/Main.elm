@@ -224,10 +224,9 @@ viewTile2 pos tile =
             emptyBaseTile pos
 
         NumTile n ->
-            --viewBaseTile pos (String.fromInt n) [ bold ]
             div []
                 [ emptyBaseTile pos
-                , stringTile pos (String.fromInt n)
+                , stringTile pos (String.fromInt n) [ bold ]
                 ]
 
         ClosedTile ->
@@ -286,8 +285,8 @@ emptyCoverTile pos =
         ]
 
 
-stringTile pos string =
-    div (outerAttrs pos) [ text string ]
+stringTile pos string xs =
+    div (outerAttrs pos ++ [ style "align-items" "center" ] ++ xs) [ text string ]
 
 
 viewBaseTile pos string xs =
