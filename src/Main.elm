@@ -299,10 +299,7 @@ renderTileView pos tv =
             div [] [ coverTile pos ]
 
         FlagView ->
-            div []
-                [ coverTile pos
-                , flagTile pos
-                ]
+            div [] [ coverTile pos, flagTile pos ]
 
 
 numTile pos n =
