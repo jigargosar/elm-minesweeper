@@ -224,7 +224,11 @@ viewTile2 pos tile =
             emptyBaseTile pos
 
         NumTile n ->
-            viewBaseTile pos (String.fromInt n) [ bold ]
+            --viewBaseTile pos (String.fromInt n) [ bold ]
+            div []
+                [ emptyBaseTile pos
+                , stringTile pos (String.fromInt n)
+                ]
 
         ClosedTile ->
             emptyCoverTile pos
@@ -282,6 +286,10 @@ emptyCoverTile pos =
         ]
 
 
+stringTile pos string =
+    div (outerAttrs pos) [ text string ]
+
+
 viewBaseTile pos string xs =
     div (outerAttrs pos)
         [ div
@@ -332,9 +340,8 @@ outerAttrs pos =
     , style "font-size" (String.fromFloat (cellWidth * 0.6) ++ "px")
     , style "font-family" "monospace"
     , style "display" "flex"
-
-    --, style "align-items" "stretch"
-    --, style "justify-content" "center"
+    , style "align-items" "stretch"
+    , style "justify-content" "center"
     , style "user-select" "none"
     , onClick (Click pos)
     , E.preventDefaultOn "contextmenu" (JD.succeed ( RightClick pos, True ))
