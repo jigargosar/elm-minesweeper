@@ -385,6 +385,7 @@ commonAttrs pos =
     , itemsCenter
     , justifyCenter
     , noSelection
+    , color (whitePct 30)
     , onClick (Click pos)
     , E.preventDefaultOn "contextmenu" (JD.succeed ( RightClick pos, True ))
     ]
