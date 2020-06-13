@@ -10,7 +10,7 @@ import LidGrid as LG exposing (Lid, LidGrid)
 import MineGrid as MG exposing (MineGrid)
 import Random exposing (Seed)
 import Set exposing (Set)
-import String exposing (fromFloat, fromInt)
+import String exposing (fromFloat)
 import Tuple
 
 
@@ -206,17 +206,13 @@ viewTile ( pos, ( lid, cell ) ) =
 
 
 viewBaseTile pos string =
-    let
-        bc =
-            whitePct 90
-    in
     div (outerTileAttrs pos)
         [ div
             (innerTileAttrs
                 ++ [ style "border-style" "solid"
                    , style "border-width" "1px"
                    , style "border-color" (whitePct 80)
-                   , style "background-color" bc
+                   , style "background-color" (whitePct 90)
                    ]
             )
             [ text string ]
