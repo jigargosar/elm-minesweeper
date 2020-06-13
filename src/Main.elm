@@ -105,6 +105,9 @@ update msg model =
         ( PlayerTurn, RightClick loc ) ->
             { model | lids = LG.cycleLabel loc model.lids }
 
+        ( Lost, Click _ ) ->
+            reset model
+
         ( _, ResetClicked ) ->
             reset model
 
