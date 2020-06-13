@@ -275,7 +275,7 @@ renderTileView pos tv =
             [ baseTile pos [], mineTile pos ]
 
         ExplodingMineView ->
-            [ baseTile pos [ backgroundColor "hsl(0, 60%, 70%)" ], mineTile pos ]
+            [ baseTile pos [ backgroundColor "hsla(0, 90%, 75%, 1)" ], mineTile pos ]
 
         SuccessMineView ->
             [ baseTile pos [], mineTile pos, tickTile pos ]
