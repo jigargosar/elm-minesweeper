@@ -314,7 +314,7 @@ tickTile pos =
 mineTile pos =
     stringTile pos
         "💣"
-        [ opacity 0.8 ]
+        [ opacity 0.8, fontSize (cellWidth * 0.7) ]
 
 
 flagTile pos =
