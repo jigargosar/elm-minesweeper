@@ -272,10 +272,10 @@ type TileView
 renderTileView pos tv =
     case tv of
         MineView ->
-            [ mineTile pos ]
+            [ baseTile pos [], mineTile pos ]
 
         ExplodingMineView ->
-            [ mineTile pos ]
+            [ baseTile pos [], mineTile pos ]
 
         SuccessMineView ->
             [ baseTile pos [], mineTile pos, tickTile pos ]
@@ -314,7 +314,7 @@ tickTile pos =
 mineTile pos =
     stringTile pos
         "💣"
-        (baseTileStyles ++ [ opacity 0.8 ])
+        [ opacity 0.8 ]
 
 
 flagTile pos =
