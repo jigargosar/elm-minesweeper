@@ -209,8 +209,12 @@ viewTile ( pos, ( lid, cell ) ) =
         LG.Flagged ->
             div []
                 [ viewCoverTile pos "⛳" [ color "red" ]
-                , viewCoverTile pos "✔" [ color "green", backgroundColor "transparent" ]
+                , viewCoverTile pos "✔" [ color "green", backgroundColorTransparent ]
                 ]
+
+
+backgroundColorTransparent =
+    backgroundColor "transparent"
 
 
 bold =
