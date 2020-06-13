@@ -206,9 +206,9 @@ viewTile ( pos, ( lid, cell ) ) =
 
 
 viewBaseTile pos string =
-    div (outerTileAttrs pos)
+    div (outerAttrs pos)
         [ div
-            (innerTileAttrs
+            (innerAttrs
                 ++ [ style "border-style" "solid"
                    , style "border-width" "1px"
                    , style "border-color" (whitePct 80)
@@ -224,9 +224,9 @@ whitePct pct =
 
 
 viewCoverTile pos string =
-    div (outerTileAttrs pos)
+    div (outerAttrs pos)
         [ div
-            (innerTileAttrs
+            (innerAttrs
                 ++ [ style "border-style" "outset"
                    , style "border-width" "1px"
                    , style "border-color" "unset"
@@ -237,7 +237,7 @@ viewCoverTile pos string =
         ]
 
 
-outerTileAttrs pos =
+outerAttrs pos =
     let
         sp =
             toScreenCords pos
@@ -260,7 +260,7 @@ outerTileAttrs pos =
     ]
 
 
-innerTileAttrs =
+innerAttrs =
     [ style "flex" "1 1 auto"
     , style "overflow" "hidden"
     , style "display" "flex"
