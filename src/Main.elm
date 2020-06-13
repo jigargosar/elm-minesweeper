@@ -229,6 +229,29 @@ viewCoverTile pos string =
         [ text string ]
 
 
+outerTileAttr pos =
+    let
+        sp =
+            toScreenCords pos
+    in
+    [ styleWidth cellWidth
+    , styleHeight cellWidth
+    , absolute
+    , transforms [ translate sp ]
+    , style "overflow" "hidden"
+
+    --, style "outline" "1px solid dodgerblue"
+    , style "font-size" "3rem"
+    , style "font-family" "monospace"
+    , style "display" "flex"
+    , style "align-items" "center"
+    , style "justify-content" "center"
+    , onClick (Click pos)
+    , E.preventDefaultOn "contextmenu" (JD.succeed ( RightClick pos, True ))
+    , style "user-select" "none"
+    ]
+
+
 commonTileAttrs : ( Int, Int ) -> List (Attribute Msg)
 commonTileAttrs pos =
     let
