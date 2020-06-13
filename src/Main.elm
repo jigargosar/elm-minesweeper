@@ -201,8 +201,17 @@ viewTile ( pos, ( lid, cell ) ) =
 
 
 viewBaseTile pos string =
+    let
+        bc =
+            "rgba(219, 219, 219)"
+    in
     div
-        (commonTileAttrs pos ++ [ style "border-style" "solid", style "border-color" "rgba(0,0,0,0.05)" ])
+        (commonTileAttrs pos
+            ++ [ style "border-style" "solid"
+               , style "border-color" bc
+               , style "background-color" bc
+               ]
+        )
         [ text string ]
 
 
