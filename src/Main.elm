@@ -211,19 +211,17 @@ viewTile ( pos, ( lid, cell ) ) =
 
 
 emptyBaseTile pos xs =
-    div (outerAttrs pos)
-        [ div
-            ([ style "flex" "1 1 auto" ]
-                ++ [ style "" ""
-                   , style "border-style" "solid"
-                   , style "border-width" "1px"
-                   , style "border-color" (whitePct 80)
-                   , backgroundColor (whitePct 90)
-                   ]
-                ++ xs
-            )
-            []
-        ]
+    div
+        (outerAttrs pos
+            ++ [ style "" ""
+               , style "border-style" "solid"
+               , style "border-width" "1px"
+               , style "border-color" (whitePct 80)
+               , backgroundColor (whitePct 90)
+               ]
+            ++ xs
+        )
+        []
 
 
 emptyCoverTile pos =
@@ -258,7 +256,7 @@ outerAttrs pos =
     , stylePx "font-size" (cellWidth * 0.6)
     , style "font-family" "monospace"
     , displayFlex
-    , itemsStretch
+    , itemsCenter
     , justifyCenter
     , noSelection
     , onClick (Click pos)
