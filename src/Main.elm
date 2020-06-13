@@ -200,7 +200,7 @@ viewTile ( pos, ( lid, cell ) ) =
                     viewBaseTile pos (String.fromInt n) [ bold ]
 
         LG.Closed ->
-            viewCoverTile pos "" []
+            emptyCoverTile pos
 
         LG.Flagged ->
             div []
