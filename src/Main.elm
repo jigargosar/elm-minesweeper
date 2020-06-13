@@ -309,16 +309,16 @@ renderTileView pos tv =
                 [ emptyBaseTile pos [], stringTile pos "💣" [], stringTile pos "✔" [ color "green" ] ]
 
         FailureEmptyView ->
-            div [] [ emptyBaseTile pos [], stringTile pos "x" [ color "red" ] ]
+            div [] [ emptyBaseTile pos [], crossTile pos ]
 
         FailureNumView n ->
-            div [] [ emptyBaseTile pos [], stringTile pos (String.fromInt n) [ bold ], stringTile pos "x" [ color "red" ] ]
+            div [] [ emptyBaseTile pos [], numTile pos n, crossTile pos ]
 
         EmptyView ->
             div [] [ emptyBaseTile pos [] ]
 
         NumView n ->
-            div [] [ emptyBaseTile pos [], stringTile pos (String.fromInt n) [ bold ] ]
+            div [] [ emptyBaseTile pos [], numTile pos n ]
 
         ClosedView ->
             div [] [ emptyCoverTile pos ]
@@ -328,6 +328,14 @@ renderTileView pos tv =
                 [ emptyCoverTile pos
                 , stringTile pos "⛳" [ color "blue" ]
                 ]
+
+
+numTile pos n =
+    stringTile pos (String.fromInt n) [ bold ]
+
+
+crossTile pos =
+    stringTile pos "X" [ color "red", bold ]
 
 
 emptyBaseTile pos xs =
