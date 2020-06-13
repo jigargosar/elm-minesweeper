@@ -314,9 +314,7 @@ tickTile pos =
 mineTile pos =
     stringTile pos
         "💣"
-        (opacity 0.8
-            :: baseTileStyles
-        )
+        (opacity 0.8 :: baseTileStyles)
 
 
 flagTile pos =
