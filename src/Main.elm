@@ -227,18 +227,15 @@ emptyBaseTile pos xs =
 
 
 emptyCoverTile pos =
-    div (outerAttrs pos ++ [ itemsStretch ])
-        [ div
-            ([ style "flex-grow" "1"
-             ]
-                ++ [ style "border-style" "outset"
-                   , style "border-width" "4px"
-                   , style "border-color" "unset"
-                   , style "background-color" (whitePct 80)
-                   ]
-            )
-            []
-        ]
+    div
+        (outerAttrs pos
+            ++ [ style "border-style" "outset"
+               , style "border-width" "4px"
+               , style "border-color" "unset"
+               , style "background-color" (whitePct 80)
+               ]
+        )
+        []
 
 
 stringTile pos string xs =
