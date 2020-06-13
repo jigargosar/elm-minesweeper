@@ -6,8 +6,8 @@ import Html.Attributes exposing (style)
 import Html.Events as E exposing (onClick)
 import IntSize as Size exposing (IntSize)
 import Json.Decode as JD
-import LidGrid exposing (Lid, LidGrid)
-import MineGrid exposing (MineGrid)
+import LidGrid as LG exposing (Lid, LidGrid)
+import MineGrid as MG exposing (MineGrid)
 import Random exposing (Seed)
 import Set exposing (Set)
 import String exposing (fromFloat, fromInt)
@@ -44,12 +44,12 @@ init : { now : Int } -> ( Model, Cmd Msg )
 init flags =
     let
         minesGenerator =
-            MineGrid.generator gridSize 0.1
+            MG.generator gridSize 0.1
 
         ( mines, seed ) =
             Random.step minesGenerator (Random.initialSeed flags.now)
     in
-    ( { lids = LidGrid.fillClosed gridSize
+    ( { lids = LG.fillClosed gridSize
       , mines = mines
       , gameState = PlayerTurn
       , seed = seed
@@ -62,12 +62,12 @@ reset : Model -> Model
 reset model =
     let
         minesGenerator =
-            MineGrid.generator gridSize 0.1
+            MG.generator gridSize 0.1
 
         ( mines, seed ) =
             Random.step minesGenerator model.seed
     in
-    { lids = LidGrid.fillClosed gridSize
+    { lids = LG.fillClosed gridSize
     , mines = mines
     , gameState = PlayerTurn
     , seed = seed
@@ -85,25 +85,25 @@ update msg model =
     case ( model.gameState, msg ) of
         ( PlayerTurn, Click loc ) ->
             case tileAt model loc of
-                Just ( LidGrid.Closed, MineGrid.Mine ) ->
+                Just ( LG.Closed, MG.Mine ) ->
                     { model
                         | gameState = Lost
-                        , lids = LidGrid.open loc model.lids
+                        , lids = LG.open loc model.lids
                     }
 
-                Just ( LidGrid.Closed, MineGrid.Empty _ ) ->
+                Just ( LG.Closed, MG.Empty _ ) ->
                     let
                         nLidGrid =
-                            MineGrid.autoOpenPosSetFrom loc model.mines
-                                |> Set.foldl LidGrid.openIfClosed model.lids
+                            MG.autoOpenPosSetFrom loc model.mines
+                                |> Set.foldl LG.openIfClosed model.lids
                     in
-                    { model | lids = LidGrid.open loc nLidGrid }
+                    { model | lids = LG.open loc nLidGrid }
 
                 _ ->
                     model
 
         ( PlayerTurn, RightClick loc ) ->
-            { model | lids = LidGrid.cycleLabel loc model.lids }
+            { model | lids = LG.cycleLabel loc model.lids }
 
         ( _, ResetClicked ) ->
             reset model
@@ -112,17 +112,17 @@ update msg model =
             model
 
 
-tileAt : Model -> ( Int, Int ) -> Maybe ( Lid, MineGrid.Cell )
+tileAt : Model -> ( Int, Int ) -> Maybe ( Lid, MG.Cell )
 tileAt model pos =
     Maybe.map2 Tuple.pair (lidAt model pos) (mineCellAt model pos)
 
 
-tileEntryAt : Model -> ( Int, Int ) -> Maybe ( ( Int, Int ), ( Lid, MineGrid.Cell ) )
+tileEntryAt : Model -> ( Int, Int ) -> Maybe ( ( Int, Int ), ( Lid, MG.Cell ) )
 tileEntryAt model pos =
     tileAt model pos |> Maybe.map (Tuple.pair pos)
 
 
-tileEntries : Model -> List ( ( Int, Int ), ( Lid, MineGrid.Cell ) )
+tileEntries : Model -> List ( ( Int, Int ), ( Lid, MG.Cell ) )
 tileEntries model =
     Size.positions gridSize
         |> List.filterMap (tileEntryAt model)
@@ -130,12 +130,12 @@ tileEntries model =
 
 lidAt : Model -> Pos -> Maybe Lid
 lidAt model =
-    LidGrid.get model.lids
+    LG.get model.lids
 
 
-mineCellAt : Model -> Pos -> Maybe MineGrid.Cell
+mineCellAt : Model -> Pos -> Maybe MG.Cell
 mineCellAt model =
-    MineGrid.get model.mines
+    MG.get model.mines
 
 
 view m =
@@ -177,10 +177,30 @@ toScreenCords ( x, y ) =
     ( toFloat x * cellWidth, toFloat y * cellWidth )
 
 
-viewTile ( pos, tile ) =
+viewTile ( pos, ( lid, cell ) ) =
+    case lid of
+        LG.Open ->
+            case cell of
+                MG.Mine ->
+                    viewMineTile pos
+
+                MG.Empty 0 ->
+                    viewEmptyTile pos
+
+                MG.Empty n ->
+                    viewNumTile pos n
+
+        LG.Closed ->
+            viewClosedTile pos
+
+        LG.Flagged ->
+            viewFlaggedTile pos
+
+
+viewTile_ ( pos, tile ) =
     let
         isOpenMine =
-            tile == ( LidGrid.Open, MineGrid.Mine )
+            tile == ( LG.Open, MG.Mine )
     in
     div
         (commonTileAttrs pos
@@ -193,13 +213,13 @@ viewTile ( pos, tile ) =
                )
         )
         [ case tile of
-            ( LidGrid.Open, MineGrid.Mine ) ->
+            ( LG.Open, MG.Mine ) ->
                 text "*"
 
-            ( LidGrid.Open, MineGrid.Empty n ) ->
+            ( LG.Open, MG.Empty n ) ->
                 text (fromInt n)
 
-            ( LidGrid.Flagged, _ ) ->
+            ( LG.Flagged, _ ) ->
                 text "F"
 
             _ ->
@@ -220,6 +240,30 @@ viewMineTile pos =
     div
         (commonTileAttrs pos)
         [ text "*" ]
+
+
+viewNumTile pos n =
+    div
+        (commonTileAttrs pos)
+        [ text (String.fromInt n) ]
+
+
+viewEmptyTile pos =
+    div
+        (commonTileAttrs pos)
+        [ text "" ]
+
+
+viewClosedTile pos =
+    div
+        (commonTileAttrs pos)
+        [ text "" ]
+
+
+viewFlaggedTile pos =
+    div
+        (commonTileAttrs pos)
+        [ text "F" ]
 
 
 commonTileAttrs : ( Int, Int ) -> List (Attribute Msg)
