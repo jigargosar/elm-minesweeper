@@ -208,7 +208,7 @@ viewTile ( pos, ( lid, cell ) ) =
 
 
 baseTileAttrs pos =
-    commonTileAttrs pos ++ [ style "border-style" "solid", style "border-color" "transparent" ]
+    commonTileAttrs pos ++ [ style "border-style" "solid", style "border-color" "rgba(0,0,0,0.05)" ]
 
 
 coverTileAttrs pos =
