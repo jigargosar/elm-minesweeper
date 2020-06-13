@@ -359,7 +359,7 @@ commonAttrs pos =
     , absolute
     , transforms [ translate sp ]
     , overflowHidden
-    , style "box-sizing" "border-box"
+    , borderBox
     , stylePx "font-size" cellWidth
     , style "font-family" "monospace"
     , displayFlex
@@ -487,3 +487,7 @@ borderWidth =
 
 opacity o =
     style "opacity" (String.fromFloat o)
+
+
+borderBox =
+    style "box-sizing" "border-box"
