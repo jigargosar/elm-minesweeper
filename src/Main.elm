@@ -335,7 +335,7 @@ numTile pos n =
 
 
 crossTile pos =
-    stringTile pos "X" [ color "red", bold ]
+    stringTile pos "X" [ color "red", bold, opacity 0.8 ]
 
 
 emptyBaseTile pos xs =
@@ -501,3 +501,7 @@ borderStyle =
 
 borderWidth =
     stylePx "border-width"
+
+
+opacity o =
+    style "opacity" (String.fromFloat o)
