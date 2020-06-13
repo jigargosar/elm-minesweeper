@@ -360,8 +360,8 @@ commonAttrs pos =
     , transforms [ translate sp ]
     , overflowHidden
     , borderBox
-    , stylePx "font-size" cellWidth
-    , style "font-family" "monospace"
+    , fontSize cellWidth
+    , monospace
     , displayFlex
     , itemsCenter
     , justifyCenter
@@ -491,3 +491,11 @@ opacity o =
 
 borderBox =
     style "box-sizing" "border-box"
+
+
+monospace =
+    style "font-family" "monospace"
+
+
+fontSize =
+    stylePx "font-size"
