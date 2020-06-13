@@ -209,7 +209,8 @@ viewBaseTile pos string =
     div (outerAttrs pos)
         [ div
             (innerAttrs
-                ++ [ style "border-style" "solid"
+                ++ [ style "" ""
+                   , style "border-style" "solid"
                    , style "border-width" "1px"
                    , style "border-color" (whitePct 80)
                    , style "background-color" (whitePct 90)
@@ -228,7 +229,7 @@ viewCoverTile pos string =
         [ div
             (innerAttrs
                 ++ [ style "border-style" "outset"
-                   , style "border-width" "1px"
+                   , style "border-width" "4px"
                    , style "border-color" "unset"
                    , style "background-color" (whitePct 80)
                    ]
@@ -249,7 +250,7 @@ outerAttrs pos =
     , style "overflow" "hidden"
 
     --, style "outline" "1px solid dodgerblue"
-    , style "font-size" "3rem"
+    , style "font-size" "2.5rem"
     , style "font-family" "monospace"
     , style "display" "flex"
 
@@ -262,7 +263,11 @@ outerAttrs pos =
 
 
 innerAttrs =
-    [ style "flex" "1 1 auto"
+    [ style "" ""
+
+    --, style "width" "100%"
+    --, style "height" "100%"
+    , style "flex" "1 1 auto"
     , style "overflow" "hidden"
     , style "display" "flex"
     , style "align-items" "center"
