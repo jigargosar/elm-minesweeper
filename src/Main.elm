@@ -194,7 +194,7 @@ viewTile ( pos, ( lid, cell ) ) =
                     viewBaseTile pos "💣" [ backgroundColor "red" ]
 
                 MG.Empty 0 ->
-                    emptyBaseTile pos
+                    div [] [ emptyBaseTile pos ]
 
                 MG.Empty n ->
                     div [] [ emptyBaseTile pos, stringTile pos (String.fromInt n) [ bold ] ]
