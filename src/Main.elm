@@ -220,16 +220,18 @@ viewBaseTile pos string =
 
 
 viewCoverTile pos string =
-    div
-        (commonTileAttrs pos
-            ++ [ style "border-style" "outset"
-               , style "background-color" "#c4c4c4"
-               ]
-        )
-        [ text string ]
+    div (outerTileAttrs pos)
+        [ div
+            (innerTileAttrs
+                ++ [ style "border-style" "outset"
+                   , style "background-color" "#c4c4c4"
+                   ]
+            )
+            [ text string ]
+        ]
 
 
-outerTileAttr pos =
+outerTileAttrs pos =
     let
         sp =
             toScreenCords pos
@@ -244,7 +246,7 @@ outerTileAttr pos =
     , style "font-size" "3rem"
     , style "font-family" "monospace"
     , style "display" "flex"
-    , style "align-items" "center"
+    , style "align-items" "stretch"
     , style "justify-content" "center"
     , onClick (Click pos)
     , E.preventDefaultOn "contextmenu" (JD.succeed ( RightClick pos, True ))
@@ -252,9 +254,8 @@ outerTileAttr pos =
     ]
 
 
-innerTileAttr =
-    [ style "width" "100%"
-    , style "height" "100%"
+innerTileAttrs =
+    [ style "flex" "1 1 auto"
     , style "overflow" "hidden"
     , style "display" "flex"
     , style "align-items" "center"
