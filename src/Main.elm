@@ -292,10 +292,10 @@ outerAttrs pos =
     --, style "outline" "1px solid dodgerblue"
     , stylePx "font-size" (cellWidth * 0.6)
     , style "font-family" "monospace"
-    , style "display" "flex"
-    , style "align-items" "stretch"
-    , style "justify-content" "center"
-    , style "user-select" "none"
+    , displayFlex
+    , itemsStretch
+    , justifyCenter
+    , noSelection
     , onClick (Click pos)
     , E.preventDefaultOn "contextmenu" (JD.succeed ( RightClick pos, True ))
     ]
@@ -368,3 +368,27 @@ translate ( x, y ) =
 
 whitePct pct =
     "hsl(0,0%," ++ String.fromInt pct ++ "%)"
+
+
+displayFlex =
+    style "display" "flex"
+
+
+itemsStretch =
+    alignItems "stretch"
+
+
+alignItems =
+    style "align-items"
+
+
+justifyCenter =
+    justifyContent "center"
+
+
+justifyContent =
+    style "justify-content"
+
+
+noSelection =
+    style "user-select" "none"
