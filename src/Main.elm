@@ -182,7 +182,7 @@ viewGrid model =
             PlayerTurn ->
                 model
                     |> tileEntries
-                    |> List.map
+                    |> List.concatMap
                         (\( pos, ( lid, cell ) ) ->
                             renderTileView pos (toPlayerTurnTileView lid cell)
                         )
@@ -190,7 +190,7 @@ viewGrid model =
             Lost _ ->
                 model
                     |> tileEntries
-                    |> List.map
+                    |> List.concatMap
                         (\( pos, ( lid, cell ) ) ->
                             renderTileView pos (toLostTileView lid cell)
                         )
@@ -272,31 +272,31 @@ type TileView
 renderTileView pos tv =
     case tv of
         MineView ->
-            div [] [ baseTile pos [], mineTile pos ]
+            [ baseTile pos [], mineTile pos ]
 
         ExplodingMineView ->
-            div [] [ baseTile pos [ backgroundColor "red", opacity 0.5 ], mineTile pos ]
+            [ baseTile pos [ backgroundColor "red", opacity 0.5 ], mineTile pos ]
 
         SuccessMineView ->
-            div [] [ baseTile pos [], mineTile pos, tickTile pos ]
+            [ baseTile pos [], mineTile pos, tickTile pos ]
 
         FailureEmptyView ->
-            div [] [ baseTile pos [], crossTile pos ]
+            [ baseTile pos [], crossTile pos ]
 
         FailureNumView n ->
-            div [] [ baseTile pos [], numTile pos n, crossTile pos ]
+            [ baseTile pos [], numTile pos n, crossTile pos ]
 
         EmptyView ->
-            div [] [ baseTile pos [] ]
+            [ baseTile pos [] ]
 
         NumView n ->
-            div [] [ baseTile pos [], numTile pos n ]
+            [ baseTile pos [], numTile pos n ]
 
         ClosedView ->
-            div [] [ coverTile pos ]
+            [ coverTile pos ]
 
         FlagView ->
-            div [] [ coverTile pos, flagTile pos ]
+            [ coverTile pos, flagTile pos ]
 
 
 numTile pos n =
