@@ -252,6 +252,16 @@ outerTileAttr pos =
     ]
 
 
+innerTileAttr =
+    [ style "width" "100%"
+    , style "height" "100%"
+    , style "overflow" "hidden"
+    , style "display" "flex"
+    , style "align-items" "center"
+    , style "justify-content" "center"
+    ]
+
+
 commonTileAttrs : ( Int, Int ) -> List (Attribute Msg)
 commonTileAttrs pos =
     let
