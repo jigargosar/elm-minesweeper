@@ -213,8 +213,7 @@ viewTile ( pos, ( lid, cell ) ) =
 emptyBaseTile pos xs =
     div
         (outerAttrs pos
-            ++ [ style "" ""
-               , style "border-style" "solid"
+            ++ [ style "border-style" "solid"
                , style "border-width" "1px"
                , style "border-color" (whitePct 80)
                , backgroundColor (whitePct 90)
