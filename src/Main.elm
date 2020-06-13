@@ -58,6 +58,7 @@ init flags =
       , seed = seed
       }
         |> update (Click ( 0, 0 ))
+        |> update (Click ( 4, 1 ))
     , Cmd.none
     )
 
@@ -190,7 +191,7 @@ viewTile ( pos, ( lid, cell ) ) =
         LG.Open ->
             case cell of
                 MG.Mine ->
-                    viewBaseTile pos "💣" [ backgroundColor "red", bold ]
+                    viewBaseTile pos "💣" [ backgroundColor "red" ]
 
                 MG.Empty 0 ->
                     viewBaseTile pos "" []
@@ -264,7 +265,7 @@ outerAttrs pos =
     , style "overflow" "hidden"
 
     --, style "outline" "1px solid dodgerblue"
-    , style "font-size" "2.5rem"
+    , style "font-size" (String.fromFloat (cellWidth * 0.6) ++ "px")
     , style "font-family" "monospace"
     , style "display" "flex"
 
