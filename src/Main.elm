@@ -257,31 +257,6 @@ toScreenCords ( x, y ) =
     ( toFloat x * cellWidth, toFloat y * cellWidth )
 
 
-viewTile ( pos, ( lid, cell ) ) =
-    case lid of
-        LG.Open ->
-            case cell of
-                MG.Mine ->
-                    div []
-                        [ emptyBaseTile pos [ backgroundColor "red" ], stringTile pos "💣" [] ]
-
-                MG.Empty 0 ->
-                    div [] [ emptyBaseTile pos [] ]
-
-                MG.Empty n ->
-                    div [] [ emptyBaseTile pos [], stringTile pos (String.fromInt n) [ bold ] ]
-
-        LG.Closed ->
-            div [] [ emptyCoverTile pos ]
-
-        LG.Flagged ->
-            div []
-                [ emptyCoverTile pos
-                , stringTile pos "⛳" [ color "blue" ]
-                , stringTile pos "✔" [ color "green" ]
-                ]
-
-
 type TileView
     = MineView
     | ExplodingMineView
@@ -298,7 +273,7 @@ renderTileView pos tv =
     case tv of
         MineView ->
             div []
-                [ emptyBaseTile pos [], stringTile pos "💣" [] ]
+                [ emptyBaseTile pos [], mineTile pos ]
 
         ExplodingMineView ->
             div []
@@ -306,7 +281,7 @@ renderTileView pos tv =
 
         SuccessMineView ->
             div []
-                [ emptyBaseTile pos [], stringTile pos "💣" [], tickTile pos ]
+                [ emptyBaseTile pos [], mineTile pos, tickTile pos ]
 
         FailureEmptyView ->
             div [] [ emptyBaseTile pos [], crossTile pos ]
@@ -340,6 +315,10 @@ crossTile pos =
 
 tickTile pos =
     stringTile pos "✔" [ color "green" ]
+
+
+mineTile pos =
+    stringTile pos "💣" [ opacity 0.5 ]
 
 
 emptyBaseTile pos xs =
