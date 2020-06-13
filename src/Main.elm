@@ -324,6 +324,10 @@ displayFlex =
     style "display" "flex"
 
 
+
+--noinspection ElmUnusedSymbol
+
+
 itemsStretch =
     alignItems "stretch"
 
