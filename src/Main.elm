@@ -43,9 +43,6 @@ type alias Pos =
 init : { now : Int } -> ( Model, Cmd Msg )
 init flags =
     let
-        minesGenerator =
-            MG.generator gridSize 0.1
-
         ( mines, seed ) =
             let
                 initialSeed =
@@ -65,12 +62,13 @@ init flags =
     )
 
 
+minesGenerator =
+    MG.generator gridSize 0.1
+
+
 reset : Model -> Model
 reset model =
     let
-        minesGenerator =
-            MG.generator gridSize 0.1
-
         ( mines, seed ) =
             Random.step minesGenerator model.seed
     in
