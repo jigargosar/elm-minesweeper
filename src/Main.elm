@@ -190,7 +190,7 @@ viewTile ( pos, ( lid, cell ) ) =
         LG.Open ->
             case cell of
                 MG.Mine ->
-                    viewBaseTile pos "*" []
+                    viewBaseTile pos "*" [ backgroundColor "red", bold ]
 
                 MG.Empty 0 ->
                     viewBaseTile pos "" []
@@ -203,6 +203,10 @@ viewTile ( pos, ( lid, cell ) ) =
 
         LG.Flagged ->
             viewCoverTile pos "F" [ color "red" ]
+
+
+bold =
+    style "font-weight" "bold"
 
 
 backgroundColor =
