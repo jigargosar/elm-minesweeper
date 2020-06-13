@@ -191,9 +191,7 @@ viewTile ( pos, ( lid, cell ) ) =
             case cell of
                 MG.Mine ->
                     div []
-                        [ emptyBaseTile pos [ backgroundColor "red" ]
-                        , stringTile pos "💣" []
-                        ]
+                        [ emptyBaseTile pos [ backgroundColor "red" ], stringTile pos "💣" [] ]
 
                 MG.Empty 0 ->
                     div [] [ emptyBaseTile pos [] ]
