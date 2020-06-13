@@ -180,50 +180,46 @@ toScreenCords ( x, y ) =
 viewTile ( pos, ( lid, cell ) ) =
     case lid of
         LG.Open ->
-            let
-                openTileAttrs =
-                    commonTileAttrs pos ++ [ style "border-style" "inset" ]
-            in
             case cell of
                 MG.Mine ->
                     div
-                        openTileAttrs
+                        (baseTileAttrs pos)
                         [ text "*" ]
 
                 MG.Empty 0 ->
                     div
-                        openTileAttrs
+                        (baseTileAttrs pos)
                         [ text "" ]
 
                 MG.Empty n ->
                     div
-                        openTileAttrs
+                        (baseTileAttrs pos)
                         [ text (String.fromInt n) ]
 
         LG.Closed ->
-            viewClosedTile pos
+            div
+                (lidTileAttrs pos)
+                [ text "" ]
 
         LG.Flagged ->
-            viewFlaggedTile pos
+            div
+                (lidTileAttrs pos)
+                [ text "F" ]
 
 
-viewClosedTile pos =
-    div
-        (commonTileAttrs pos)
-        [ text "" ]
+baseTileAttrs pos =
+    commonTileAttrs pos ++ [ style "border-style" "inset" ]
 
 
-viewFlaggedTile pos =
-    div
-        (commonTileAttrs pos ++ [ style "color" "red" ])
-        [ text "F" ]
+lidTileAttrs pos =
+    commonTileAttrs pos ++ [ style "border-style" "outset" ]
 
 
 commonTileAttrs : ( Int, Int ) -> List (Attribute Msg)
-commonTileAttrs loc =
+commonTileAttrs pos =
     let
         sp =
-            toScreenCords loc
+            toScreenCords pos
     in
     [ styleWidth cellWidth
     , styleHeight cellWidth
@@ -237,8 +233,8 @@ commonTileAttrs loc =
     , style "display" "flex"
     , style "align-items" "center"
     , style "justify-content" "center"
-    , onClick (Click loc)
-    , E.preventDefaultOn "contextmenu" (JD.succeed ( RightClick loc, True ))
+    , onClick (Click pos)
+    , E.preventDefaultOn "contextmenu" (JD.succeed ( RightClick pos, True ))
     , style "user-select" "none"
     , style "border-style" "outset"
     , style "background-color" "white"
