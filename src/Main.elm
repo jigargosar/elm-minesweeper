@@ -181,6 +181,26 @@ viewGrid model =
         (model |> tileEntries |> List.map viewTile)
 
 
+viewTileEntry ( pos, ( lid, cell ) ) =
+    case lid of
+        LG.Open ->
+            case cell of
+                MG.Mine ->
+                    renderTileView pos MineView
+
+                MG.Empty 0 ->
+                    renderTileView pos EmptyView
+
+                MG.Empty n ->
+                    renderTileView pos (NumView n)
+
+        LG.Closed ->
+            renderTileView pos ClosedView
+
+        LG.Flagged ->
+            renderTileView pos FlagView
+
+
 toScreenCords ( x, y ) =
     ( toFloat x * cellWidth, toFloat y * cellWidth )
 
@@ -216,7 +236,7 @@ type TileView
     | EmptyView
     | NumView Int
     | ClosedView
-    | FlaggedView
+    | FlagView
 
 
 renderTileView pos tv =
@@ -238,7 +258,7 @@ renderTileView pos tv =
         ClosedView ->
             div [] [ emptyCoverTile pos ]
 
-        FlaggedView ->
+        FlagView ->
             div []
                 [ emptyCoverTile pos
                 , stringTile pos "⛳" [ color "blue" ]
