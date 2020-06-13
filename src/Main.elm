@@ -273,35 +273,35 @@ renderTileView pos tv =
     case tv of
         MineView ->
             div []
-                [ emptyBaseTile pos [], mineTile pos ]
+                [ baseTile pos [], mineTile pos ]
 
         ExplodingMineView ->
             div []
-                [ emptyBaseTile pos [ backgroundColor "red", opacity 0.5 ], mineTile pos ]
+                [ baseTile pos [ backgroundColor "red", opacity 0.5 ], mineTile pos ]
 
         SuccessMineView ->
             div []
-                [ emptyBaseTile pos [], mineTile pos, tickTile pos ]
+                [ baseTile pos [], mineTile pos, tickTile pos ]
 
         FailureEmptyView ->
-            div [] [ emptyBaseTile pos [], crossTile pos ]
+            div [] [ baseTile pos [], crossTile pos ]
 
         FailureNumView n ->
-            div [] [ emptyBaseTile pos [], numTile pos n, crossTile pos ]
+            div [] [ baseTile pos [], numTile pos n, crossTile pos ]
 
         EmptyView ->
-            div [] [ emptyBaseTile pos [] ]
+            div [] [ baseTile pos [] ]
 
         NumView n ->
-            div [] [ emptyBaseTile pos [], numTile pos n ]
+            div [] [ baseTile pos [], numTile pos n ]
 
         ClosedView ->
-            div [] [ emptyCoverTile pos ]
+            div [] [ coverTile pos ]
 
         FlagView ->
             div []
-                [ emptyCoverTile pos
-                , stringTile pos "⛳" [ color "blue" ]
+                [ coverTile pos
+                , flagTile pos
                 ]
 
 
@@ -321,7 +321,11 @@ mineTile pos =
     stringTile pos "💣" [ opacity 0.8 ]
 
 
-emptyBaseTile pos xs =
+flagTile pos =
+    stringTile pos "⛳" []
+
+
+baseTile pos xs =
     div
         (commonAttrs pos
             ++ [ borderSolid
@@ -334,7 +338,7 @@ emptyBaseTile pos xs =
         []
 
 
-emptyCoverTile pos =
+coverTile pos =
     div
         (commonAttrs pos
             ++ [ borderOutset
