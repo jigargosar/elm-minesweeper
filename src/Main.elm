@@ -234,26 +234,6 @@ emptyCoverTile pos =
         []
 
 
-borderColor =
-    style "border-color"
-
-
-borderSolid =
-    borderStyle "solid"
-
-
-borderOutset =
-    borderStyle "outset"
-
-
-borderStyle =
-    style "border-style"
-
-
-borderWidth =
-    stylePx "border-width"
-
-
 stringTile pos string xs =
     div (commonAttrs pos ++ [ itemsCenter ] ++ xs) [ text string ]
 
@@ -373,3 +353,23 @@ overflowHidden =
 
 itemsCenter =
     alignItems "center"
+
+
+borderColor =
+    style "border-color"
+
+
+borderSolid =
+    borderStyle "solid"
+
+
+borderOutset =
+    borderStyle "outset"
+
+
+borderStyle =
+    style "border-style"
+
+
+borderWidth =
+    stylePx "border-width"
