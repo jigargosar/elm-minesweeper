@@ -197,7 +197,7 @@ viewTile ( pos, ( lid, cell ) ) =
                     viewBaseTile pos "" []
 
                 MG.Empty n ->
-                    viewBaseTile pos (String.fromInt n) []
+                    viewBaseTile pos (String.fromInt n) [ bold ]
 
         LG.Closed ->
             viewCoverTile pos "" []
