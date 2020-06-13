@@ -178,27 +178,79 @@ viewGrid model =
         , styleHeight (gridHeight * cellWidth)
         , relative
         ]
-        (model |> tileEntries |> List.map viewTile)
+        (case model.gameState of
+            PlayerTurn ->
+                model
+                    |> tileEntries
+                    |> List.map
+                        (\( pos, ( lid, cell ) ) ->
+                            renderTileView pos (toPlayerTurnTileView lid cell)
+                        )
+
+            Lost _ ->
+                model
+                    |> tileEntries
+                    |> List.map
+                        (\( pos, ( lid, cell ) ) ->
+                            renderTileView pos (toLostTileView lid cell)
+                        )
+        )
 
 
-viewTileEntry ( pos, ( lid, cell ) ) =
+toPlayerTurnTileView lid cell =
     case lid of
         LG.Open ->
             case cell of
                 MG.Mine ->
-                    renderTileView pos MineView
+                    MineView
 
                 MG.Empty 0 ->
-                    renderTileView pos EmptyView
+                    EmptyView
 
                 MG.Empty n ->
-                    renderTileView pos (NumView n)
+                    NumView n
 
         LG.Closed ->
-            renderTileView pos ClosedView
+            ClosedView
 
         LG.Flagged ->
-            renderTileView pos FlagView
+            FlagView
+
+
+toLostTileView lid cell =
+    case cell of
+        MG.Mine ->
+            case lid of
+                LG.Open ->
+                    ExplodingMineView
+
+                LG.Closed ->
+                    MineView
+
+                LG.Flagged ->
+                    SuccessMineView
+
+        MG.Empty 0 ->
+            case lid of
+                LG.Open ->
+                    EmptyView
+
+                LG.Closed ->
+                    EmptyView
+
+                LG.Flagged ->
+                    FailureEmptyView
+
+        MG.Empty n ->
+            case lid of
+                LG.Open ->
+                    NumView n
+
+                LG.Closed ->
+                    NumView n
+
+                LG.Flagged ->
+                    FailureNumView n
 
 
 toScreenCords ( x, y ) =
@@ -237,6 +289,9 @@ type TileView
     | NumView Int
     | ClosedView
     | FlagView
+    | SuccessMineView
+    | FailureEmptyView
+    | FailureNumView Int
 
 
 renderTileView pos tv =
@@ -248,6 +303,16 @@ renderTileView pos tv =
         ExplodingMineView ->
             div []
                 [ emptyBaseTile pos [ backgroundColor "red" ], stringTile pos "💣" [] ]
+
+        SuccessMineView ->
+            div []
+                [ emptyBaseTile pos [], stringTile pos "💣" [], stringTile pos "✔" [ color "green" ] ]
+
+        FailureEmptyView ->
+            div [] [ emptyBaseTile pos [], stringTile pos "x" [ color "red" ] ]
+
+        FailureNumView n ->
+            div [] [ emptyBaseTile pos [], stringTile pos (String.fromInt n) [ bold ], stringTile pos "x" [ color "red" ] ]
 
         EmptyView ->
             div [] [ emptyBaseTile pos [] ]
