@@ -154,13 +154,22 @@ cellWidth =
 
 viewGrid : Model -> Html Msg
 viewGrid m =
+    let
+        viewTileHelp pos =
+            case tileAt m pos of
+                Just tile ->
+                    Just (viewTile m pos)
+
+                Nothing ->
+                    Nothing
+    in
     div
         [ styleWidth (gridWidth * cellWidth)
         , styleHeight (gridHeight * cellWidth)
         , relative
         ]
         (Size.positions gridSize
-            |> List.map (viewTile m)
+            |> List.filterMap viewTileHelp
         )
 
 
