@@ -194,28 +194,22 @@ viewTile ( pos, ( lid, cell ) ) =
                     viewBaseTile pos (String.fromInt n)
 
         LG.Closed ->
-            div
-                (coverTileAttrs pos)
-                [ text "" ]
+            viewCoverTile pos ""
 
         LG.Flagged ->
-            div
-                (coverTileAttrs pos)
-                [ text "F" ]
+            viewCoverTile pos "F"
 
 
 viewBaseTile pos string =
     div
-        (baseTileAttrs pos)
+        (commonTileAttrs pos ++ [ style "border-style" "solid", style "border-color" "rgba(0,0,0,0.05)" ])
         [ text string ]
 
 
-baseTileAttrs pos =
-    commonTileAttrs pos ++ [ style "border-style" "solid", style "border-color" "rgba(0,0,0,0.05)" ]
-
-
-coverTileAttrs pos =
-    commonTileAttrs pos ++ [ style "border-style" "outset" ]
+viewCoverTile pos string =
+    div
+        (commonTileAttrs pos ++ [ style "border-style" "outset" ])
+        [ text string ]
 
 
 commonTileAttrs : ( Int, Int ) -> List (Attribute Msg)
