@@ -197,7 +197,8 @@ viewTile ( pos, ( lid, cell ) ) =
                     emptyBaseTile pos
 
                 MG.Empty n ->
-                    viewBaseTile pos (String.fromInt n) [ bold ]
+                    --viewBaseTile pos (String.fromInt n) [ bold ]
+                    div [] [ emptyBaseTile pos, stringTile pos (String.fromInt n) [ bold ] ]
 
         LG.Closed ->
             emptyCoverTile pos
@@ -207,39 +208,6 @@ viewTile ( pos, ( lid, cell ) ) =
                 [ viewCoverTile pos "⛳" [ color "red" ]
                 , viewCoverTile pos "✔" [ color "green", backgroundColor "transparent" ]
                 ]
-
-
-type TileView
-    = EmptyTile
-    | NumTile Int
-    | ClosedTile
-    | FlaggedTile
-    | MineTile
-    | ExplodingMineTile
-
-
-viewTile2 pos tile =
-    case tile of
-        EmptyTile ->
-            emptyBaseTile pos
-
-        NumTile n ->
-            div []
-                [ emptyBaseTile pos
-                , stringTile pos (String.fromInt n) [ bold ]
-                ]
-
-        ClosedTile ->
-            emptyCoverTile pos
-
-        FlaggedTile ->
-            viewCoverTile pos "⛳" [ color "red" ]
-
-        MineTile ->
-            viewBaseTile pos "💣" []
-
-        ExplodingMineTile ->
-            viewBaseTile pos "💣" [ backgroundColor "red" ]
 
 
 bold =
