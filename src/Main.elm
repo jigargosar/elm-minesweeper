@@ -209,6 +209,36 @@ viewTile ( pos, ( lid, cell ) ) =
                 ]
 
 
+type TileView
+    = EmptyTile
+    | NumTile Int
+    | ClosedTile
+    | FlaggedTile
+    | MineTile
+    | ExplodingMineTile
+
+
+viewTile2 pos tile =
+    case tile of
+        EmptyTile ->
+            viewBaseTile pos "" []
+
+        NumTile n ->
+            viewBaseTile pos (String.fromInt n) [ bold ]
+
+        ClosedTile ->
+            viewCoverTile pos "" []
+
+        FlaggedTile ->
+            viewCoverTile pos "⛳" [ color "red" ]
+
+        MineTile ->
+            viewBaseTile pos "💣" []
+
+        ExplodingMineTile ->
+            viewBaseTile pos "💣" [ backgroundColor "red" ]
+
+
 bold =
     style "font-weight" "bold"
 
