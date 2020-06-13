@@ -192,16 +192,20 @@ viewTile ( pos, ( lid, cell ) ) =
         LG.Open ->
             case cell of
                 MG.Mine ->
-                    div []
-                        [ emptyBaseTile pos
-                        , viewBaseTile pos "💣" [ backgroundColor "red" ]
-                        ]
+                    if True then
+                        viewBaseTile pos "💣" [ backgroundColor "red" ]
+
+                    else
+                        div []
+                            [ emptyBaseTile pos [ backgroundColor "red" ]
+                            , stringTile pos "💣" []
+                            ]
 
                 MG.Empty 0 ->
-                    div [] [ emptyBaseTile pos ]
+                    div [] [ emptyBaseTile pos [] ]
 
                 MG.Empty n ->
-                    div [] [ emptyBaseTile pos, stringTile pos (String.fromInt n) [ bold ] ]
+                    div [] [ emptyBaseTile pos [], stringTile pos (String.fromInt n) [ bold ] ]
 
         LG.Closed ->
             div [] [ emptyCoverTile pos ]
@@ -225,7 +229,7 @@ color =
     style "color"
 
 
-emptyBaseTile pos =
+emptyBaseTile pos xs =
     div (outerAttrs pos)
         [ div
             (innerAttrs
@@ -236,6 +240,7 @@ emptyBaseTile pos =
                    , style "border-color" (whitePct 80)
                    , backgroundColor (whitePct 90)
                    ]
+                ++ xs
             )
             []
         ]
