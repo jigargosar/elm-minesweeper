@@ -221,10 +221,6 @@ whitePct pct =
     "hsl(0,0%," ++ String.fromInt pct ++ "%)"
 
 
-
---noinspection SpellCheckingInspection
-
-
 viewCoverTile pos string =
     div (outerTileAttrs pos)
         [ div
