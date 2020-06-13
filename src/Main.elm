@@ -245,22 +245,6 @@ stringTile pos string xs =
     div (outerAttrs pos ++ [ style "align-items" "center" ] ++ xs) [ text string ]
 
 
-viewBaseTile pos string xs =
-    div (outerAttrs pos)
-        [ div
-            (innerAttrs
-                ++ [ style "" ""
-                   , style "border-style" "solid"
-                   , style "border-width" "1px"
-                   , style "border-color" (whitePct 80)
-                   , backgroundColor (whitePct 90)
-                   ]
-                ++ xs
-            )
-            [ text string ]
-        ]
-
-
 viewCoverTile pos string xs =
     div (outerAttrs pos)
         [ div
