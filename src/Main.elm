@@ -236,7 +236,7 @@ commonTileAttrs pos =
     , onClick (Click pos)
     , E.preventDefaultOn "contextmenu" (JD.succeed ( RightClick pos, True ))
     , style "user-select" "none"
-    , style "border-style" "outset"
+    , style "border-width" "2px"
     , style "background-color" "white"
     ]
 
