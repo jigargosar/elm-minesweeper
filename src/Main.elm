@@ -272,7 +272,7 @@ type TileView
 renderTileView pos tv =
     case tv of
         MineView ->
-            [ baseTile pos [], mineTile pos ]
+            [ mineTile pos ]
 
         ExplodingMineView ->
             [ baseTile pos [ backgroundColor "red", opacity 0.5 ], mineTile pos ]
@@ -315,7 +315,7 @@ mineTile pos =
     stringTile pos
         "💣"
         (opacity 0.8
-            :: baseTileBorderStyles
+            :: baseTileStyles
         )
 
 
@@ -323,19 +323,18 @@ flagTile pos =
     stringTile pos "⛳" []
 
 
-baseTileBorderStyles =
+baseTileStyles =
     [ borderSolid
     , borderWidth 0.5
     , borderColor (whitePct 80)
+    , backgroundColor (whitePct 90)
     ]
 
 
 baseTile pos xs =
     div
         (commonAttrs pos
-            ++ baseTileBorderStyles
-            ++ [ backgroundColor (whitePct 90)
-               ]
+            ++ baseTileStyles
             ++ xs
         )
         []
