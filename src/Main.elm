@@ -213,9 +213,9 @@ viewTile ( pos, ( lid, cell ) ) =
 emptyBaseTile pos xs =
     div
         (commonAttrs pos
-            ++ [ style "border-style" "solid"
-               , style "border-width" "0.5px"
-               , style "border-color" (whitePct 80)
+            ++ [ borderSolid
+               , borderWidth 0.5
+               , borderColor (whitePct 80)
                , backgroundColor (whitePct 90)
                ]
             ++ xs
@@ -226,13 +226,32 @@ emptyBaseTile pos xs =
 emptyCoverTile pos =
     div
         (commonAttrs pos
-            ++ [ style "border-style" "outset"
-               , style "border-width" "4px"
-               , style "border-color" "unset"
+            ++ [ borderOutset
+               , borderWidth 4
                , backgroundColor (whitePct 80)
                ]
         )
         []
+
+
+borderColor =
+    style "border-color"
+
+
+borderSolid =
+    borderStyle "solid"
+
+
+borderOutset =
+    borderStyle "outset"
+
+
+borderStyle =
+    style "border-style"
+
+
+borderWidth =
+    stylePx "border-width"
 
 
 stringTile pos string xs =
