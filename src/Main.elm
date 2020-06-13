@@ -1,7 +1,7 @@
 module Main exposing (main)
 
 import Browser
-import Html exposing (Html, button, div, text)
+import Html exposing (Attribute, Html, button, div, text)
 import Html.Attributes exposing (style)
 import Html.Events as E exposing (onClick)
 import IntSize as Size exposing (IntSize)
@@ -178,21 +178,7 @@ viewTile m loc =
             tileAt m loc == Just ( LidGrid.Open, MineGrid.Mine )
     in
     div
-        ([ styleWidth cellWidth
-         , styleHeight cellWidth
-         , absolute
-         , transforms [ translate sp ]
-         , style "overflow" "hidden"
-         , style "outline" "1px solid dodgerblue"
-         , style "font-size" "3rem"
-         , style "font-family" "monospace"
-         , style "display" "flex"
-         , style "align-items" "center"
-         , style "justify-content" "center"
-         , onClick (Click loc)
-         , E.preventDefaultOn "contextmenu" (JD.succeed ( RightClick loc, True ))
-         , style "user-select" "none"
-         ]
+        (commonTileAttrs loc
             ++ (if isOpenMine then
                     [ style "background-color" "red"
                     ]
@@ -214,6 +200,29 @@ viewTile m loc =
             _ ->
                 text ""
         ]
+
+
+commonTileAttrs : ( Int, Int ) -> List (Attribute Msg)
+commonTileAttrs loc =
+    let
+        sp =
+            toScreenCords loc
+    in
+    [ styleWidth cellWidth
+    , styleHeight cellWidth
+    , absolute
+    , transforms [ translate sp ]
+    , style "overflow" "hidden"
+    , style "outline" "1px solid dodgerblue"
+    , style "font-size" "3rem"
+    , style "font-family" "monospace"
+    , style "display" "flex"
+    , style "align-items" "center"
+    , style "justify-content" "center"
+    , onClick (Click loc)
+    , E.preventDefaultOn "contextmenu" (JD.succeed ( RightClick loc, True ))
+    , style "user-select" "none"
+    ]
 
 
 
