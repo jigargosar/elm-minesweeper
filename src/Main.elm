@@ -1,14 +1,14 @@
 module Main exposing (main)
 
 import Browser
-import Html exposing (Html, div, text)
+import Html exposing (Html, button, div, text)
 import Html.Attributes exposing (style)
 import Html.Events as E exposing (onClick)
 import IntSize as Size exposing (IntSize)
 import Json.Decode as JD
 import LidGrid exposing (Lid, LidGrid)
 import MineGrid exposing (MineGrid)
-import Random
+import Random exposing (Seed)
 import Set exposing (Set)
 import String exposing (fromFloat, fromInt)
 import Tuple exposing (first)
@@ -27,6 +27,7 @@ type alias Model =
     { lids : LidGrid
     , mines : MineGrid
     , gameState : GameState
+    , seed : Seed
     }
 
 
@@ -45,22 +46,38 @@ init flags =
         minesGenerator =
             MineGrid.generator gridSize 0.1
 
-        mines : MineGrid
-        mines =
+        ( mines, seed ) =
             Random.step minesGenerator (Random.initialSeed flags.now)
-                |> first
     in
     ( { lids = LidGrid.fillClosed gridSize
       , mines = mines
       , gameState = PlayerTurn
+      , seed = seed
       }
     , Cmd.none
     )
 
 
+reset : Model -> Model
+reset model =
+    let
+        minesGenerator =
+            MineGrid.generator gridSize 0.1
+
+        ( mines, seed ) =
+            Random.step minesGenerator model.seed
+    in
+    { lids = LidGrid.fillClosed gridSize
+    , mines = mines
+    , gameState = PlayerTurn
+    , seed = seed
+    }
+
+
 type Msg
     = Click Pos
     | RightClick Pos
+    | ResetClicked
 
 
 update : Msg -> Model -> Model
@@ -88,6 +105,9 @@ update msg model =
         ( PlayerTurn, RightClick loc ) ->
             { model | lids = LidGrid.cycleLabel loc model.lids }
 
+        ( _, ResetClicked ) ->
+            reset model
+
         _ ->
             model
 
@@ -109,7 +129,8 @@ mineCellAt model =
 
 view m =
     div []
-        [ div [] [ text "MineSweeper" ]
+        [ div [] [ text <| "MineSweeper: " ++ Debug.toString m.gameState ]
+        , div [] [ button [ onClick ResetClicked ] [ text "Reset" ] ]
         , viewGrid m
         ]
 
