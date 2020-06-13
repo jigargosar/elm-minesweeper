@@ -231,6 +231,7 @@ viewCoverTile pos string =
         [ div
             (innerTileAttrs
                 ++ [ style "border-style" "outset"
+                   , style "border-color" "unset"
                    , style "background-color" (whitePct 80)
                    ]
             )
