@@ -206,6 +206,10 @@ viewBaseTile pos string =
         [ text string ]
 
 
+
+--noinspection SpellCheckingInspection
+
+
 viewCoverTile pos string =
     div
         (commonTileAttrs pos
