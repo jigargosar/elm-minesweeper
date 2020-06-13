@@ -205,14 +205,16 @@ viewBaseTile pos string =
         bc =
             whitePct 90
     in
-    div
-        (commonTileAttrs pos
-            ++ [ style "border-style" "solid"
-               , style "border-color" bc
-               , style "background-color" bc
-               ]
-        )
-        [ text string ]
+    div (outerTileAttrs pos)
+        [ div
+            (innerTileAttrs
+                ++ [ style "border-style" "solid"
+                   , style "border-color" bc
+                   , style "background-color" bc
+                   ]
+            )
+            [ text string ]
+        ]
 
 
 whitePct pct =
