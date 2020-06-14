@@ -107,6 +107,14 @@ computeAutoOpenLidPositions grid pending acc =
             computeAutoOpenLidPositions grid nPending (Set.insert current acc)
 
 
+neighbourPositionSetWhereCellSatisfies : (b -> Bool) -> Int2 -> Grid b -> Set Int2
+neighbourPositionSetWhereCellSatisfies pred pos grid =
+    Grid.neighbours pos grid
+        |> List.filter (\( _, cell ) -> pred cell)
+        |> List.map Tuple.first
+        |> Set.fromList
+
+
 canOpenCell : Cell -> Bool
 canOpenCell ( lid, _ ) =
     lid == Lid.Closed
