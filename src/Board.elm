@@ -61,6 +61,11 @@ lidAt pos =
     cellAt pos >> Maybe.map Tuple.first
 
 
+mineCellAt : Int2 -> CellGrid -> Maybe MineCell
+mineCellAt pos =
+    cellAt pos >> Maybe.map Tuple.second
+
+
 computeLidPositionsToOpen : Int2 -> CellGrid -> Maybe ( State, Set Int2 )
 computeLidPositionsToOpen start grid =
     case cellAt start grid of
