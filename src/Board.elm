@@ -35,7 +35,7 @@ type State
 
 openLidAt : Int2 -> Board -> Maybe ( State, Board )
 openLidAt pos (Board grid) =
-    case computeLidPositionsToOpen pos grid of
+    case computePositionsToOpen pos grid of
         Nothing ->
             Nothing
 
@@ -51,8 +51,8 @@ openLidAt pos (Board grid) =
                 )
 
 
-computeLidPositionsToOpen : Int2 -> CellGrid -> Maybe ( State, Set Int2 )
-computeLidPositionsToOpen start grid =
+computePositionsToOpen : Int2 -> CellGrid -> Maybe ( State, Set Int2 )
+computePositionsToOpen start grid =
     case cellAt start grid of
         Just ( Lid.Closed, mineCell ) ->
             case mineCell of
