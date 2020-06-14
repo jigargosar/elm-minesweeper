@@ -5,7 +5,7 @@ import IntSize as Size exposing (IntSize)
 import Lid exposing (Lid)
 import List.Extra as List
 import MineCell as Mine exposing (MineCell)
-import More.Basics exposing (Int2Dict)
+import More.Basics exposing (Int2, Int2Dict)
 import Random exposing (Generator)
 import Set exposing (Set)
 
@@ -14,10 +14,18 @@ type Board
     = Board (Grid ( Lid, MineCell ))
 
 
+type alias Cell =
+    ( Lid, MineCell )
+
+
+type alias CellGrid =
+    Grid Cell
+
+
 generator : IntSize -> Generator Board
 generator size =
     minePosSetGenerator size 0.1
-        |> Random.map (initMineCellGrid size >> Board)
+        |> Random.map (initCellGrid size >> Board)
 
 
 type State
@@ -25,7 +33,7 @@ type State
     | Lost
 
 
-openLidAt : ( Int, Int ) -> Board -> Maybe ( State, Board )
+openLidAt : Int2 -> Board -> Maybe ( State, Board )
 openLidAt pos (Board grid) =
     case computeLidPositionsToOpen pos grid of
         Nothing ->
@@ -104,7 +112,7 @@ canOpenLidAt pos grid =
             False
 
 
-updateLid : ( Int, Int ) -> (Lid -> Lid) -> Grid ( Lid, MineCell ) -> Grid ( Lid, MineCell )
+updateLid : Int2 -> (Lid -> Lid) -> Grid ( Lid, MineCell ) -> Grid ( Lid, MineCell )
 updateLid pos f =
     Grid.update pos (Tuple.mapFirst f)
 
@@ -120,7 +128,7 @@ lidOpenIfClosed pos =
         )
 
 
-cycleLabel : ( Int, Int ) -> Board -> Maybe Board
+cycleLabel : Int2 -> Board -> Maybe Board
 cycleLabel pos (Board grid) =
     case Grid.get pos grid of
         Just ( Lid.Open, _ ) ->
@@ -155,7 +163,7 @@ toDict (Board grid) =
 -- Mine Grid
 
 
-minePosSetGenerator : IntSize -> Float -> Generator (Set ( Int, Int ))
+minePosSetGenerator : IntSize -> Float -> Generator (Set Int2)
 minePosSetGenerator size minePct =
     let
         xs =
@@ -171,7 +179,7 @@ minePosSetGenerator size minePct =
             )
 
 
-initMineCellGrid size minePosSet =
+initCellGrid size minePosSet =
     let
         isMine pos =
             Set.member pos minePosSet
