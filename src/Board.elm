@@ -122,12 +122,7 @@ canAutoOpenLidAt pos grid =
 
 
 canOpenLidAt pos grid =
-    case lidAt pos grid of
-        Just Lid.Closed ->
-            True
-
-        _ ->
-            False
+    lidAt pos grid == Just Lid.Closed
 
 
 updateLid : Int2 -> (Lid -> Lid) -> CellGrid -> CellGrid
