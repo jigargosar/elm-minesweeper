@@ -1,4 +1,4 @@
-module Board exposing (Board, State(..), cycleLabel, generator, openLid, toDict)
+module Board exposing (Board, State(..), cycleLabel, generator, openLidAt, toDict)
 
 import Dict exposing (Dict)
 import Grid exposing (Grid)
@@ -26,8 +26,8 @@ type State
     | Lost
 
 
-openLid : ( Int, Int ) -> Board -> Maybe ( State, Board )
-openLid pos (Board size lids mines) =
+openLidAt : ( Int, Int ) -> Board -> Maybe ( State, Board )
+openLidAt pos (Board size lids mines) =
     case dictGet2 pos (Grid.toDict lids) (Grid.toDict mines) of
         Just ( Lid.Closed, Mine.Mine ) ->
             Just

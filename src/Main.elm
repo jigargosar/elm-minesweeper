@@ -83,7 +83,7 @@ update : Msg -> Model -> Model
 update msg model =
     case ( model.gameState, msg ) of
         ( Board.PlayerTurn, Click pos ) ->
-            case Board.openLid pos model.board of
+            case Board.openLidAt pos model.board of
                 Just ( gameState, board ) ->
                     { model
                         | gameState = gameState
