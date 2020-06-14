@@ -26,8 +26,8 @@ type State
     | Lost
 
 
-openLidAt : ( Int, Int ) -> Board -> Maybe ( State, Board )
-openLidAt pos (Board size lids mines) =
+openLidAt_ : ( Int, Int ) -> Board -> Maybe ( State, Board )
+openLidAt_ pos (Board size lids mines) =
     case dictGet2 pos (Grid.toDict lids) (Grid.toDict mines) of
         Just ( Lid.Closed, Mine.Mine ) ->
             Just
@@ -52,8 +52,8 @@ openLidAt pos (Board size lids mines) =
             Nothing
 
 
-openLidAt2 : ( Int, Int ) -> Board -> Maybe ( State, Board )
-openLidAt2 pos (Board size lids mines) =
+openLidAt : ( Int, Int ) -> Board -> Maybe ( State, Board )
+openLidAt pos (Board size lids mines) =
     case computeLidPositionsToOpen pos lids mines of
         Nothing ->
             Nothing
