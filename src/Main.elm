@@ -47,7 +47,7 @@ init flags =
     in
     ( generateModel initialSeed
         |> update (Click ( 0, 0 ))
-      --|> update (RightClick ( 4, 0 ))
+        |> update (RightClick ( 4, 0 ))
       --|> update (Click ( 4, 1 ))
     , Cmd.none
     )
