@@ -10,7 +10,6 @@ import Json.Decode as JD
 import LidGrid as LG exposing (Lid, LidGrid)
 import MineGrid as MG exposing (MineGrid)
 import Random exposing (Seed)
-import Set exposing (Set)
 
 
 main =
@@ -23,9 +22,7 @@ main =
 
 
 type alias Model =
-    { lids : LidGrid
-    , mines : MineGrid
-    , board : Board
+    { board : Board
     , gameState : GameState
     , seed : Seed
     }
@@ -59,14 +56,12 @@ generateModel : Seed -> Model
 generateModel initialSeed =
     let
         generator =
-            Random.pair (MG.generator gridSize 0.1) (Board.generate gridSize)
+            Board.generate gridSize
 
-        ( ( mines, board ), seed ) =
+        ( board, seed ) =
             Random.step generator initialSeed
     in
-    { lids = LG.fillClosed gridSize
-    , mines = mines
-    , board = board
+    { board = board
     , gameState = Board.PlayerTurn
     , seed = seed
     }
@@ -87,18 +82,23 @@ update : Msg -> Model -> Model
 update msg model =
     case ( model.gameState, msg ) of
         ( Board.PlayerTurn, Click pos ) ->
-            case openLid pos model of
-                Just ( gameState, lids ) ->
+            case Board.openLid pos model.board of
+                Just ( gameState, board ) ->
                     { model
                         | gameState = gameState
-                        , lids = lids
+                        , board = board
                     }
 
                 Nothing ->
                     model
 
         ( Board.PlayerTurn, RightClick loc ) ->
-            { model | lids = LG.cycleLabelIfNotOpen loc model.lids }
+            case Board.cycleLabel loc model.board of
+                Just board ->
+                    { model | board = board }
+
+                Nothing ->
+                    model
 
         ( Board.Lost, Click _ ) ->
             reset model
@@ -110,30 +110,9 @@ update msg model =
             model
 
 
-openLid : ( Int, Int ) -> Model -> Maybe ( GameState, LidGrid )
-openLid pos model =
-    case tileAt model pos of
-        Just ( LG.Closed, MG.Mine ) ->
-            Just
-                ( Board.Lost
-                , LG.open pos model.lids
-                )
-
-        Just ( LG.Closed, MG.Empty _ ) ->
-            let
-                nLidGrid =
-                    MG.autoOpenPosSetFrom pos model.mines
-                        |> Set.foldl LG.openIfClosed model.lids
-            in
-            Just ( Board.PlayerTurn, LG.open pos nLidGrid )
-
-        _ ->
-            Nothing
-
-
 tileAt : Model -> ( Int, Int ) -> Maybe ( Lid, MG.Cell )
 tileAt model pos =
-    Maybe.map2 Tuple.pair (lidAt model pos) (mineCellAt model pos)
+    Board.tileAt pos model.board
 
 
 tileEntryAt : Model -> ( Int, Int ) -> Maybe ( ( Int, Int ), ( Lid, MG.Cell ) )
@@ -145,16 +124,6 @@ tileEntries : Model -> List ( ( Int, Int ), ( Lid, MG.Cell ) )
 tileEntries model =
     Size.positions gridSize
         |> List.filterMap (tileEntryAt model)
-
-
-lidAt : Model -> Pos -> Maybe Lid
-lidAt model =
-    LG.get model.lids
-
-
-mineCellAt : Model -> Pos -> Maybe MG.Cell
-mineCellAt model =
-    MG.get model.mines
 
 
 view m =
