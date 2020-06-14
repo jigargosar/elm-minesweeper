@@ -10,13 +10,13 @@ import Set
 
 
 type Board
-    = Board IntSize LidGrid MineGrid
+    = Board IntSize (PosDict Lid) MineGrid
 
 
 generate : IntSize -> Generator Board
 generate size =
     MG.generator size 0.1
-        |> Random.map (Board size (LG.fillClosed size))
+        |> Random.map (Board size (PosDict.init size (always LG.Closed)))
 
 
 type State
@@ -26,20 +26,33 @@ type State
 
 openLid : ( Int, Int ) -> Board -> Maybe ( State, Board )
 openLid pos (Board size lids mines) =
-    case Maybe.map2 Tuple.pair (LG.get lids pos) (MG.get mines pos) of
+    case Maybe.map2 Tuple.pair (Dict.get pos lids) (MG.get mines pos) of
         Just ( LG.Closed, MG.Mine ) ->
             Just
                 ( Lost
-                , Board size (LG.open pos lids) mines
+                , Board size (Dict.insert pos LG.Open lids) mines
                 )
 
         Just ( LG.Closed, MG.Empty _ ) ->
             let
                 nLidGrid =
                     MG.autoOpenPosSetFrom pos mines
-                        |> Set.foldl LG.openIfClosed lids
+                        |> Set.foldl
+                            (\np ->
+                                Dict.update np
+                                    (Maybe.map
+                                        (\lid ->
+                                            if lid == LG.Closed then
+                                                LG.Open
+
+                                            else
+                                                lid
+                                        )
+                                    )
+                            )
+                            lids
             in
-            Just ( PlayerTurn, Board size (LG.open pos nLidGrid) mines )
+            Just ( PlayerTurn, Board size (Dict.insert pos LG.Open lids) mines )
 
         _ ->
             Nothing
@@ -49,9 +62,23 @@ cycleLabel : ( Int, Int ) -> Board -> Maybe Board
 cycleLabel pos (Board s l m) =
     let
         nl =
-            LG.cycleLabelIfNotOpen pos l
+            Dict.update pos
+                (Maybe.map
+                    (\lid ->
+                        case lid of
+                            LG.Open ->
+                                lid
+
+                            LG.Closed ->
+                                LG.Flagged
+
+                            LG.Flagged ->
+                                LG.Closed
+                    )
+                )
+                l
     in
-    if LG.get l pos /= Just LG.Open then
+    if Dict.get pos l /= Just LG.Open then
         Board s nl m
             |> Just
 
@@ -65,6 +92,6 @@ toDict (Board _ l m) =
         (\_ _ -> identity)
         (\k v1 v2 -> Dict.insert k ( v1, v2 ))
         (\_ _ -> identity)
-        (LG.toDict l)
+        l
         (MG.toDict m)
         Dict.empty
