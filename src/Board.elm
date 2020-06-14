@@ -4,16 +4,9 @@ import Dict exposing (Dict)
 import IntSize exposing (IntSize)
 import LidGrid as LG exposing (Lid, LidGrid)
 import MineGrid as MG exposing (MineGrid)
+import PosDict exposing (PosDict)
 import Random exposing (Generator)
 import Set
-
-
-type alias Pos =
-    ( Int, Int )
-
-
-type alias PosDict a =
-    Dict Pos a
 
 
 type Board
