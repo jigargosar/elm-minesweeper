@@ -13,6 +13,7 @@ module Grid exposing
 import Dict exposing (Dict)
 import IntSize exposing (IntSize)
 import PosDict exposing (PosDict)
+import Set exposing (Set)
 
 
 type Grid a
@@ -60,9 +61,25 @@ get pos =
     toDict >> Dict.get pos
 
 
+neighbourPosSet : Grid a -> ( Int, Int ) -> Set ( Int, Int )
 neighbourPosSet (Grid size _) pos =
     IntSize.neighbourSet size pos
 
 
+includeNeighboursPosSet : Grid a -> Set ( Int, Int ) -> Set ( Int, Int )
 includeNeighboursPosSet (Grid size _) pos =
     IntSize.includeNeighbours size pos
+
+
+filterNeighbourPosSet : ( Int, Int ) -> (( Int, Int ) -> a -> Bool) -> Grid a -> Set ( Int, Int )
+filterNeighbourPosSet pos isOk grid =
+    neighbourPosSet grid pos
+        |> Set.filter
+            (\nPos ->
+                case get nPos grid of
+                    Nothing ->
+                        False
+
+                    Just a ->
+                        isOk pos a
+            )
