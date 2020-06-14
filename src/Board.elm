@@ -83,7 +83,13 @@ computeAutoOpenLidPositions grid pending acc =
     case Set.toList pending of
         [] ->
             Set.foldl
-                (\pos -> Set.union (Grid.neighbours pos grid |> List.map Tuple.first |> Set.fromList))
+                (\pos ->
+                    Set.union
+                        (Grid.neighbours pos grid
+                            |> List.map Tuple.first
+                            |> Set.fromList
+                        )
+                )
                 acc
                 acc
                 |> Set.filter (\pos -> canOpenLidAt pos grid)
