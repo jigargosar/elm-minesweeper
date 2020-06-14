@@ -73,13 +73,13 @@ includeNeighbours (Grid size _) pos =
 
 filterNeighbours : ( Int, Int ) -> (a -> Bool) -> Grid a -> Set ( Int, Int )
 filterNeighbours pos isOk grid =
-    neighbourSet grid pos
-        |> Set.filter
-            (\nPos ->
-                case get nPos grid of
-                    Nothing ->
-                        False
+    let
+        func nPos =
+            case get nPos grid of
+                Nothing ->
+                    False
 
-                    Just a ->
-                        isOk a
-            )
+                Just a ->
+                    isOk a
+    in
+    Set.filter func (neighbourSet grid pos)
