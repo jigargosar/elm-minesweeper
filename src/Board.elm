@@ -62,16 +62,14 @@ computePositionsToOpen start grid =
                         , Set.singleton start
                         )
 
-                Mine.Empty 0 ->
+                Mine.Empty surroundingMineCount ->
                     Just
                         ( PlayerTurn
-                        , computeAutoOpenPositions grid (Set.singleton start) Set.empty
-                        )
+                        , if surroundingMineCount == 0 then
+                            computeAutoOpenPositions grid (Set.singleton start) Set.empty
 
-                Mine.Empty _ ->
-                    Just
-                        ( PlayerTurn
-                        , Set.singleton start
+                          else
+                            Set.singleton start
                         )
 
         _ ->
