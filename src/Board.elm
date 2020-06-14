@@ -26,32 +26,6 @@ type State
     | Lost
 
 
-openLidAt_ : ( Int, Int ) -> Board -> Maybe ( State, Board )
-openLidAt_ pos (Board size lids mines) =
-    case dictGet2 pos (Grid.toDict lids) (Grid.toDict mines) of
-        Just ( Lid.Closed, Mine.Mine ) ->
-            Just
-                ( Lost
-                , Board size (Grid.set pos Lid.Open lids) mines
-                )
-
-        Just ( Lid.Closed, Mine.Empty _ ) ->
-            let
-                nLids =
-                    Set.foldl
-                        lidOpenIfClosed
-                        lids
-                        (autoOpenPosSetFrom pos mines)
-            in
-            Just
-                ( PlayerTurn
-                , Board size (Grid.set pos Lid.Open nLids) mines
-                )
-
-        _ ->
-            Nothing
-
-
 openLidAt : ( Int, Int ) -> Board -> Maybe ( State, Board )
 openLidAt pos (Board size lids mines) =
     case computeLidPositionsToOpen pos lids mines of
@@ -211,45 +185,3 @@ initMineCellGrid size minePosSet =
             else
                 Mine.Empty (neighbourMineCount pos)
         )
-
-
-autoOpenPosSetFrom : ( Int, Int ) -> Grid MineCell -> Set ( Int, Int )
-autoOpenPosSetFrom pos grid =
-    if Grid.get pos grid == Just (Mine.Empty 0) then
-        connectedEmptyPositionsWithNoSurroundingMines grid pos Set.empty Set.empty
-            |> Grid.includeNeighbours grid
-
-    else
-        Set.empty
-
-
-connectedEmptyPositionsWithNoSurroundingMines :
-    Grid MineCell
-    -> ( Int, Int )
-    -> Set ( Int, Int )
-    -> Set ( Int, Int )
-    -> Set ( Int, Int )
-connectedEmptyPositionsWithNoSurroundingMines grid current pending acc =
-    let
-        nAcc =
-            Set.insert current acc
-    in
-    case
-        Set.diff (Grid.filterNeighbours current ((==) (Mine.Empty 0)) grid) acc
-            |> Set.union pending
-            |> Set.toList
-    of
-        [] ->
-            nAcc
-
-        nCurrent :: nPending ->
-            connectedEmptyPositionsWithNoSurroundingMines grid nCurrent (Set.fromList nPending) nAcc
-
-
-
--- Dict Helpers
-
-
-dictGet2 : comparable -> Dict comparable v -> Dict comparable a -> Maybe ( v, a )
-dictGet2 k a b =
-    Maybe.map2 Tuple.pair (Dict.get k a) (Dict.get k b)
