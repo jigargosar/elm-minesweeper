@@ -51,14 +51,14 @@ openLidAt pos (Board grid) =
                 )
 
 
-get : Int2 -> CellGrid -> Maybe Cell
-get =
+getCell : Int2 -> CellGrid -> Maybe Cell
+getCell =
     Grid.get
 
 
 computeLidPositionsToOpen : Int2 -> CellGrid -> Maybe ( State, Set Int2 )
 computeLidPositionsToOpen start grid =
-    case get start grid of
+    case getCell start grid of
         Nothing ->
             Nothing
 
@@ -103,7 +103,7 @@ computeAutoOpenLidPositions grid pending acc =
 
 canAutoOpenLidAt : Int2 -> CellGrid -> Bool
 canAutoOpenLidAt pos grid =
-    case get pos grid of
+    case getCell pos grid of
         Just ( Lid.Closed, Mine.Empty 0 ) ->
             True
 
@@ -112,7 +112,7 @@ canAutoOpenLidAt pos grid =
 
 
 canOpenLidAt pos grid =
-    case get pos grid of
+    case getCell pos grid of
         Just ( Lid.Closed, _ ) ->
             True
 
@@ -143,7 +143,7 @@ lidOpenIfClosed pos =
 
 cycleLabel : Int2 -> Board -> Maybe Board
 cycleLabel pos (Board grid) =
-    case get pos grid of
+    case getCell pos grid of
         Just ( Lid.Open, _ ) ->
             Nothing
 
