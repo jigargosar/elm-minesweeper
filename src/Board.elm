@@ -2,7 +2,7 @@ module Board exposing (Board, State(..), cycleLabel, generate, openLid, toDict)
 
 import Dict exposing (Dict)
 import IntSize exposing (IntSize)
-import LidGrid as LG exposing (Lid)
+import LidGrid as Lids exposing (Lid)
 import MineGrid as Mines exposing (MineGrid)
 import PosDict exposing (PosDict)
 import Random exposing (Generator)
@@ -16,7 +16,7 @@ type Board
 generate : IntSize -> Generator Board
 generate size =
     Mines.generator size 0.1
-        |> Random.map (Board size (PosDict.init size (always LG.Closed)))
+        |> Random.map (Board size (PosDict.init size (always Lids.Closed)))
 
 
 type State
@@ -27,13 +27,13 @@ type State
 openLid : ( Int, Int ) -> Board -> Maybe ( State, Board )
 openLid pos (Board size lids mines) =
     case dictGet2 pos lids (Mines.toDict mines) of
-        Just ( LG.Closed, Mines.Mine ) ->
+        Just ( Lids.Closed, Mines.Mine ) ->
             Just
                 ( Lost
-                , Board size (dictSetExisting pos LG.Open lids) mines
+                , Board size (dictSetExisting pos Lids.Open lids) mines
                 )
 
-        Just ( LG.Closed, Mines.Empty _ ) ->
+        Just ( Lids.Closed, Mines.Empty _ ) ->
             let
                 nLids =
                     Set.foldl
@@ -43,7 +43,7 @@ openLid pos (Board size lids mines) =
             in
             Just
                 ( PlayerTurn
-                , Board size (dictSetExisting pos LG.Open nLids) mines
+                , Board size (dictSetExisting pos Lids.Open nLids) mines
                 )
 
         _ ->
@@ -54,8 +54,8 @@ lidOpenIfClosed : comparable -> Dict comparable Lid -> Dict comparable Lid
 lidOpenIfClosed pos =
     dictUpdateExisting pos
         (\lid ->
-            if lid == LG.Closed then
-                LG.Open
+            if lid == Lids.Closed then
+                Lids.Open
 
             else
                 lid
@@ -69,18 +69,18 @@ cycleLabel pos (Board s l m) =
             dictUpdateExisting pos
                 (\lid ->
                     case lid of
-                        LG.Open ->
+                        Lids.Open ->
                             lid
 
-                        LG.Closed ->
-                            LG.Flagged
+                        Lids.Closed ->
+                            Lids.Flagged
 
-                        LG.Flagged ->
-                            LG.Closed
+                        Lids.Flagged ->
+                            Lids.Closed
                 )
                 l
     in
-    if Dict.get pos l /= Just LG.Open then
+    if Dict.get pos l /= Just Lids.Open then
         Board s nl m
             |> Just
 
