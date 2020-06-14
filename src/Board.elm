@@ -1,6 +1,7 @@
 module Board exposing (Board, State(..), cycleLabel, generate, openLid, toDict)
 
 import Dict exposing (Dict)
+import Dict.Extra
 import IntSize exposing (IntSize)
 import LidGrid as LG exposing (Lid)
 import MineGrid as MG exposing (MineGrid)
@@ -35,19 +36,20 @@ openLid pos (Board size lids mines) =
 
         Just ( LG.Closed, MG.Empty _ ) ->
             let
+                _ =
+                    Dict.Extra.insertDedupe
+
                 nl =
                     MG.autoOpenPosSetFrom pos mines
                         |> Set.foldl
                             (\np ->
-                                Dict.update np
-                                    (Maybe.map
-                                        (\lid ->
-                                            if lid == LG.Closed then
-                                                LG.Open
+                                dictMapAt np
+                                    (\lid ->
+                                        if lid == LG.Closed then
+                                            LG.Open
 
-                                            else
-                                                lid
-                                        )
+                                        else
+                                            lid
                                     )
                             )
                             lids
@@ -56,6 +58,11 @@ openLid pos (Board size lids mines) =
 
         _ ->
             Nothing
+
+
+dictMapAt : comparable -> (b -> b) -> Dict comparable b -> Dict comparable b
+dictMapAt pos f =
+    Dict.update pos (Maybe.map f)
 
 
 cycleLabel : ( Int, Int ) -> Board -> Maybe Board

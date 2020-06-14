@@ -11,6 +11,7 @@
             "elm/html": "1.0.0",
             "elm/json": "1.1.2",
             "elm/random": "1.0.0",
+            "elm-community/dict-extra": "2.4.0",
             "elm-community/list-extra": "8.2.4",
             "mpizenberg/elm-pointer-events": "4.0.2"
         },
