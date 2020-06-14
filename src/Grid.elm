@@ -1,9 +1,18 @@
-module Grid exposing (Grid, filled, get, includeNeighboursPosSet, init, neighbourPosSet, set, toDict, update)
+module Grid exposing
+    ( Grid
+    , filled
+    , get
+    , includeNeighboursPosSet
+    , init
+    , neighbourPosSet
+    , set
+    , toDict
+    , update
+    )
 
 import Dict exposing (Dict)
 import IntSize exposing (IntSize)
 import PosDict exposing (PosDict)
-import Set exposing (Set)
 
 
 type Grid a
