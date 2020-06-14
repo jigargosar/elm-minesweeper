@@ -52,6 +52,25 @@ openLidAt pos (Board size lids mines) =
             Nothing
 
 
+openLidAt2 : ( Int, Int ) -> Board -> Maybe ( State, Board )
+openLidAt2 pos (Board size lids mines) =
+    case computeLidPositionsToOpen pos lids mines of
+        Nothing ->
+            Nothing
+
+        Just ( state, toOpen ) ->
+            Just
+                ( state
+                , Board size
+                    (Set.foldl
+                        lidOpenIfClosed
+                        lids
+                        toOpen
+                    )
+                    mines
+                )
+
+
 computeLidPositionsToOpen start lids mines =
     if lidsCanOpenAt start lids then
         case Grid.get start mines of
