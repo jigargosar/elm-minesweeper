@@ -61,8 +61,8 @@ openLid pos (Board size lids mines) =
 
 
 dictUpdateExisting : comparable -> (b -> b) -> Dict comparable b -> Dict comparable b
-dictUpdateExisting pos f =
-    Dict.update pos (Maybe.map f)
+dictUpdateExisting k f =
+    Dict.update k (Maybe.map f)
 
 
 cycleLabel : ( Int, Int ) -> Board -> Maybe Board
