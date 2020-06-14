@@ -1,5 +1,6 @@
 module Main exposing (main)
 
+import Board exposing (Board)
 import Browser
 import Html exposing (Attribute, Html, button, div, text)
 import Html.Attributes exposing (style)
@@ -24,6 +25,7 @@ main =
 type alias Model =
     { lids : LidGrid
     , mines : MineGrid
+    , board : Board
     , gameState : GameState
     , seed : Seed
     }
@@ -41,25 +43,36 @@ type alias Pos =
 init : { now : Int } -> ( Model, Cmd Msg )
 init flags =
     let
-        ( mines, seed ) =
-            let
-                initialSeed =
-                    flags.now
-                        |> always 2
-                        |> Random.initialSeed
-            in
-            Random.step minesGenerator initialSeed
+        initialSeed =
+            flags.now
+                |> always 2
+                |> Random.initialSeed
     in
-    ( { lids = LG.fillClosed gridSize
-      , mines = mines
-      , gameState = PlayerTurn
-      , seed = seed
-      }
+    ( generateModel initialSeed
         |> update (Click ( 0, 0 ))
         |> update (RightClick ( 4, 0 ))
         |> update (Click ( 4, 1 ))
     , Cmd.none
     )
+
+
+generateMinesAndBoard : Seed -> ( ( MineGrid, Board ), Seed )
+generateMinesAndBoard =
+    Random.step (Random.pair minesGenerator (Board.generate gridSize))
+
+
+generateModel : Seed -> Model
+generateModel initialSeed =
+    let
+        ( ( mines, board ), seed ) =
+            generateMinesAndBoard initialSeed
+    in
+    { lids = LG.fillClosed gridSize
+    , mines = mines
+    , board = board
+    , gameState = PlayerTurn
+    , seed = seed
+    }
 
 
 minesGenerator =
@@ -68,15 +81,7 @@ minesGenerator =
 
 reset : Model -> Model
 reset model =
-    let
-        ( mines, seed ) =
-            Random.step minesGenerator model.seed
-    in
-    { lids = LG.fillClosed gridSize
-    , mines = mines
-    , gameState = PlayerTurn
-    , seed = seed
-    }
+    generateModel model.seed
 
 
 type Msg
