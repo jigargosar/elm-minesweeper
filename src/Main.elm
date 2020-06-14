@@ -31,9 +31,8 @@ type alias Model =
     }
 
 
-type GameState
-    = PlayerTurn
-    | Lost
+type alias GameState =
+    Board.State
 
 
 type alias Pos =
@@ -68,7 +67,7 @@ generateModel initialSeed =
     { lids = LG.fillClosed gridSize
     , mines = mines
     , board = board
-    , gameState = PlayerTurn
+    , gameState = Board.PlayerTurn
     , seed = seed
     }
 
@@ -87,7 +86,7 @@ type Msg
 update : Msg -> Model -> Model
 update msg model =
     case ( model.gameState, msg ) of
-        ( PlayerTurn, Click pos ) ->
+        ( Board.PlayerTurn, Click pos ) ->
             case openLid pos model of
                 Just ( gameState, lids ) ->
                     { model
@@ -98,10 +97,10 @@ update msg model =
                 Nothing ->
                     model
 
-        ( PlayerTurn, RightClick loc ) ->
+        ( Board.PlayerTurn, RightClick loc ) ->
             { model | lids = LG.cycleLabelIfNotOpen loc model.lids }
 
-        ( Lost, Click _ ) ->
+        ( Board.Lost, Click _ ) ->
             reset model
 
         ( _, ResetClicked ) ->
@@ -116,7 +115,7 @@ openLid pos model =
     case tileAt model pos of
         Just ( LG.Closed, MG.Mine ) ->
             Just
-                ( Lost
+                ( Board.Lost
                 , LG.open pos model.lids
                 )
 
@@ -126,7 +125,7 @@ openLid pos model =
                     MG.autoOpenPosSetFrom pos model.mines
                         |> Set.foldl LG.openIfClosed model.lids
             in
-            Just ( PlayerTurn, LG.open pos nLidGrid )
+            Just ( Board.PlayerTurn, LG.open pos nLidGrid )
 
         _ ->
             Nothing
@@ -191,7 +190,7 @@ viewGrid model =
         , relative
         ]
         (case model.gameState of
-            PlayerTurn ->
+            Board.PlayerTurn ->
                 model
                     |> tileEntries
                     |> List.concatMap
@@ -199,7 +198,7 @@ viewGrid model =
                             renderTileView pos (toPlayerTurnTileView lid cell)
                         )
 
-            Lost ->
+            Board.Lost ->
                 model
                     |> tileEntries
                     |> List.concatMap
