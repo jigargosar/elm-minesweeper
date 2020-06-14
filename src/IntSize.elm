@@ -37,6 +37,11 @@ foldPositions f (Size ( w, h )) =
         |> List.concatMap (\x -> List.range 0 (h - 1) |> List.map (\y -> f ( x, y )))
 
 
+positions : IntSize -> List ( Int, Int )
+positions =
+    foldPositions identity
+
+
 neighbours : IntSize -> ( Int, Int ) -> List ( Int, Int )
 neighbours size pos =
     Tuple.neighboursOf pos
@@ -52,8 +57,3 @@ includeNeighbours : IntSize -> Set ( Int, Int ) -> Set ( Int, Int )
 includeNeighbours size posSet =
     posSet
         |> Set.foldl (neighbourSet size >> Set.union) posSet
-
-
-positions : IntSize -> List ( Int, Int )
-positions (Size size) =
-    Tuple.range size
