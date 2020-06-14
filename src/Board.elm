@@ -76,13 +76,22 @@ computeLidPositionsToOpen start grid =
             if lid == Lid.Closed then
                 case mineCell of
                     Mine.Mine ->
-                        Just ( Lost, Set.singleton start )
+                        Just
+                            ( Lost
+                            , Set.singleton start
+                            )
 
                     Mine.Empty 0 ->
-                        Just ( PlayerTurn, computeAutoOpenLidPositions grid (Set.singleton start) Set.empty )
+                        Just
+                            ( PlayerTurn
+                            , computeAutoOpenLidPositions grid (Set.singleton start) Set.empty
+                            )
 
                     Mine.Empty _ ->
-                        Just ( PlayerTurn, Set.singleton start )
+                        Just
+                            ( PlayerTurn
+                            , Set.singleton start
+                            )
 
             else
                 Nothing
