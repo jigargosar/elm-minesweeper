@@ -1,6 +1,5 @@
 module IntSize exposing
     ( IntSize
-    , includeNeighbours
     , init
     , mapPositions
     , neighbours
@@ -9,7 +8,6 @@ module IntSize exposing
 
 import More.Basics exposing (..)
 import More.Tuple as Tuple
-import Set exposing (Set)
 
 
 type IntSize
@@ -45,9 +43,3 @@ neighbours size pos =
     in
     Tuple.neighboursOf pos
         |> List.filter (isPosValid size)
-
-
-includeNeighbours : IntSize -> Set Int2 -> Set Int2
-includeNeighbours size posSet =
-    posSet
-        |> Set.foldl (neighbours size >> Set.fromList >> Set.union) posSet

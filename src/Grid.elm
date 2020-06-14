@@ -2,7 +2,6 @@ module Grid exposing
     ( Grid
     , filled
     , get
-    , includeNeighbours
     , init
     , neighbours
     , set
@@ -13,7 +12,6 @@ module Grid exposing
 import Dict exposing (Dict)
 import IntSize exposing (IntSize)
 import More.Basics exposing (Int2Dict)
-import Set exposing (Set)
 
 
 type Grid a
@@ -70,8 +68,3 @@ neighbours pos (Grid size d) =
     in
     IntSize.neighbours size pos
         |> List.filterMap dictGetEntry
-
-
-includeNeighbours : Grid a -> Set ( Int, Int ) -> Set ( Int, Int )
-includeNeighbours (Grid size _) pos =
-    IntSize.includeNeighbours size pos
