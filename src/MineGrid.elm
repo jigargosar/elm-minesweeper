@@ -20,23 +20,23 @@ type Cell
     | Empty Int
 
 
-type MineGrid
-    = MineGrid (Grid Cell)
+type alias MineGrid =
+    Grid Cell
 
 
 toDict : MineGrid -> PosDict Cell
-toDict (MineGrid g) =
+toDict g =
     Grid.toDict g
 
 
 generator : IntSize -> Float -> Generator MineGrid
 generator size minePct =
     minePosSetGenerator size minePct
-        |> Random.map (initCellGrid size >> MineGrid)
+        |> Random.map (initCellGrid size)
 
 
 autoOpenPosSetFrom : ( Int, Int ) -> MineGrid -> Set ( Int, Int )
-autoOpenPosSetFrom pos (MineGrid grid) =
+autoOpenPosSetFrom pos grid =
     if isEmptyWithNoSurroundingMines grid pos then
         connectedEmptyPositionsWithZeroSurroundingMines grid pos Set.empty Set.empty
             |> Grid.includeNeighboursPosSet grid
