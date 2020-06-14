@@ -85,7 +85,7 @@ computeAutoOpenLidPositions grid pending acc =
             Set.foldl
                 (\pos ->
                     Set.union
-                        (neighbourPositionsWhere canOpenCell pos grid)
+                        (neighbourPositionsWhere (\_ -> canOpenCell) pos grid)
                 )
                 acc
                 acc
@@ -93,10 +93,12 @@ computeAutoOpenLidPositions grid pending acc =
         current :: rest ->
             let
                 toCompute =
-                    Grid.neighbours current grid
-                        |> List.filter (\( pos, cell ) -> canAutoOpenCell cell && not (Set.member pos acc))
-                        |> List.map Tuple.first
-                        |> Set.fromList
+                    neighbourPositionsWhere
+                        (\pos cell ->
+                            canAutoOpenCell cell && not (Set.member pos acc)
+                        )
+                        current
+                        grid
 
                 nPending =
                     Set.union toCompute (Set.fromList rest)
@@ -104,10 +106,10 @@ computeAutoOpenLidPositions grid pending acc =
             computeAutoOpenLidPositions grid nPending (Set.insert current acc)
 
 
-neighbourPositionsWhere : (b -> Bool) -> Int2 -> Grid b -> Set Int2
+neighbourPositionsWhere : (Int2 -> b -> Bool) -> Int2 -> Grid b -> Set Int2
 neighbourPositionsWhere pred pos grid =
     Grid.neighbours pos grid
-        |> List.filter (\( _, cell ) -> pred cell)
+        |> List.filter (\( neighbourPos, neighbourCell ) -> pred neighbourPos neighbourCell)
         |> List.map Tuple.first
         |> Set.fromList
 
