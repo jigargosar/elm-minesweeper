@@ -43,7 +43,7 @@ openLid pos (Board size lids mines) =
             in
             Just
                 ( PlayerTurn
-                , Board size (Dict.insert pos LG.Open nLids) mines
+                , Board size (dictSetExisting pos LG.Open nLids) mines
                 )
 
         _ ->
