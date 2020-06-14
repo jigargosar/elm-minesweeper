@@ -2,6 +2,7 @@ module IntSize exposing
     ( IntSize
     , includeNeighbours
     , init
+    , mapPositions
     , neighbourSet
     , neighbours
     , positions
@@ -21,15 +22,15 @@ init w h =
     Size ( w, h )
 
 
-foldPositions : (Int2 -> a) -> IntSize -> List a
-foldPositions f (Size ( w, h )) =
+mapPositions : (Int2 -> a) -> IntSize -> List a
+mapPositions f (Size ( w, h )) =
     List.range 0 (w - 1)
         |> List.concatMap (\x -> List.range 0 (h - 1) |> List.map (\y -> f ( x, y )))
 
 
 positions : IntSize -> List Int2
 positions =
-    foldPositions identity
+    mapPositions identity
 
 
 neighbours : IntSize -> Int2 -> List Int2

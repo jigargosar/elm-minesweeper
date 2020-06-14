@@ -15,17 +15,18 @@ module Grid exposing
 
 import Dict exposing (Dict)
 import IntSize exposing (IntSize)
-import PosDict exposing (PosDict)
+import More.Basics exposing (Int2Dict)
 import Set exposing (Set)
 
 
 type Grid a
-    = Grid IntSize (PosDict a)
+    = Grid IntSize (Int2Dict a)
 
 
 init : IntSize -> (( Int, Int ) -> a) -> Grid a
 init size f =
-    PosDict.init size f
+    IntSize.mapPositions (\p -> ( p, f p )) size
+        |> Dict.fromList
         |> Grid size
 
 
@@ -34,12 +35,12 @@ filled size a =
     init size (always a)
 
 
-toDict : Grid a -> PosDict a
+toDict : Grid a -> Int2Dict a
 toDict (Grid _ d) =
     d
 
 
-mapDict : (PosDict a -> PosDict b) -> Grid a -> Grid b
+mapDict : (Int2Dict a -> Int2Dict b) -> Grid a -> Grid b
 mapDict f (Grid s d) =
     Grid s (f d)
 

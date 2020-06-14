@@ -5,7 +5,7 @@ import IntSize as Size exposing (IntSize)
 import Lid exposing (Lid)
 import List.Extra as List
 import MineCell as Mine exposing (MineCell)
-import PosDict exposing (PosDict)
+import More.Basics exposing (Int2Dict)
 import Random exposing (Generator)
 import Set exposing (Set)
 
@@ -142,7 +142,7 @@ cycleLabel pos (Board grid) =
                 )
 
 
-toDict : Board -> PosDict ( Lid, MineCell )
+toDict : Board -> Int2Dict ( Lid, MineCell )
 toDict (Board grid) =
     Grid.toDict grid
 
