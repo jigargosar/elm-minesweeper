@@ -2,9 +2,9 @@ module Grid exposing
     ( Grid
     , filled
     , get
-    , includeNeighboursPosSet
+    , includeNeighbours
     , init
-    , neighbourPosSet
+    , neighbourSet
     , set
     , toDict
     , update
@@ -61,19 +61,19 @@ get pos =
     toDict >> Dict.get pos
 
 
-neighbourPosSet : Grid a -> ( Int, Int ) -> Set ( Int, Int )
-neighbourPosSet (Grid size _) pos =
+neighbourSet : Grid a -> ( Int, Int ) -> Set ( Int, Int )
+neighbourSet (Grid size _) pos =
     IntSize.neighbourSet size pos
 
 
-includeNeighboursPosSet : Grid a -> Set ( Int, Int ) -> Set ( Int, Int )
-includeNeighboursPosSet (Grid size _) pos =
+includeNeighbours : Grid a -> Set ( Int, Int ) -> Set ( Int, Int )
+includeNeighbours (Grid size _) pos =
     IntSize.includeNeighbours size pos
 
 
-filterNeighbourPosSet : ( Int, Int ) -> (( Int, Int ) -> a -> Bool) -> Grid a -> Set ( Int, Int )
-filterNeighbourPosSet pos isOk grid =
-    neighbourPosSet grid pos
+filterNeighbours : ( Int, Int ) -> (a -> Bool) -> Grid a -> Set ( Int, Int )
+filterNeighbours pos isOk grid =
+    neighbourSet grid pos
         |> Set.filter
             (\nPos ->
                 case get nPos grid of
@@ -81,5 +81,5 @@ filterNeighbourPosSet pos isOk grid =
                         False
 
                     Just a ->
-                        isOk pos a
+                        isOk a
             )

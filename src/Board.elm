@@ -150,7 +150,7 @@ autoOpenPosSetFrom : ( Int, Int ) -> Grid MineCell -> Set ( Int, Int )
 autoOpenPosSetFrom pos grid =
     if isEmptyWithNoSurroundingMines grid pos then
         connectedEmptyPositionsWithZeroSurroundingMines grid pos Set.empty Set.empty
-            |> Grid.includeNeighboursPosSet grid
+            |> Grid.includeNeighbours grid
 
     else
         Set.empty
@@ -181,7 +181,7 @@ connectedEmptyPositionsWithZeroSurroundingMines grid current pending acc =
 
 neighboursHavingZeroSurroundingMines : Grid MineCell -> ( Int, Int ) -> Set ( Int, Int )
 neighboursHavingZeroSurroundingMines grid pos =
-    Grid.neighbourPosSet grid pos
+    Grid.neighbourSet grid pos
         |> Set.filter (isEmptyWithNoSurroundingMines grid)
 
 
