@@ -2,6 +2,7 @@ module Main exposing (main)
 
 import Board exposing (Board)
 import Browser
+import Dict
 import Html exposing (Attribute, Html, button, div, text)
 import Html.Attributes exposing (style)
 import Html.Events as E exposing (onClick)
@@ -110,22 +111,6 @@ update msg model =
             model
 
 
-tileAt : Model -> ( Int, Int ) -> Maybe ( Lid, MG.Cell )
-tileAt model pos =
-    Board.tileAt pos model.board
-
-
-tileEntryAt : Model -> ( Int, Int ) -> Maybe ( ( Int, Int ), ( Lid, MG.Cell ) )
-tileEntryAt model pos =
-    tileAt model pos |> Maybe.map (Tuple.pair pos)
-
-
-tileEntries : Model -> List ( ( Int, Int ), ( Lid, MG.Cell ) )
-tileEntries model =
-    Size.positions gridSize
-        |> List.filterMap (tileEntryAt model)
-
-
 view m =
     div []
         [ div [] [ text <| "MineSweeper: " ++ Debug.toString m.gameState ]
@@ -160,16 +145,18 @@ viewGrid model =
         ]
         (case model.gameState of
             Board.PlayerTurn ->
-                model
-                    |> tileEntries
+                model.board
+                    |> Board.toDict
+                    |> Dict.toList
                     |> List.concatMap
                         (\( pos, ( lid, cell ) ) ->
                             renderTileView pos (toPlayerTurnTileView lid cell)
                         )
 
             Board.Lost ->
-                model
-                    |> tileEntries
+                model.board
+                    |> Board.toDict
+                    |> Dict.toList
                     |> List.concatMap
                         (\( pos, ( lid, cell ) ) ->
                             renderTileView pos (toLostTileView lid cell)

@@ -1,4 +1,4 @@
-module Board exposing (Board, State(..), cycleLabel, generate, openLid, tileAt)
+module Board exposing (Board, State(..), cycleLabel, generate, openLid, tileAt, toDict)
 
 import Dict exposing (Dict)
 import IntSize exposing (IntSize)
