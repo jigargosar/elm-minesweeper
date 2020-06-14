@@ -51,6 +51,11 @@ openLidAt pos (Board grid) =
                 )
 
 
+get : Int2 -> CellGrid -> Maybe Cell
+get =
+    Grid.get
+
+
 computeLidPositionsToOpen start grid =
     case Grid.get start grid of
         Nothing ->
