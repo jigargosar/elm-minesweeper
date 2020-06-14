@@ -85,7 +85,7 @@ computeAutoOpenLidPositions grid pending acc =
             Set.foldl
                 (\pos ->
                     Set.union
-                        (neighbourPositionSetWhereCellSatisfies canOpenCell pos grid)
+                        (neighbourPositionSetWhere canOpenCell pos grid)
                 )
                 acc
                 acc
@@ -103,8 +103,8 @@ computeAutoOpenLidPositions grid pending acc =
             computeAutoOpenLidPositions grid nPending (Set.insert current acc)
 
 
-neighbourPositionSetWhereCellSatisfies : (b -> Bool) -> Int2 -> Grid b -> Set Int2
-neighbourPositionSetWhereCellSatisfies pred pos grid =
+neighbourPositionSetWhere : (b -> Bool) -> Int2 -> Grid b -> Set Int2
+neighbourPositionSetWhere pred pos grid =
     Grid.neighbours pos grid
         |> List.filter (\( _, cell ) -> pred cell)
         |> List.map Tuple.first
