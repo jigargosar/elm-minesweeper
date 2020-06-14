@@ -39,14 +39,14 @@ openLidAt pos (Board grid) =
         Nothing ->
             Nothing
 
-        Just ( state, toOpen ) ->
+        Just ( state, positionsToOpen ) ->
             Just
                 ( state
                 , Board
                     (Set.foldl
-                        lidOpenIfClosed
+                        (\toOpen -> setLid toOpen Lid.Open)
                         grid
-                        toOpen
+                        positionsToOpen
                     )
                 )
 
