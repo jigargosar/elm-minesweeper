@@ -12,18 +12,18 @@ type Lid
 
 
 type LidGrid
-    = LidGrid IntSize (PosDict Lid)
+    = LidGrid (PosDict Lid)
 
 
 toDict : LidGrid -> PosDict Lid
-toDict (LidGrid _ d) =
+toDict (LidGrid d) =
     d
 
 
 fillClosed : IntSize -> LidGrid
 fillClosed size =
     PosDict.init size (always Closed)
-        |> LidGrid size
+        |> LidGrid
 
 
 setAt : ( Int, Int ) -> Lid -> LidGrid -> LidGrid
@@ -32,12 +32,12 @@ setAt pos lid =
 
 
 mapAt : ( Int, Int ) -> (Lid -> Lid) -> LidGrid -> LidGrid
-mapAt pos f (LidGrid s d) =
-    LidGrid s (Dict.update pos (Maybe.map f) d)
+mapAt pos f (LidGrid d) =
+    LidGrid (Dict.update pos (Maybe.map f) d)
 
 
 get : LidGrid -> ( Int, Int ) -> Maybe Lid
-get (LidGrid _ d) pos =
+get (LidGrid d) pos =
     Dict.get pos d
 
 
