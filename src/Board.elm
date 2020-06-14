@@ -101,6 +101,11 @@ computeAutoOpenLidPositions grid pending acc =
             computeAutoOpenLidPositions grid nPending (Set.insert current acc)
 
 
+canAutoOpenCell : Cell -> Bool
+canAutoOpenCell cell =
+    cell == ( Lid.Closed, Mine.Empty 0 )
+
+
 cellAt : Int2 -> CellGrid -> Maybe Cell
 cellAt =
     Grid.get
@@ -109,11 +114,6 @@ cellAt =
 lidAt : Int2 -> CellGrid -> Maybe Lid
 lidAt pos =
     cellAt pos >> Maybe.map Tuple.first
-
-
-canAutoOpenCell : Cell -> Bool
-canAutoOpenCell cell =
-    cell == ( Lid.Closed, Mine.Empty 0 )
 
 
 canOpenLidAt : Int2 -> CellGrid -> Bool
