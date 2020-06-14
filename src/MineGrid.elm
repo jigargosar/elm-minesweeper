@@ -36,8 +36,8 @@ generator size minePct =
 
 
 autoOpenPosSetFrom : ( Int, Int ) -> MineGrid -> Set ( Int, Int )
-autoOpenPosSetFrom pos ((MineGrid size dict) as model) =
-    if isEmptyWithNoSurroundingMines dict pos then
+autoOpenPosSetFrom pos ((MineGrid size grid) as model) =
+    if isEmptyWithNoSurroundingMines grid pos then
         connectedEmptyPositionsWithZeroSurroundingMines model pos Set.empty Set.empty
             |> Size.includeNeighbours size
 
