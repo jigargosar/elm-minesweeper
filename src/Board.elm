@@ -168,7 +168,7 @@ connectedEmptyPositionsWithZeroSurroundingMines grid current pending acc =
             Set.insert current acc
     in
     case
-        Set.diff (neighboursHavingZeroSurroundingMines grid current) acc
+        Set.diff (Grid.filterNeighbours current ((==) (Mine.Empty 0)) grid) acc
             |> Set.union pending
             |> Set.toList
     of
@@ -177,12 +177,6 @@ connectedEmptyPositionsWithZeroSurroundingMines grid current pending acc =
 
         nCurrent :: nPending ->
             connectedEmptyPositionsWithZeroSurroundingMines grid nCurrent (Set.fromList nPending) nAcc
-
-
-neighboursHavingZeroSurroundingMines : Grid MineCell -> ( Int, Int ) -> Set ( Int, Int )
-neighboursHavingZeroSurroundingMines grid pos =
-    Grid.neighbourSet grid pos
-        |> Set.filter (isEmptyWithNoSurroundingMines grid)
 
 
 isEmptyWithNoSurroundingMines dict pos =
