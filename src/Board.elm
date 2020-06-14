@@ -168,7 +168,7 @@ connectedEmptyPositionsWithNoSurroundingMines grid current pending acc =
             Set.insert current acc
     in
     case
-        Set.diff (Grid.filterNeighbours current ((==) (Mine.Empty 0)) grid) acc
+        Set.diff (Grid.neighboursWhere current ((==) (Mine.Empty 0)) grid) acc
             |> Set.union pending
             |> Set.toList
     of
