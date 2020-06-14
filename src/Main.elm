@@ -119,6 +119,27 @@ update msg model =
             model
 
 
+openTileAt : ( Int, Int ) -> Model -> Maybe ( GameState, LidGrid )
+openTileAt pos model =
+    case tileAt model pos of
+        Just ( LG.Closed, MG.Mine ) ->
+            Just
+                ( Lost
+                , LG.open pos model.lids
+                )
+
+        Just ( LG.Closed, MG.Empty _ ) ->
+            let
+                nLidGrid =
+                    MG.autoOpenPosSetFrom pos model.mines
+                        |> Set.foldl LG.openIfClosed model.lids
+            in
+            Just ( PlayerTurn, LG.open pos nLidGrid )
+
+        _ ->
+            Nothing
+
+
 tileAt : Model -> ( Int, Int ) -> Maybe ( Lid, MG.Cell )
 tileAt model pos =
     Maybe.map2 Tuple.pair (lidAt model pos) (mineCellAt model pos)
