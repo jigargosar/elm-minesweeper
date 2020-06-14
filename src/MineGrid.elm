@@ -31,7 +31,7 @@ toDict (MineGrid g) =
 
 generator : IntSize -> Float -> Generator MineGrid
 generator size minePct =
-    minesGenerator size minePct
+    minePosSetGenerator size minePct
         |> Random.map (initCellGrid size >> MineGrid)
 
 
@@ -97,8 +97,8 @@ initCellGrid size minePosSet =
         )
 
 
-minesGenerator : IntSize -> Float -> Generator (Set ( Int, Int ))
-minesGenerator size minePct =
+minePosSetGenerator : IntSize -> Float -> Generator (Set ( Int, Int ))
+minePosSetGenerator size minePct =
     let
         xs =
             Size.positions size
