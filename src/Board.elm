@@ -122,8 +122,8 @@ canAutoOpenLidAt pos grid =
 
 
 canOpenLidAt pos grid =
-    case cellAt pos grid of
-        Just ( Lid.Closed, _ ) ->
+    case lidAt pos grid of
+        Just Lid.Closed ->
             True
 
         _ ->
