@@ -12,13 +12,13 @@ import Set exposing (Set)
 
 
 type Board
-    = Board IntSize (Grid Lid) (Grid MineCell)
+    = Board (Grid Lid) (Grid MineCell)
 
 
 generator : IntSize -> Generator Board
 generator size =
     mineGridGenerator size 0.1
-        |> Random.map (Board size (Grid.filled size Lid.Closed))
+        |> Random.map (Board (Grid.filled size Lid.Closed))
 
 
 type State
@@ -27,7 +27,7 @@ type State
 
 
 openLidAt : ( Int, Int ) -> Board -> Maybe ( State, Board )
-openLidAt pos (Board size lids mines) =
+openLidAt pos (Board lids mines) =
     case computeLidPositionsToOpen pos lids mines of
         Nothing ->
             Nothing
@@ -35,7 +35,7 @@ openLidAt pos (Board size lids mines) =
         Just ( state, toOpen ) ->
             Just
                 ( state
-                , Board size
+                , Board
                     (Set.foldl
                         lidOpenIfClosed
                         lids
@@ -106,7 +106,7 @@ lidOpenIfClosed pos =
 
 
 cycleLabel : ( Int, Int ) -> Board -> Maybe Board
-cycleLabel pos (Board s l m) =
+cycleLabel pos (Board l m) =
     let
         nl =
             Grid.update pos
@@ -124,7 +124,7 @@ cycleLabel pos (Board s l m) =
                 l
     in
     if Grid.get pos l /= Just Lid.Open then
-        Board s nl m
+        Board nl m
             |> Just
 
     else
@@ -132,7 +132,7 @@ cycleLabel pos (Board s l m) =
 
 
 toDict : Board -> PosDict ( Lid, MineCell )
-toDict (Board _ l m) =
+toDict (Board l m) =
     Dict.merge
         (\_ _ -> identity)
         (\k v1 v2 -> Dict.insert k ( v1, v2 ))
