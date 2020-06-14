@@ -2,8 +2,6 @@ module IntSize exposing
     ( IntSize
     , includeNeighbours
     , init
-    , isPosInvalid
-    , isPosValid
     , neighbourSet
     , neighbours
     , positions
