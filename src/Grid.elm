@@ -1,11 +1,9 @@
 module Grid exposing
     ( Grid
     , filled
-    , filterNeighbours
     , get
     , includeNeighbours
     , init
-    , neighbourPositions
     , neighbourSet
     , neighbours
     , set
@@ -70,11 +68,6 @@ neighbourSet pos (Grid size _) =
     IntSize.neighbourSet size pos
 
 
-neighbourPositions : ( Int, Int ) -> Grid a -> List ( Int, Int )
-neighbourPositions pos (Grid size _) =
-    IntSize.neighbours size pos
-
-
 neighbours : ( Int, Int ) -> Grid a -> List ( ( Int, Int ), a )
 neighbours pos (Grid size d) =
     let
@@ -88,17 +81,3 @@ neighbours pos (Grid size d) =
 includeNeighbours : Grid a -> Set ( Int, Int ) -> Set ( Int, Int )
 includeNeighbours (Grid size _) pos =
     IntSize.includeNeighbours size pos
-
-
-filterNeighbours : ( Int, Int ) -> (a -> Bool) -> Grid a -> Set ( Int, Int )
-filterNeighbours pos isOk grid =
-    let
-        func nPos =
-            case get nPos grid of
-                Nothing ->
-                    False
-
-                Just a ->
-                    isOk a
-    in
-    Set.filter func (neighbourSet pos grid)
