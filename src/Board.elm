@@ -60,33 +60,21 @@ openLid pos (Board size lids mines) =
             Nothing
 
 
-dictUpdateExisting : comparable -> (b -> b) -> Dict comparable b -> Dict comparable b
-dictUpdateExisting k f =
-    Dict.update k (Maybe.map f)
-
-
-dictGet2 : comparable -> Dict comparable v -> Dict comparable a -> Maybe ( v, a )
-dictGet2 k a b =
-    Maybe.map2 Tuple.pair (Dict.get k a) (Dict.get k b)
-
-
 cycleLabel : ( Int, Int ) -> Board -> Maybe Board
 cycleLabel pos (Board s l m) =
     let
         nl =
-            Dict.update pos
-                (Maybe.map
-                    (\lid ->
-                        case lid of
-                            LG.Open ->
-                                lid
+            dictUpdateExisting pos
+                (\lid ->
+                    case lid of
+                        LG.Open ->
+                            lid
 
-                            LG.Closed ->
-                                LG.Flagged
+                        LG.Closed ->
+                            LG.Flagged
 
-                            LG.Flagged ->
-                                LG.Closed
-                    )
+                        LG.Flagged ->
+                            LG.Closed
                 )
                 l
     in
@@ -96,6 +84,16 @@ cycleLabel pos (Board s l m) =
 
     else
         Nothing
+
+
+dictUpdateExisting : comparable -> (b -> b) -> Dict comparable b -> Dict comparable b
+dictUpdateExisting k f =
+    Dict.update k (Maybe.map f)
+
+
+dictGet2 : comparable -> Dict comparable v -> Dict comparable a -> Maybe ( v, a )
+dictGet2 k a b =
+    Maybe.map2 Tuple.pair (Dict.get k a) (Dict.get k b)
 
 
 toDict : Board -> PosDict ( Lid, MG.Cell )
