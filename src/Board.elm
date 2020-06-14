@@ -2,7 +2,7 @@ module Board exposing (Board, State(..), cycleLabel, generate, openLid, toDict)
 
 import Dict exposing (Dict)
 import IntSize exposing (IntSize)
-import LidGrid as LG exposing (Lid, LidGrid)
+import LidGrid as LG exposing (Lid)
 import MineGrid as MG exposing (MineGrid)
 import PosDict exposing (PosDict)
 import Random exposing (Generator)
