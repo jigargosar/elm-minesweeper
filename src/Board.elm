@@ -3,7 +3,7 @@ module Board exposing (Board, State(..), cycleLabel, generate, openLid, toDict)
 import Dict exposing (Dict)
 import IntSize exposing (IntSize)
 import LidGrid as LG exposing (Lid)
-import MineGrid as MG exposing (MineGrid)
+import MineGrid as Mines exposing (MineGrid)
 import PosDict exposing (PosDict)
 import Random exposing (Generator)
 import Set
@@ -15,7 +15,7 @@ type Board
 
 generate : IntSize -> Generator Board
 generate size =
-    MG.generator size 0.1
+    Mines.generator size 0.1
         |> Random.map (Board size (PosDict.init size (always LG.Closed)))
 
 
@@ -26,29 +26,20 @@ type State
 
 openLid : ( Int, Int ) -> Board -> Maybe ( State, Board )
 openLid pos (Board size lids mines) =
-    case dictGet2 pos lids (MG.toDict mines) of
-        Just ( LG.Closed, MG.Mine ) ->
+    case dictGet2 pos lids (Mines.toDict mines) of
+        Just ( LG.Closed, Mines.Mine ) ->
             Just
                 ( Lost
                 , Board size (Dict.insert pos LG.Open lids) mines
                 )
 
-        Just ( LG.Closed, MG.Empty _ ) ->
+        Just ( LG.Closed, Mines.Empty _ ) ->
             let
                 nLids =
-                    MG.autoOpenPosSetFrom pos mines
-                        |> Set.foldl
-                            (\np ->
-                                dictUpdateExisting np
-                                    (\lid ->
-                                        if lid == LG.Closed then
-                                            LG.Open
-
-                                        else
-                                            lid
-                                    )
-                            )
-                            lids
+                    Set.foldl
+                        lidOpenIfClosed
+                        lids
+                        (Mines.autoOpenPosSetFrom pos mines)
             in
             Just
                 ( PlayerTurn
@@ -97,14 +88,14 @@ cycleLabel pos (Board s l m) =
         Nothing
 
 
-toDict : Board -> PosDict ( Lid, MG.Cell )
+toDict : Board -> PosDict ( Lid, Mines.Cell )
 toDict (Board _ l m) =
     Dict.merge
         (\_ _ -> identity)
         (\k v1 v2 -> Dict.insert k ( v1, v2 ))
         (\_ _ -> identity)
         l
-        (MG.toDict m)
+        (Mines.toDict m)
         Dict.empty
 
 
