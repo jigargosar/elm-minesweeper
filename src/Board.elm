@@ -66,7 +66,10 @@ computePositionsToOpen start grid =
                     Just
                         ( PlayerTurn
                         , if neighbourMineCount == 0 then
-                            computeAutoOpenPositions grid (Set.singleton start) Set.empty
+                            computeAutoOpenPositions
+                                grid
+                                (Set.singleton start)
+                                Set.empty
 
                           else
                             Set.singleton start
