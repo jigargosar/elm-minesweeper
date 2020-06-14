@@ -3,7 +3,6 @@ module IntSize exposing
     , includeNeighbours
     , init
     , mapPositions
-    , neighbourSet
     , neighbours
     , positions
     )
@@ -46,11 +45,6 @@ neighbours size pos =
     in
     Tuple.neighboursOf pos
         |> List.filter (isPosValid size)
-
-
-neighbourSet : IntSize -> Int2 -> Set Int2
-neighbourSet size =
-    neighbours size >> Set.fromList
 
 
 includeNeighbours : IntSize -> Set Int2 -> Set Int2
