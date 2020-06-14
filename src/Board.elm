@@ -86,16 +86,6 @@ cycleLabel pos (Board s l m) =
         Nothing
 
 
-dictUpdateExisting : comparable -> (b -> b) -> Dict comparable b -> Dict comparable b
-dictUpdateExisting k f =
-    Dict.update k (Maybe.map f)
-
-
-dictGet2 : comparable -> Dict comparable v -> Dict comparable a -> Maybe ( v, a )
-dictGet2 k a b =
-    Maybe.map2 Tuple.pair (Dict.get k a) (Dict.get k b)
-
-
 toDict : Board -> PosDict ( Lid, MG.Cell )
 toDict (Board _ l m) =
     Dict.merge
@@ -105,3 +95,17 @@ toDict (Board _ l m) =
         l
         (MG.toDict m)
         Dict.empty
+
+
+
+-- Dict Helpers
+
+
+dictUpdateExisting : comparable -> (b -> b) -> Dict comparable b -> Dict comparable b
+dictUpdateExisting k f =
+    Dict.update k (Maybe.map f)
+
+
+dictGet2 : comparable -> Dict comparable v -> Dict comparable a -> Maybe ( v, a )
+dictGet2 k a b =
+    Maybe.map2 Tuple.pair (Dict.get k a) (Dict.get k b)
