@@ -35,7 +35,7 @@ openLid pos (Board size lids mines) =
 
         Just ( LG.Closed, MG.Empty _ ) ->
             let
-                nLidGrid =
+                nl =
                     MG.autoOpenPosSetFrom pos mines
                         |> Set.foldl
                             (\np ->
@@ -52,7 +52,7 @@ openLid pos (Board size lids mines) =
                             )
                             lids
             in
-            Just ( PlayerTurn, Board size (Dict.insert pos LG.Open lids) mines )
+            Just ( PlayerTurn, Board size (Dict.insert pos LG.Open nl) mines )
 
         _ ->
             Nothing
