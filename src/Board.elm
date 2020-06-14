@@ -78,16 +78,6 @@ computeLidPositionsToOpen start grid =
             Nothing
 
 
-cellAt : Int2 -> CellGrid -> Maybe Cell
-cellAt =
-    Grid.get
-
-
-lidAt : Int2 -> CellGrid -> Maybe Lid
-lidAt pos =
-    cellAt pos >> Maybe.map Tuple.first
-
-
 computeAutoOpenLidPositions : CellGrid -> Set Int2 -> Set Int2 -> Set Int2
 computeAutoOpenLidPositions grid pending acc =
     case Set.toList pending of
@@ -109,6 +99,16 @@ computeAutoOpenLidPositions grid pending acc =
                     Set.union (Set.fromList toCompute) (Set.fromList rest)
             in
             computeAutoOpenLidPositions grid nPending (Set.insert current acc)
+
+
+cellAt : Int2 -> CellGrid -> Maybe Cell
+cellAt =
+    Grid.get
+
+
+lidAt : Int2 -> CellGrid -> Maybe Lid
+lidAt pos =
+    cellAt pos >> Maybe.map Tuple.first
 
 
 canAutoOpenLidAt : Int2 -> CellGrid -> Bool
