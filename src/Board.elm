@@ -112,7 +112,7 @@ canOpenLidAt pos grid =
             False
 
 
-updateLid : Int2 -> (Lid -> Lid) -> Grid Cell -> Grid Cell
+updateLid : Int2 -> (Lid -> Lid) -> CellGrid -> CellGrid
 updateLid pos f =
     Grid.update pos (Tuple.mapFirst f)
 
