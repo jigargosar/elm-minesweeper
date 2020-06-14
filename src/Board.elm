@@ -131,11 +131,6 @@ cellAt =
     Grid.get
 
 
-lidAt : Int2 -> CellGrid -> Maybe Lid
-lidAt pos =
-    cellAt pos >> Maybe.map Tuple.first
-
-
 updateLid : Int2 -> (Lid -> Lid) -> CellGrid -> CellGrid
 updateLid pos f =
     Grid.update pos (Tuple.mapFirst f)
@@ -161,7 +156,7 @@ cycleLabel : Int2 -> Board -> Maybe Board
 cycleLabel pos (Board grid) =
     let
         maybeLid =
-            case lidAt pos grid of
+            case cellAt pos grid |> Maybe.map Tuple.first of
                 Just Lid.Closed ->
                     Just Lid.Flagged
 
