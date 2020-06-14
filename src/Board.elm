@@ -143,8 +143,8 @@ lidOpenIfClosed pos =
 
 cycleLabel : Int2 -> Board -> Maybe Board
 cycleLabel pos (Board grid) =
-    case cellAt pos grid of
-        Just ( Lid.Open, _ ) ->
+    case lidAt pos grid of
+        Just Lid.Open ->
             Nothing
 
         _ ->
