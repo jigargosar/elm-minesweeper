@@ -11,7 +11,7 @@ import Set exposing (Set)
 
 
 type Board
-    = Board (Grid ( Lid, MineCell ))
+    = Board (Grid Cell)
 
 
 type alias Cell =
@@ -112,7 +112,7 @@ canOpenLidAt pos grid =
             False
 
 
-updateLid : Int2 -> (Lid -> Lid) -> Grid ( Lid, MineCell ) -> Grid ( Lid, MineCell )
+updateLid : Int2 -> (Lid -> Lid) -> Grid Cell -> Grid Cell
 updateLid pos f =
     Grid.update pos (Tuple.mapFirst f)
 
@@ -154,7 +154,7 @@ cycleLabel pos (Board grid) =
                 )
 
 
-toDict : Board -> Int2Dict ( Lid, MineCell )
+toDict : Board -> Int2Dict Cell
 toDict (Board grid) =
     Grid.toDict grid
 
