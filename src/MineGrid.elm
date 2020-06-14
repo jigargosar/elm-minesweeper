@@ -6,7 +6,7 @@ module MineGrid exposing
     , toDict
     )
 
-import Dict
+import Grid exposing (Grid)
 import IntSize as Size exposing (IntSize)
 import List.Extra as List
 import More.Tuple as Tuple
@@ -21,17 +21,18 @@ type Cell
 
 
 type MineGrid
-    = MineGrid IntSize (PosDict Cell)
+    = MineGrid IntSize (Grid Cell)
 
 
-toDict (MineGrid _ d) =
-    d
+toDict : MineGrid -> PosDict Cell
+toDict (MineGrid _ g) =
+    Grid.toDict g
 
 
 generator : IntSize -> Float -> Generator MineGrid
 generator size minePct =
     minesGenerator size minePct
-        |> Random.map (initCellDict size >> MineGrid size)
+        |> Random.map (initCellGrid size >> MineGrid size)
 
 
 autoOpenPosSetFrom : ( Int, Int ) -> MineGrid -> Set ( Int, Int )
@@ -73,11 +74,11 @@ neighboursHavingZeroSurroundingMines (MineGrid size dict) pos =
 
 
 isEmptyWithNoSurroundingMines dict pos =
-    Dict.get pos dict == Just (Empty 0)
+    Grid.get pos dict == Just (Empty 0)
 
 
-initCellDict : IntSize -> Set ( Int, Int ) -> PosDict Cell
-initCellDict size minePosSet =
+initCellGrid : IntSize -> Set ( Int, Int ) -> Grid Cell
+initCellGrid size minePosSet =
     let
         isMine pos =
             Set.member pos minePosSet
@@ -85,7 +86,7 @@ initCellDict size minePosSet =
         neighbourMineCount pos =
             Tuple.neighboursOf pos |> List.count isMine
     in
-    PosDict.init size
+    Grid.init size
         (\pos ->
             if Set.member pos minePosSet then
                 Mine
