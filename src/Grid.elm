@@ -1,6 +1,7 @@
 module Grid exposing
     ( Grid
     , filled
+    , filterNeighbours
     , get
     , includeNeighbours
     , init
