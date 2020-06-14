@@ -43,7 +43,7 @@ openLid pos (Board size lids mines) =
                     MG.autoOpenPosSetFrom pos mines
                         |> Set.foldl
                             (\np ->
-                                dictMapAt np
+                                dictUpdateExisting np
                                     (\lid ->
                                         if lid == LG.Closed then
                                             LG.Open
@@ -60,8 +60,8 @@ openLid pos (Board size lids mines) =
             Nothing
 
 
-dictMapAt : comparable -> (b -> b) -> Dict comparable b -> Dict comparable b
-dictMapAt pos f =
+dictUpdateExisting : comparable -> (b -> b) -> Dict comparable b -> Dict comparable b
+dictUpdateExisting pos f =
     Dict.update pos (Maybe.map f)
 
 
