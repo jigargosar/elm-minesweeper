@@ -37,20 +37,20 @@ generator size minePct =
 autoOpenPosSetFrom : ( Int, Int ) -> MineGrid -> Set ( Int, Int )
 autoOpenPosSetFrom pos ((MineGrid size dict) as model) =
     if isEmptyWithNoSurroundingMines dict pos then
-        connectedPositionsWithZeroSurroundingMines model pos Set.empty Set.empty
+        connectedEmptyPositionsWithZeroSurroundingMines model pos Set.empty Set.empty
             |> Size.includeNeighbours size
 
     else
         Set.empty
 
 
-connectedPositionsWithZeroSurroundingMines :
+connectedEmptyPositionsWithZeroSurroundingMines :
     MineGrid
     -> ( Int, Int )
     -> Set ( Int, Int )
     -> Set ( Int, Int )
     -> Set ( Int, Int )
-connectedPositionsWithZeroSurroundingMines model current pending acc =
+connectedEmptyPositionsWithZeroSurroundingMines model current pending acc =
     let
         nAcc =
             Set.insert current acc
@@ -64,7 +64,7 @@ connectedPositionsWithZeroSurroundingMines model current pending acc =
             nAcc
 
         nCurrent :: nPending ->
-            connectedPositionsWithZeroSurroundingMines model nCurrent (Set.fromList nPending) nAcc
+            connectedEmptyPositionsWithZeroSurroundingMines model nCurrent (Set.fromList nPending) nAcc
 
 
 neighboursHavingZeroSurroundingMines (MineGrid size dict) pos =
