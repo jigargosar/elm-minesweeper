@@ -7,12 +7,13 @@ module IntSize exposing
     , positions
     )
 
+import More.Basics exposing (..)
 import More.Tuple as Tuple
 import Set exposing (Set)
 
 
 type IntSize
-    = IntSize ( Int, Int )
+    = IntSize Int2
 
 
 init : Int -> Int -> IntSize
