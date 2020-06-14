@@ -111,3 +111,8 @@ dictUpdateExisting k f =
 dictGet2 : comparable -> Dict comparable v -> Dict comparable a -> Maybe ( v, a )
 dictGet2 k a b =
     Maybe.map2 Tuple.pair (Dict.get k a) (Dict.get k b)
+
+
+dictSetExisting : comparable -> b -> Dict comparable b -> Dict comparable b
+dictSetExisting k v =
+    dictUpdateExisting k (always v)
