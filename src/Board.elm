@@ -179,6 +179,7 @@ minePosSetGenerator size minePct =
             )
 
 
+initCellGrid : IntSize -> Set Int2 -> CellGrid
 initCellGrid size minePosSet =
     let
         isMine pos =
