@@ -51,16 +51,6 @@ openLidAt pos (Board grid) =
                 )
 
 
-cellAt : Int2 -> CellGrid -> Maybe Cell
-cellAt =
-    Grid.get
-
-
-lidAt : Int2 -> CellGrid -> Maybe Lid
-lidAt pos =
-    cellAt pos >> Maybe.map Tuple.first
-
-
 computeLidPositionsToOpen : Int2 -> CellGrid -> Maybe ( State, Set Int2 )
 computeLidPositionsToOpen start grid =
     case cellAt start grid of
@@ -86,6 +76,16 @@ computeLidPositionsToOpen start grid =
 
         _ ->
             Nothing
+
+
+cellAt : Int2 -> CellGrid -> Maybe Cell
+cellAt =
+    Grid.get
+
+
+lidAt : Int2 -> CellGrid -> Maybe Lid
+lidAt pos =
+    cellAt pos >> Maybe.map Tuple.first
 
 
 computeAutoOpenLidPositions : CellGrid -> Set Int2 -> Set Int2 -> Set Int2
