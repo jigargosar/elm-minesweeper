@@ -1,4 +1,4 @@
-module LidGrid exposing (Lid(..), LidGrid, cycleLabelIfClosed, fillClosed, get, open, openIfClosed)
+module LidGrid exposing (Lid(..), LidGrid, cycleLabelIfNotOpen, fillClosed, get, open, openIfClosed)
 
 import Dict
 import IntSize exposing (IntSize)
@@ -53,8 +53,8 @@ openIfClosed pos =
         )
 
 
-cycleLabelIfClosed : ( Int, Int ) -> LidGrid -> LidGrid
-cycleLabelIfClosed pos =
+cycleLabelIfNotOpen : ( Int, Int ) -> LidGrid -> LidGrid
+cycleLabelIfNotOpen pos =
     mapAt pos
         (\lid ->
             case lid of

@@ -99,7 +99,7 @@ update msg model =
                     model
 
         ( PlayerTurn, RightClick loc ) ->
-            { model | lids = LG.cycleLabelIfClosed loc model.lids }
+            { model | lids = LG.cycleLabelIfNotOpen loc model.lids }
 
         ( Lost, Click _ ) ->
             reset model

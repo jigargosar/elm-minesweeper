@@ -1,4 +1,4 @@
-module Board exposing (Board, State, generate, openLid)
+module Board exposing (Board, State, cycleLabel, generate, openLid)
 
 import Dict exposing (Dict)
 import IntSize exposing (IntSize)
@@ -50,3 +50,17 @@ openLid pos (Board size lids mines) =
 
         _ ->
             Nothing
+
+
+cycleLabel : ( Int, Int ) -> Board -> Maybe Board
+cycleLabel pos (Board s l m) =
+    let
+        nl =
+            LG.cycleLabelIfNotOpen pos l
+    in
+    if LG.get l pos /= Just LG.Open then
+        Board s nl m
+            |> Just
+
+    else
+        Nothing
