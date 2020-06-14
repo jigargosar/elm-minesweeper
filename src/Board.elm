@@ -148,7 +148,7 @@ initMineCellGrid size minePosSet =
 
 autoOpenPosSetFrom : ( Int, Int ) -> Grid MineCell -> Set ( Int, Int )
 autoOpenPosSetFrom pos grid =
-    if isEmptyWithNoSurroundingMines grid pos then
+    if Grid.get pos grid == Just (Mine.Empty 0) then
         connectedEmptyPositionsWithNoSurroundingMines grid pos Set.empty Set.empty
             |> Grid.includeNeighbours grid
 
@@ -177,10 +177,6 @@ connectedEmptyPositionsWithNoSurroundingMines grid current pending acc =
 
         nCurrent :: nPending ->
             connectedEmptyPositionsWithNoSurroundingMines grid nCurrent (Set.fromList nPending) nAcc
-
-
-isEmptyWithNoSurroundingMines dict pos =
-    Grid.get pos dict == Just (Mine.Empty 0)
 
 
 
