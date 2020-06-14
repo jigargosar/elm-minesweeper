@@ -125,6 +125,11 @@ updateLid pos f =
     Grid.update pos (Tuple.mapFirst f)
 
 
+setLid : Int2 -> Lid -> CellGrid -> CellGrid
+setLid pos lid =
+    updateLid pos (always lid)
+
+
 lidOpenIfClosed pos =
     updateLid pos
         (\lid ->
