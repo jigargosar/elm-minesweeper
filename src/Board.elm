@@ -109,9 +109,9 @@ computeAutoOpenPositions grid pending result =
 
 
 neighbourPositionsWhere : (Int2 -> b -> Bool) -> Int2 -> Grid b -> Set Int2
-neighbourPositionsWhere pred pos grid =
+neighbourPositionsWhere isOk pos grid =
     Grid.neighbours pos grid
-        |> List.filter (\( neighbourPos, neighbourCell ) -> pred neighbourPos neighbourCell)
+        |> List.filter (\( neighbourPos, neighbourCell ) -> isOk neighbourPos neighbourCell)
         |> List.map Tuple.first
         |> Set.fromList
 
