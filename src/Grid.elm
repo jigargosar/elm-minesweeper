@@ -1,8 +1,9 @@
-module Grid exposing (Grid, filled, get, init, set, toDict, update)
+module Grid exposing (Grid, filled, get, includeNeighboursPosSet, init, neighbourPosSet, set, toDict, update)
 
 import Dict exposing (Dict)
 import IntSize exposing (IntSize)
 import PosDict exposing (PosDict)
+import Set exposing (Set)
 
 
 type Grid a
@@ -35,6 +36,11 @@ update pos f =
     mapDict (dictUpdateExisting pos f)
 
 
+dictUpdateExisting : comparable -> (b -> b) -> Dict comparable b -> Dict comparable b
+dictUpdateExisting k f =
+    Dict.update k (Maybe.map f)
+
+
 set : ( Int, Int ) -> b -> Grid b -> Grid b
 set pos a =
     update pos (always a)
@@ -45,6 +51,9 @@ get pos =
     toDict >> Dict.get pos
 
 
-dictUpdateExisting : comparable -> (b -> b) -> Dict comparable b -> Dict comparable b
-dictUpdateExisting k f =
-    Dict.update k (Maybe.map f)
+neighbourPosSet (Grid size _) pos =
+    IntSize.neighbourSet size pos
+
+
+includeNeighboursPosSet (Grid size _) pos =
+    IntSize.includeNeighbours size pos

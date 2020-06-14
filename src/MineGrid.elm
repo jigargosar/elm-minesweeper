@@ -21,43 +21,43 @@ type Cell
 
 
 type MineGrid
-    = MineGrid IntSize (Grid Cell)
+    = MineGrid (Grid Cell)
 
 
 toDict : MineGrid -> PosDict Cell
-toDict (MineGrid _ g) =
+toDict (MineGrid g) =
     Grid.toDict g
 
 
 generator : IntSize -> Float -> Generator MineGrid
 generator size minePct =
     minesGenerator size minePct
-        |> Random.map (initCellGrid size >> MineGrid size)
+        |> Random.map (initCellGrid size >> MineGrid)
 
 
 autoOpenPosSetFrom : ( Int, Int ) -> MineGrid -> Set ( Int, Int )
-autoOpenPosSetFrom pos ((MineGrid size grid) as model) =
+autoOpenPosSetFrom pos (MineGrid grid) =
     if isEmptyWithNoSurroundingMines grid pos then
-        connectedEmptyPositionsWithZeroSurroundingMines model pos Set.empty Set.empty
-            |> Size.includeNeighbours size
+        connectedEmptyPositionsWithZeroSurroundingMines grid pos Set.empty Set.empty
+            |> Grid.includeNeighboursPosSet grid
 
     else
         Set.empty
 
 
 connectedEmptyPositionsWithZeroSurroundingMines :
-    MineGrid
+    Grid Cell
     -> ( Int, Int )
     -> Set ( Int, Int )
     -> Set ( Int, Int )
     -> Set ( Int, Int )
-connectedEmptyPositionsWithZeroSurroundingMines model current pending acc =
+connectedEmptyPositionsWithZeroSurroundingMines grid current pending acc =
     let
         nAcc =
             Set.insert current acc
     in
     case
-        Set.diff (neighboursHavingZeroSurroundingMines model current) acc
+        Set.diff (neighboursHavingZeroSurroundingMines grid current) acc
             |> Set.union pending
             |> Set.toList
     of
@@ -65,12 +65,13 @@ connectedEmptyPositionsWithZeroSurroundingMines model current pending acc =
             nAcc
 
         nCurrent :: nPending ->
-            connectedEmptyPositionsWithZeroSurroundingMines model nCurrent (Set.fromList nPending) nAcc
+            connectedEmptyPositionsWithZeroSurroundingMines grid nCurrent (Set.fromList nPending) nAcc
 
 
-neighboursHavingZeroSurroundingMines (MineGrid size dict) pos =
-    Size.neighbourSet size pos
-        |> Set.filter (isEmptyWithNoSurroundingMines dict)
+neighboursHavingZeroSurroundingMines : Grid Cell -> ( Int, Int ) -> Set ( Int, Int )
+neighboursHavingZeroSurroundingMines grid pos =
+    Grid.neighbourPosSet grid pos
+        |> Set.filter (isEmptyWithNoSurroundingMines grid)
 
 
 isEmptyWithNoSurroundingMines dict pos =
