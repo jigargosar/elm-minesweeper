@@ -101,6 +101,7 @@ computeAutoOpenLidPositions grid pending acc =
             computeAutoOpenLidPositions grid nPending (Set.insert current acc)
 
 
+canAutoOpenLidAt : Int2 -> CellGrid -> Bool
 canAutoOpenLidAt pos grid =
     case get pos grid of
         Just ( Lid.Closed, Mine.Empty 0 ) ->
