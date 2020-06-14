@@ -111,6 +111,11 @@ lidAt pos =
     cellAt pos >> Maybe.map Tuple.first
 
 
+canAutoOpenCell : Cell -> Bool
+canAutoOpenCell cell =
+    cell == ( Lid.Closed, Mine.Empty 0 )
+
+
 canAutoOpenLidAt : Int2 -> CellGrid -> Bool
 canAutoOpenLidAt pos grid =
     cellAt pos grid == Just ( Lid.Closed, Mine.Empty 0 )
