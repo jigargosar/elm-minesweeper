@@ -96,7 +96,8 @@ computeAutoOpenPositions grid pending result =
                 toCompute =
                     neighbourPositionsWhere
                         (\nPos nCell ->
-                            canAutoOpenCell nCell && not (Set.member nPos result)
+                            canAutoOpenCell nCell
+                                && not (Set.member nPos result)
                         )
                         current
                         grid
