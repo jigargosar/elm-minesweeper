@@ -3,7 +3,6 @@ module MineGrid exposing
     , MineGrid
     , autoOpenPosSetFrom
     , generator
-    , get
     , toDict
     )
 
@@ -33,11 +32,6 @@ generator : IntSize -> Float -> Generator MineGrid
 generator size minePct =
     minesGenerator size minePct
         |> Random.map (initCellDict size >> MineGrid size)
-
-
-get : MineGrid -> ( Int, Int ) -> Maybe Cell
-get (MineGrid _ d) k =
-    Dict.get k d
 
 
 autoOpenPosSetFrom : ( Int, Int ) -> MineGrid -> Set ( Int, Int )

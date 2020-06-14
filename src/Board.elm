@@ -27,7 +27,7 @@ type State
 
 openLid : ( Int, Int ) -> Board -> Maybe ( State, Board )
 openLid pos (Board size lids mines) =
-    case Maybe.map2 Tuple.pair (Dict.get pos lids) (MG.get mines pos) of
+    case dictGet2 pos lids (MG.toDict mines) of
         Just ( LG.Closed, MG.Mine ) ->
             Just
                 ( Lost
@@ -63,6 +63,11 @@ openLid pos (Board size lids mines) =
 dictUpdateExisting : comparable -> (b -> b) -> Dict comparable b -> Dict comparable b
 dictUpdateExisting k f =
     Dict.update k (Maybe.map f)
+
+
+dictGet2 : comparable -> Dict comparable v -> Dict comparable a -> Maybe ( v, a )
+dictGet2 k a b =
+    Maybe.map2 Tuple.pair (Dict.get k a) (Dict.get k b)
 
 
 cycleLabel : ( Int, Int ) -> Board -> Maybe Board
