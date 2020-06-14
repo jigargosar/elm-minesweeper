@@ -59,6 +59,18 @@ openLid pos (Board size lids mines) =
             Nothing
 
 
+lidOpenIfClosed : comparable -> Dict comparable Lid -> Dict comparable Lid
+lidOpenIfClosed pos =
+    dictUpdateExisting pos
+        (\lid ->
+            if lid == LG.Closed then
+                LG.Open
+
+            else
+                lid
+        )
+
+
 cycleLabel : ( Int, Int ) -> Board -> Maybe Board
 cycleLabel pos (Board s l m) =
     let
