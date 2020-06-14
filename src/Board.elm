@@ -1,10 +1,11 @@
-module Board exposing (Board, generate)
+module Board exposing (Board, State, generate, openLid)
 
 import Dict exposing (Dict)
 import IntSize exposing (IntSize)
-import LidGrid as LG exposing (LidGrid)
-import MineGrid exposing (MineGrid)
+import LidGrid as LG exposing (Lid, LidGrid)
+import MineGrid as MG exposing (MineGrid)
 import Random exposing (Generator)
+import Set
 
 
 type alias Pos =
@@ -21,5 +22,31 @@ type Board
 
 generate : IntSize -> Generator Board
 generate size =
-    MineGrid.generator size 0.1
+    MG.generator size 0.1
         |> Random.map (Board size (LG.fillClosed size))
+
+
+type State
+    = PlayerTurn
+    | Lost
+
+
+openLid : ( Int, Int ) -> Board -> Maybe ( State, Board )
+openLid pos (Board size lids mines) =
+    case Maybe.map2 Tuple.pair (LG.get lids pos) (MG.get mines pos) of
+        Just ( LG.Closed, MG.Mine ) ->
+            Just
+                ( Lost
+                , Board size (LG.open pos lids) mines
+                )
+
+        Just ( LG.Closed, MG.Empty _ ) ->
+            let
+                nLidGrid =
+                    MG.autoOpenPosSetFrom pos mines
+                        |> Set.foldl LG.openIfClosed lids
+            in
+            Just ( PlayerTurn, Board size (LG.open pos nLidGrid) mines )
+
+        _ ->
+            Nothing
