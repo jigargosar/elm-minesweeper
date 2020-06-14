@@ -73,11 +73,12 @@ computeAutoOpenLidPositions grid pending acc =
         current :: rest ->
             let
                 toCompute =
-                    Grid.neighbourSet current grid
-                        |> Set.filter (\pos -> canAutoOpenLidAt pos grid && not (Set.member pos acc))
+                    Grid.neighbours current grid
+                        |> List.filter (\( pos, _ ) -> canAutoOpenLidAt pos grid && not (Set.member pos acc))
+                        |> List.map Tuple.first
 
                 nPending =
-                    Set.union toCompute (Set.fromList rest)
+                    Set.union (Set.fromList toCompute) (Set.fromList rest)
             in
             computeAutoOpenLidPositions grid nPending (Set.insert current acc)
 
