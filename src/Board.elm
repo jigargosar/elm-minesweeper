@@ -16,7 +16,7 @@ type Board
 generate : IntSize -> Generator Board
 generate size =
     Mines.generator size 0.1
-        |> Random.map (Board size (PosDict.init size (always Lid.Closed)))
+        |> Random.map (Board size (PosDict.filled size Lid.Closed))
 
 
 type State
