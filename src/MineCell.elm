@@ -8,7 +8,6 @@ import Grid exposing (Grid)
 import IntSize as Size exposing (IntSize)
 import List.Extra as List
 import More.Tuple as Tuple
-import PosDict exposing (PosDict)
 import Random exposing (Generator)
 import Set exposing (Set)
 
@@ -16,11 +15,6 @@ import Set exposing (Set)
 type MineCell
     = Mine
     | Empty Int
-
-
-toDict : Grid MineCell -> PosDict MineCell
-toDict g =
-    Grid.toDict g
 
 
 generator : IntSize -> Float -> Generator (Grid MineCell)
