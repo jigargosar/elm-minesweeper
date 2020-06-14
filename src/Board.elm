@@ -168,10 +168,6 @@ toDict (Board grid) =
     Grid.toDict grid
 
 
-
--- Mine Grid
-
-
 minePosSetGenerator : IntSize -> Float -> Generator (Set Int2)
 minePosSetGenerator size minePct =
     let
