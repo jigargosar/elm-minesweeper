@@ -56,6 +56,7 @@ get =
     Grid.get
 
 
+computeLidPositionsToOpen : Int2 -> CellGrid -> Maybe ( State, Set Int2 )
 computeLidPositionsToOpen start grid =
     case get start grid of
         Nothing ->
