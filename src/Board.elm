@@ -69,3 +69,14 @@ cycleLabel pos (Board s l m) =
 tileAt : ( Int, Int ) -> Board -> Maybe ( Lid, MG.Cell )
 tileAt pos (Board size lids mines) =
     Maybe.map2 Tuple.pair (LG.get lids pos) (MG.get mines pos)
+
+
+toDict : Board -> PosDict ( Lid, MG.Cell )
+toDict (Board _ l m) =
+    Dict.merge
+        (\_ _ -> identity)
+        (\k v1 v2 -> Dict.insert k ( v1, v2 ))
+        (\_ _ -> identity)
+        (LG.toDict l)
+        (MG.toDict m)
+        Dict.empty

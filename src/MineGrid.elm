@@ -4,6 +4,7 @@ module MineGrid exposing
     , autoOpenPosSetFrom
     , generator
     , get
+    , toDict
     )
 
 import Dict
@@ -22,6 +23,10 @@ type Cell
 
 type MineGrid
     = MineGrid IntSize (PosDict Cell)
+
+
+toDict (MineGrid _ d) =
+    d
 
 
 generator : IntSize -> Float -> Generator MineGrid

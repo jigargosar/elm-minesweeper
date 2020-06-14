@@ -1,4 +1,4 @@
-module LidGrid exposing (Lid(..), LidGrid, cycleLabelIfNotOpen, fillClosed, get, open, openIfClosed)
+module LidGrid exposing (Lid(..), LidGrid, cycleLabelIfNotOpen, fillClosed, get, open, openIfClosed, toDict)
 
 import Dict
 import IntSize exposing (IntSize)
@@ -13,6 +13,11 @@ type Lid
 
 type LidGrid
     = LidGrid IntSize (PosDict Lid)
+
+
+toDict : LidGrid -> PosDict Lid
+toDict (LidGrid _ d) =
+    d
 
 
 fillClosed : IntSize -> LidGrid
