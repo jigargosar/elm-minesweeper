@@ -143,28 +143,31 @@ lidOpenIfClosed pos =
 
 cycleLabel : Int2 -> Board -> Maybe Board
 cycleLabel pos (Board grid) =
-    case lidAt pos grid of
-        Just Lid.Open ->
+    let
+        maybeLid =
+            case lidAt pos grid of
+                Nothing ->
+                    Nothing
+
+                Just lid ->
+                    case lid of
+                        Lid.Open ->
+                            Nothing
+
+                        Lid.Closed ->
+                            Just Lid.Flagged
+
+                        Lid.Flagged ->
+                            Just Lid.Closed
+    in
+    case maybeLid of
+        Nothing ->
             Nothing
 
-        _ ->
-            Just
-                (Board
-                    (updateLid pos
-                        (\lid ->
-                            case lid of
-                                Lid.Open ->
-                                    lid
-
-                                Lid.Closed ->
-                                    Lid.Flagged
-
-                                Lid.Flagged ->
-                                    Lid.Closed
-                        )
-                        grid
-                    )
-                )
+        Just lid ->
+            setLid pos lid grid
+                |> Board
+                |> Just
 
 
 toDict : Board -> Int2Dict Cell
