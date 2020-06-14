@@ -1,7 +1,6 @@
 module Board exposing (Board, State(..), cycleLabel, generate, openLid, toDict)
 
 import Dict exposing (Dict)
-import Dict.Extra
 import IntSize exposing (IntSize)
 import LidGrid as LG exposing (Lid)
 import MineGrid as MG exposing (MineGrid)
@@ -36,9 +35,6 @@ openLid pos (Board size lids mines) =
 
         Just ( LG.Closed, MG.Empty _ ) ->
             let
-                _ =
-                    Dict.Extra.insertDedupe
-
                 nl =
                     MG.autoOpenPosSetFrom pos mines
                         |> Set.foldl
