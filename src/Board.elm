@@ -30,7 +30,7 @@ openLid pos (Board size lids mines) =
         Just ( LG.Closed, Mines.Mine ) ->
             Just
                 ( Lost
-                , Board size (Dict.insert pos LG.Open lids) mines
+                , Board size (dictSetExisting pos LG.Open lids) mines
                 )
 
         Just ( LG.Closed, Mines.Empty _ ) ->
