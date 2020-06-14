@@ -96,9 +96,10 @@ computeAutoOpenLidPositions grid pending acc =
                     Grid.neighbours current grid
                         |> List.filter (\( pos, cell ) -> canAutoOpenCell cell && not (Set.member pos acc))
                         |> List.map Tuple.first
+                        |> Set.fromList
 
                 nPending =
-                    Set.union (Set.fromList toCompute) (Set.fromList rest)
+                    Set.union toCompute (Set.fromList rest)
             in
             computeAutoOpenLidPositions grid nPending (Set.insert current acc)
 
