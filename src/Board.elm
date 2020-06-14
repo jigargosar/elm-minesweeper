@@ -116,6 +116,7 @@ canAutoOpenLidAt pos grid =
     cellAt pos grid == Just ( Lid.Closed, Mine.Empty 0 )
 
 
+canOpenLidAt : Int2 -> CellGrid -> Bool
 canOpenLidAt pos grid =
     lidAt pos grid == Just Lid.Closed
 
