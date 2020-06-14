@@ -4,7 +4,6 @@ module Grid exposing
     , get
     , includeNeighbours
     , init
-    , neighbourSet
     , neighbours
     , set
     , toDict
@@ -61,11 +60,6 @@ set pos a =
 get : ( Int, Int ) -> Grid v -> Maybe v
 get pos =
     toDict >> Dict.get pos
-
-
-neighbourSet : ( Int, Int ) -> Grid a -> Set ( Int, Int )
-neighbourSet pos (Grid size _) =
-    IntSize.neighbourSet size pos
 
 
 neighbours : ( Int, Int ) -> Grid a -> List ( ( Int, Int ), a )

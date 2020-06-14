@@ -56,4 +56,4 @@ neighbourSet size =
 includeNeighbours : IntSize -> Set Int2 -> Set Int2
 includeNeighbours size posSet =
     posSet
-        |> Set.foldl (neighbourSet size >> Set.union) posSet
+        |> Set.foldl (neighbours size >> Set.fromList >> Set.union) posSet
