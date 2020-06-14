@@ -13,22 +13,28 @@ import Set exposing (Set)
 
 
 type IntSize
-    = IntSize Int2
+    = Size Int2
 
 
 init : Int -> Int -> IntSize
 init w h =
-    IntSize ( w, h )
+    Size ( w, h )
 
 
 isPosInvalid : IntSize -> ( Int, Int ) -> Bool
-isPosInvalid (IntSize ( w, h )) ( x, y ) =
+isPosInvalid (Size ( w, h )) ( x, y ) =
     x < 0 || y < 0 || x >= w || y >= h
 
 
 isPosValid : IntSize -> ( Int, Int ) -> Bool
 isPosValid s =
     isPosInvalid s >> not
+
+
+foldPositions : (Int2 -> a) -> IntSize -> List a
+foldPositions f (Size ( w, h )) =
+    List.range 0 (w - 1)
+        |> List.concatMap (\x -> List.range 0 (h - 1) |> List.map (\y -> f ( x, y )))
 
 
 neighbours : IntSize -> ( Int, Int ) -> List ( Int, Int )
@@ -49,5 +55,5 @@ includeNeighbours size posSet =
 
 
 positions : IntSize -> List ( Int, Int )
-positions (IntSize size) =
+positions (Size size) =
     Tuple.range size
