@@ -79,7 +79,7 @@ computeLidPositionsToOpen start grid =
 
 
 computeAutoOpenLidPositions : CellGrid -> Set Int2 -> Set Int2 -> Set Int2
-computeAutoOpenLidPositions grid pending acc =
+computeAutoOpenLidPositions grid pending result =
     case Set.toList pending of
         [] ->
             Set.foldl
@@ -87,15 +87,15 @@ computeAutoOpenLidPositions grid pending acc =
                     Set.union
                         (neighbourPositionsWhere (\_ -> canOpenCell) pos grid)
                 )
-                acc
-                acc
+                result
+                result
 
         current :: rest ->
             let
                 toCompute =
                     neighbourPositionsWhere
                         (\pos cell ->
-                            canAutoOpenCell cell && not (Set.member pos acc)
+                            canAutoOpenCell cell && not (Set.member pos result)
                         )
                         current
                         grid
@@ -103,7 +103,7 @@ computeAutoOpenLidPositions grid pending acc =
                 nPending =
                     Set.union toCompute (Set.fromList rest)
             in
-            computeAutoOpenLidPositions grid nPending (Set.insert current acc)
+            computeAutoOpenLidPositions grid nPending (Set.insert current result)
 
 
 neighbourPositionsWhere : (Int2 -> b -> Bool) -> Int2 -> Grid b -> Set Int2
