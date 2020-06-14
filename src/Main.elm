@@ -88,26 +88,14 @@ update : Msg -> Model -> Model
 update msg model =
     case ( model.gameState, msg ) of
         ( PlayerTurn, Click pos ) ->
-            let
-                _ =
-                    openLid pos model
-            in
-            case tileAt model pos of
-                Just ( LG.Closed, MG.Mine ) ->
+            case openLid pos model of
+                Just ( gameState, lids ) ->
                     { model
-                        | gameState = Lost
-                        , lids = LG.open pos model.lids
+                        | gameState = gameState
+                        , lids = lids
                     }
 
-                Just ( LG.Closed, MG.Empty _ ) ->
-                    let
-                        nLidGrid =
-                            MG.autoOpenPosSetFrom pos model.mines
-                                |> Set.foldl LG.openIfClosed model.lids
-                    in
-                    { model | lids = LG.open pos nLidGrid }
-
-                _ ->
+                Nothing ->
                     model
 
         ( PlayerTurn, RightClick loc ) ->
