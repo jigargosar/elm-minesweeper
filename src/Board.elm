@@ -34,19 +34,19 @@ type State
 
 
 openLidAt : Int2 -> Board -> Maybe ( State, Board )
-openLidAt pos (Board grid) =
-    case computePositionsToOpen pos grid of
+openLidAt input (Board grid) =
+    case computePositionsToOpen input grid of
         Nothing ->
             Nothing
 
-        Just ( state, positionsToOpen ) ->
+        Just ( state, toOpen ) ->
             Just
                 ( state
                 , Board
                     (Set.foldl
-                        (\toOpen -> setLid toOpen Lid.Open)
+                        (\pos -> setLid pos Lid.Open)
                         grid
-                        positionsToOpen
+                        toOpen
                     )
                 )
 
