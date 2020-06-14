@@ -147,19 +147,14 @@ cycleLabel pos (Board grid) =
     let
         maybeLid =
             case lidAt pos grid of
-                Nothing ->
+                Just Lid.Closed ->
+                    Just Lid.Flagged
+
+                Just Lid.Flagged ->
+                    Just Lid.Closed
+
+                _ ->
                     Nothing
-
-                Just lid ->
-                    case lid of
-                        Lid.Open ->
-                            Nothing
-
-                        Lid.Closed ->
-                            Just Lid.Flagged
-
-                        Lid.Flagged ->
-                            Just Lid.Closed
     in
     case maybeLid of
         Nothing ->
