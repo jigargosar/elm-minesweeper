@@ -1,6 +1,5 @@
 module MineGrid exposing
     ( Cell(..)
-    , MineGrid
     , autoOpenPosSetFrom
     , generator
     , toDict
@@ -20,22 +19,18 @@ type Cell
     | Empty Int
 
 
-type alias MineGrid =
-    Grid Cell
-
-
-toDict : MineGrid -> PosDict Cell
+toDict : Grid Cell -> PosDict Cell
 toDict g =
     Grid.toDict g
 
 
-generator : IntSize -> Float -> Generator MineGrid
+generator : IntSize -> Float -> Generator (Grid Cell)
 generator size minePct =
     minePosSetGenerator size minePct
         |> Random.map (initCellGrid size)
 
 
-autoOpenPosSetFrom : ( Int, Int ) -> MineGrid -> Set ( Int, Int )
+autoOpenPosSetFrom : ( Int, Int ) -> Grid Cell -> Set ( Int, Int )
 autoOpenPosSetFrom pos grid =
     if isEmptyWithNoSurroundingMines grid pos then
         connectedEmptyPositionsWithZeroSurroundingMines grid pos Set.empty Set.empty

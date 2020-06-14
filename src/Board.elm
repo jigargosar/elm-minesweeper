@@ -4,14 +4,14 @@ import Dict exposing (Dict)
 import Grid exposing (Grid)
 import IntSize exposing (IntSize)
 import Lid exposing (Lid)
-import MineGrid as Mines exposing (MineGrid)
+import MineGrid as Mines
 import PosDict exposing (PosDict)
 import Random exposing (Generator)
 import Set
 
 
 type Board
-    = Board IntSize (Grid Lid) MineGrid
+    = Board IntSize (Grid Lid) (Grid Mines.Cell)
 
 
 generate : IntSize -> Generator Board
