@@ -52,6 +52,50 @@ openLidAt pos (Board size lids mines) =
             Nothing
 
 
+computeLidPositionsToOpen start lids mines =
+    if lidsCanOpenAt start lids then
+        case Grid.get start mines of
+            Nothing ->
+                Nothing
+
+            Just mineCell ->
+                case mineCell of
+                    Mine.Mine ->
+                        Just ( Lost, Set.singleton start )
+
+                    Mine.Empty 0 ->
+                        Just ( PlayerTurn, computeAutoOpenLidPositions lids mines [ start ] (Set.singleton start) )
+
+                    Mine.Empty _ ->
+                        Just ( PlayerTurn, Set.singleton start )
+
+    else
+        Nothing
+
+
+computeAutoOpenLidPositions : Grid Lid -> Grid MineCell -> List ( Int, Int ) -> Set ( Int, Int ) -> Set ( Int, Int )
+computeAutoOpenLidPositions lids mines pending acc =
+    case pending of
+        [] ->
+            acc
+
+        current :: nPending ->
+            let
+                toCompute =
+                    Grid.neighbourPositions current mines
+                        |> List.filter (\pos -> canAutoOpenLidAt pos lids mines && not (Set.member pos acc))
+            in
+            computeAutoOpenLidPositions lids mines (toCompute ++ nPending) (Set.insert current acc)
+
+
+canAutoOpenLidAt pos lids mines =
+    lidsCanOpenAt pos lids && Grid.get pos mines == Just (Mine.Empty 0)
+
+
+lidsCanOpenAt pos lids =
+    Grid.get pos lids == Just Lid.Closed
+
+
 lidOpenIfClosed : ( Int, Int ) -> Grid Lid -> Grid Lid
 lidOpenIfClosed pos =
     Grid.update pos

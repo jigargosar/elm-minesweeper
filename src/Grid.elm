@@ -5,7 +5,9 @@ module Grid exposing
     , get
     , includeNeighbours
     , init
+    , neighbourPositions
     , neighbourSet
+    , neighbours
     , set
     , toDict
     , update
@@ -62,9 +64,24 @@ get pos =
     toDict >> Dict.get pos
 
 
-neighbourSet : Grid a -> ( Int, Int ) -> Set ( Int, Int )
-neighbourSet (Grid size _) pos =
+neighbourSet : ( Int, Int ) -> Grid a -> Set ( Int, Int )
+neighbourSet pos (Grid size _) =
     IntSize.neighbourSet size pos
+
+
+neighbourPositions : ( Int, Int ) -> Grid a -> List ( Int, Int )
+neighbourPositions pos (Grid size _) =
+    IntSize.neighbours size pos
+
+
+neighbours : ( Int, Int ) -> Grid a -> List ( ( Int, Int ), a )
+neighbours pos (Grid size d) =
+    let
+        dictGetEntry k =
+            Dict.get k d |> Maybe.map (Tuple.pair k)
+    in
+    IntSize.neighbours size pos
+        |> List.filterMap dictGetEntry
 
 
 includeNeighbours : Grid a -> Set ( Int, Int ) -> Set ( Int, Int )
@@ -83,4 +100,4 @@ filterNeighbours pos isOk grid =
                 Just a ->
                     isOk a
     in
-    Set.filter func (neighbourSet grid pos)
+    Set.filter func (neighbourSet pos grid)
