@@ -64,32 +64,28 @@ lidAt pos =
 computeLidPositionsToOpen : Int2 -> CellGrid -> Maybe ( State, Set Int2 )
 computeLidPositionsToOpen start grid =
     case cellAt start grid of
-        Nothing ->
+        Just ( Lid.Closed, mineCell ) ->
+            case mineCell of
+                Mine.Mine ->
+                    Just
+                        ( Lost
+                        , Set.singleton start
+                        )
+
+                Mine.Empty 0 ->
+                    Just
+                        ( PlayerTurn
+                        , computeAutoOpenLidPositions grid (Set.singleton start) Set.empty
+                        )
+
+                Mine.Empty _ ->
+                    Just
+                        ( PlayerTurn
+                        , Set.singleton start
+                        )
+
+        _ ->
             Nothing
-
-        Just ( lid, mineCell ) ->
-            if lid == Lid.Closed then
-                case mineCell of
-                    Mine.Mine ->
-                        Just
-                            ( Lost
-                            , Set.singleton start
-                            )
-
-                    Mine.Empty 0 ->
-                        Just
-                            ( PlayerTurn
-                            , computeAutoOpenLidPositions grid (Set.singleton start) Set.empty
-                            )
-
-                    Mine.Empty _ ->
-                        Just
-                            ( PlayerTurn
-                            , Set.singleton start
-                            )
-
-            else
-                Nothing
 
 
 computeAutoOpenLidPositions : CellGrid -> Set Int2 -> Set Int2 -> Set Int2
