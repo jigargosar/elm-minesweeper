@@ -100,41 +100,46 @@ canOpenLidAt pos grid =
             False
 
 
+updateLid : ( Int, Int ) -> (Lid -> Lid) -> Grid ( Lid, MineCell ) -> Grid ( Lid, MineCell )
+updateLid pos f =
+    Grid.update pos (Tuple.mapFirst f)
+
+
 lidOpenIfClosed pos =
-    Grid.update pos
-        (\( lid, mine ) ->
+    updateLid pos
+        (\lid ->
             if lid == Lid.Closed then
-                ( Lid.Open, mine )
+                Lid.Open
 
             else
-                ( lid, mine )
+                lid
         )
 
 
 cycleLabel : ( Int, Int ) -> Board -> Maybe Board
 cycleLabel pos (Board grid) =
-    let
-        nl =
-            Grid.update pos
-                (\( lid, mine ) ->
-                    case lid of
-                        Lid.Open ->
-                            ( lid, mine )
-
-                        Lid.Closed ->
-                            ( Lid.Flagged, mine )
-
-                        Lid.Flagged ->
-                            ( Lid.Closed, mine )
-                )
-                grid
-    in
     case Grid.get pos grid of
         Just ( Lid.Open, _ ) ->
             Nothing
 
         _ ->
-            Just (Board nl)
+            Just
+                (Board
+                    (updateLid pos
+                        (\lid ->
+                            case lid of
+                                Lid.Open ->
+                                    lid
+
+                                Lid.Closed ->
+                                    Lid.Flagged
+
+                                Lid.Flagged ->
+                                    Lid.Closed
+                        )
+                        grid
+                    )
+                )
 
 
 toDict : Board -> PosDict ( Lid, MineCell )
