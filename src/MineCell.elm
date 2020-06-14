@@ -1,5 +1,5 @@
-module MineGrid exposing
-    ( Cell(..)
+module MineCell exposing
+    ( MineCell(..)
     , autoOpenPosSetFrom
     , generator
     , toDict
@@ -14,23 +14,23 @@ import Random exposing (Generator)
 import Set exposing (Set)
 
 
-type Cell
+type MineCell
     = Mine
     | Empty Int
 
 
-toDict : Grid Cell -> PosDict Cell
+toDict : Grid MineCell -> PosDict MineCell
 toDict g =
     Grid.toDict g
 
 
-generator : IntSize -> Float -> Generator (Grid Cell)
+generator : IntSize -> Float -> Generator (Grid MineCell)
 generator size minePct =
     minePosSetGenerator size minePct
         |> Random.map (initCellGrid size)
 
 
-autoOpenPosSetFrom : ( Int, Int ) -> Grid Cell -> Set ( Int, Int )
+autoOpenPosSetFrom : ( Int, Int ) -> Grid MineCell -> Set ( Int, Int )
 autoOpenPosSetFrom pos grid =
     if isEmptyWithNoSurroundingMines grid pos then
         connectedEmptyPositionsWithZeroSurroundingMines grid pos Set.empty Set.empty
@@ -41,7 +41,7 @@ autoOpenPosSetFrom pos grid =
 
 
 connectedEmptyPositionsWithZeroSurroundingMines :
-    Grid Cell
+    Grid MineCell
     -> ( Int, Int )
     -> Set ( Int, Int )
     -> Set ( Int, Int )
@@ -63,7 +63,7 @@ connectedEmptyPositionsWithZeroSurroundingMines grid current pending acc =
             connectedEmptyPositionsWithZeroSurroundingMines grid nCurrent (Set.fromList nPending) nAcc
 
 
-neighboursHavingZeroSurroundingMines : Grid Cell -> ( Int, Int ) -> Set ( Int, Int )
+neighboursHavingZeroSurroundingMines : Grid MineCell -> ( Int, Int ) -> Set ( Int, Int )
 neighboursHavingZeroSurroundingMines grid pos =
     Grid.neighbourPosSet grid pos
         |> Set.filter (isEmptyWithNoSurroundingMines grid)
@@ -73,7 +73,7 @@ isEmptyWithNoSurroundingMines dict pos =
     Grid.get pos dict == Just (Empty 0)
 
 
-initCellGrid : IntSize -> Set ( Int, Int ) -> Grid Cell
+initCellGrid : IntSize -> Set ( Int, Int ) -> Grid MineCell
 initCellGrid size minePosSet =
     let
         isMine pos =

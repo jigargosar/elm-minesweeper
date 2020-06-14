@@ -4,14 +4,14 @@ import Dict exposing (Dict)
 import Grid exposing (Grid)
 import IntSize exposing (IntSize)
 import Lid exposing (Lid)
-import MineGrid as Mines
+import MineCell as Mines
 import PosDict exposing (PosDict)
 import Random exposing (Generator)
 import Set
 
 
 type Board
-    = Board IntSize (Grid Lid) (Grid Mines.Cell)
+    = Board IntSize (Grid Lid) (Grid Mines.MineCell)
 
 
 generate : IntSize -> Generator Board
@@ -89,7 +89,7 @@ cycleLabel pos (Board s l m) =
         Nothing
 
 
-toDict : Board -> PosDict ( Lid, Mines.Cell )
+toDict : Board -> PosDict ( Lid, Mines.MineCell )
 toDict (Board _ l m) =
     Dict.merge
         (\_ _ -> identity)
