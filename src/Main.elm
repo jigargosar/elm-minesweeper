@@ -8,8 +8,8 @@ import Html.Attributes exposing (style)
 import Html.Events as E exposing (onClick)
 import IntSize as Size exposing (IntSize)
 import Json.Decode as JD
-import Lid as LG exposing (Lid)
-import MineCell as MG
+import Lid exposing (Lid)
+import MineCell as Mine
 import Random exposing (Seed)
 
 
@@ -166,57 +166,57 @@ viewGrid model =
 
 toPlayerTurnTileView lid cell =
     case lid of
-        LG.Open ->
+        Lid.Open ->
             case cell of
-                MG.Mine ->
+                Mine.Mine ->
                     MineView
 
-                MG.Empty 0 ->
+                Mine.Empty 0 ->
                     EmptyView
 
-                MG.Empty n ->
+                Mine.Empty n ->
                     NumView n
 
-        LG.Closed ->
+        Lid.Closed ->
             ClosedView
 
-        LG.Flagged ->
+        Lid.Flagged ->
             FlagView
 
 
 toLostTileView lid cell =
     case cell of
-        MG.Mine ->
+        Mine.Mine ->
             case lid of
-                LG.Open ->
+                Lid.Open ->
                     ExplodingMineView
 
-                LG.Closed ->
+                Lid.Closed ->
                     MineView
 
-                LG.Flagged ->
+                Lid.Flagged ->
                     SuccessMineView
 
-        MG.Empty 0 ->
+        Mine.Empty 0 ->
             case lid of
-                LG.Open ->
+                Lid.Open ->
                     EmptyView
 
-                LG.Closed ->
+                Lid.Closed ->
                     EmptyView
 
-                LG.Flagged ->
+                Lid.Flagged ->
                     FailureEmptyView
 
-        MG.Empty n ->
+        Mine.Empty n ->
             case lid of
-                LG.Open ->
+                Lid.Open ->
                     NumView n
 
-                LG.Closed ->
+                Lid.Closed ->
                     NumView n
 
-                LG.Flagged ->
+                Lid.Flagged ->
                     FailureNumView n
 
 
