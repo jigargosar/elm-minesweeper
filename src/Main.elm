@@ -56,16 +56,14 @@ init flags =
     )
 
 
-generateMinesAndBoard : Seed -> ( ( MineGrid, Board ), Seed )
-generateMinesAndBoard =
-    Random.step (Random.pair minesGenerator (Board.generate gridSize))
-
-
 generateModel : Seed -> Model
 generateModel initialSeed =
     let
+        generator =
+            Random.pair (MG.generator gridSize 0.1) (Board.generate gridSize)
+
         ( ( mines, board ), seed ) =
-            generateMinesAndBoard initialSeed
+            Random.step generator initialSeed
     in
     { lids = LG.fillClosed gridSize
     , mines = mines
@@ -73,10 +71,6 @@ generateModel initialSeed =
     , gameState = PlayerTurn
     , seed = seed
     }
-
-
-minesGenerator =
-    MG.generator gridSize 0.1
 
 
 reset : Model -> Model
