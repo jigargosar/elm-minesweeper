@@ -57,7 +57,7 @@ generateModel : Seed -> Model
 generateModel initialSeed =
     let
         generator =
-            Board.generate gridSize
+            Board.generator gridSize
 
         ( board, seed ) =
             Random.step generator initialSeed

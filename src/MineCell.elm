@@ -20,7 +20,7 @@ type MineCell
 generator : IntSize -> Float -> Generator (Grid MineCell)
 generator size minePct =
     minePosSetGenerator size minePct
-        |> Random.map (initCellGrid size)
+        |> Random.map (initMineCellGrid size)
 
 
 autoOpenPosSetFrom : ( Int, Int ) -> Grid MineCell -> Set ( Int, Int )
@@ -66,8 +66,8 @@ isEmptyWithNoSurroundingMines dict pos =
     Grid.get pos dict == Just (Empty 0)
 
 
-initCellGrid : IntSize -> Set ( Int, Int ) -> Grid MineCell
-initCellGrid size minePosSet =
+initMineCellGrid : IntSize -> Set ( Int, Int ) -> Grid MineCell
+initMineCellGrid size minePosSet =
     let
         isMine pos =
             Set.member pos minePosSet
