@@ -57,7 +57,7 @@ get =
 
 
 computeLidPositionsToOpen start grid =
-    case Grid.get start grid of
+    case get start grid of
         Nothing ->
             Nothing
 
