@@ -1,4 +1,4 @@
-module LidGrid exposing (Lid(..))
+module Lid exposing (..)
 
 
 type Lid

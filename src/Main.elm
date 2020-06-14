@@ -8,7 +8,7 @@ import Html.Attributes exposing (style)
 import Html.Events as E exposing (onClick)
 import IntSize as Size exposing (IntSize)
 import Json.Decode as JD
-import LidGrid as LG exposing (Lid)
+import Lid as LG exposing (Lid)
 import MineGrid as MG exposing (MineGrid)
 import Random exposing (Seed)
 
