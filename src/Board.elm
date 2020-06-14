@@ -86,13 +86,13 @@ computeAutoOpenLidPositions grid pending acc =
                 (\pos ->
                     Set.union
                         (Grid.neighbours pos grid
+                            |> List.filter (\( _, cell ) -> canOpenCell cell)
                             |> List.map Tuple.first
                             |> Set.fromList
                         )
                 )
                 acc
                 acc
-                |> Set.filter (\pos -> canOpenLidAt pos grid)
 
         current :: rest ->
             let
@@ -105,6 +105,11 @@ computeAutoOpenLidPositions grid pending acc =
                     Set.union (Set.fromList toCompute) (Set.fromList rest)
             in
             computeAutoOpenLidPositions grid nPending (Set.insert current acc)
+
+
+canOpenCell : Cell -> Bool
+canOpenCell ( lid, _ ) =
+    lid == Lid.Closed
 
 
 canAutoOpenCell : Cell -> Bool
@@ -120,11 +125,6 @@ cellAt =
 lidAt : Int2 -> CellGrid -> Maybe Lid
 lidAt pos =
     cellAt pos >> Maybe.map Tuple.first
-
-
-canOpenLidAt : Int2 -> CellGrid -> Bool
-canOpenLidAt pos grid =
-    lidAt pos grid == Just Lid.Closed
 
 
 updateLid : Int2 -> (Lid -> Lid) -> CellGrid -> CellGrid
