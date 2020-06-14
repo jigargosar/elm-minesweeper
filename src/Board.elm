@@ -156,14 +156,11 @@ cycleLabel pos (Board grid) =
                 _ ->
                     Nothing
     in
-    case maybeLid of
-        Nothing ->
-            Nothing
-
-        Just lid ->
-            setLid pos lid grid
-                |> Board
-                |> Just
+    maybeLid
+        |> Maybe.map
+            (\lid ->
+                Board (setLid pos lid grid)
+            )
 
 
 toDict : Board -> Int2Dict Cell
