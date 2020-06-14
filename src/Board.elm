@@ -27,7 +27,7 @@ type State
 
 openLid : ( Int, Int ) -> Board -> Maybe ( State, Board )
 openLid pos (Board size lids mines) =
-    case dictGet2 pos (Grid.toDict lids) (Mine.toDict mines) of
+    case dictGet2 pos (Grid.toDict lids) (Grid.toDict mines) of
         Just ( Lid.Closed, Mine.Mine ) ->
             Just
                 ( Lost
@@ -96,7 +96,7 @@ toDict (Board _ l m) =
         (\k v1 v2 -> Dict.insert k ( v1, v2 ))
         (\_ _ -> identity)
         (Grid.toDict l)
-        (Mine.toDict m)
+        (Grid.toDict m)
         Dict.empty
 
 

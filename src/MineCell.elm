@@ -2,7 +2,6 @@ module MineCell exposing
     ( MineCell(..)
     , autoOpenPosSetFrom
     , generator
-    , toDict
     )
 
 import Grid exposing (Grid)
