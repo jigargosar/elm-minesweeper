@@ -11,7 +11,7 @@ import Set exposing (Set)
 
 
 type Board
-    = Board (Grid Cell)
+    = Board CellGrid
 
 
 type alias Cell =
