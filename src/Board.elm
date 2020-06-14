@@ -50,7 +50,10 @@ openLid pos (Board size lids mines) =
                             )
                             lids
             in
-            Just ( PlayerTurn, Board size (Dict.insert pos LG.Open nLids) mines )
+            Just
+                ( PlayerTurn
+                , Board size (Dict.insert pos LG.Open nLids) mines
+                )
 
         _ ->
             Nothing
