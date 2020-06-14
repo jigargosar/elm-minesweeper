@@ -1,4 +1,4 @@
-module Board exposing (Board, State(..), cycleLabel, generate, openLid, tileAt, toDict)
+module Board exposing (Board, State(..), cycleLabel, generate, openLid, toDict)
 
 import Dict exposing (Dict)
 import IntSize exposing (IntSize)
@@ -64,11 +64,6 @@ cycleLabel pos (Board s l m) =
 
     else
         Nothing
-
-
-tileAt : ( Int, Int ) -> Board -> Maybe ( Lid, MG.Cell )
-tileAt pos (Board size lids mines) =
-    Maybe.map2 Tuple.pair (LG.get lids pos) (MG.get mines pos)
 
 
 toDict : Board -> PosDict ( Lid, MG.Cell )
