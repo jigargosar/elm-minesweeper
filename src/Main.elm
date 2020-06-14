@@ -90,7 +90,7 @@ update msg model =
         ( PlayerTurn, Click pos ) ->
             let
                 _ =
-                    openTileAt pos model
+                    openPos pos model
             in
             case tileAt model pos of
                 Just ( LG.Closed, MG.Mine ) ->
@@ -123,8 +123,8 @@ update msg model =
             model
 
 
-openTileAt : ( Int, Int ) -> Model -> Maybe ( GameState, LidGrid )
-openTileAt pos model =
+openPos : ( Int, Int ) -> Model -> Maybe ( GameState, LidGrid )
+openPos pos model =
     case tileAt model pos of
         Just ( LG.Closed, MG.Mine ) ->
             Just
