@@ -64,7 +64,7 @@ computeLidPositionsToOpen start lids mines =
                         Just ( Lost, Set.singleton start )
 
                     Mine.Empty 0 ->
-                        Just ( PlayerTurn, computeAutoOpenLidPositions lids mines [ start ] (Set.singleton start) )
+                        Just ( PlayerTurn, computeAutoOpenLidPositions lids mines (Set.singleton start) Set.empty )
 
                     Mine.Empty _ ->
                         Just ( PlayerTurn, Set.singleton start )
@@ -73,19 +73,23 @@ computeLidPositionsToOpen start lids mines =
         Nothing
 
 
-computeAutoOpenLidPositions : Grid Lid -> Grid MineCell -> List ( Int, Int ) -> Set ( Int, Int ) -> Set ( Int, Int )
+computeAutoOpenLidPositions : Grid Lid -> Grid MineCell -> Set ( Int, Int ) -> Set ( Int, Int ) -> Set ( Int, Int )
 computeAutoOpenLidPositions lids mines pending acc =
-    case pending of
+    case Set.toList pending of
         [] ->
-            acc
+            Grid.includeNeighbours mines acc
+                |> Set.filter (\pos -> lidsCanOpenAt pos lids)
 
-        current :: nPending ->
+        current :: rest ->
             let
                 toCompute =
-                    Grid.neighbourPositions current mines
-                        |> List.filter (\pos -> canAutoOpenLidAt pos lids mines && not (Set.member pos acc))
+                    Grid.neighbourSet current mines
+                        |> Set.filter (\pos -> canAutoOpenLidAt pos lids mines && not (Set.member pos acc))
+
+                nPending =
+                    Set.union toCompute (Set.fromList rest)
             in
-            computeAutoOpenLidPositions lids mines (toCompute ++ nPending) (Set.insert current acc)
+            computeAutoOpenLidPositions lids mines nPending (Set.insert current acc)
 
 
 canAutoOpenLidAt pos lids mines =
