@@ -1,6 +1,7 @@
 module Board exposing (Board, State(..), cycleLabel, generate, openLid, toDict)
 
 import Dict exposing (Dict)
+import Grid exposing (Grid)
 import IntSize exposing (IntSize)
 import Lid exposing (Lid)
 import MineGrid as Mines exposing (MineGrid)
@@ -10,13 +11,13 @@ import Set
 
 
 type Board
-    = Board IntSize (PosDict Lid) MineGrid
+    = Board IntSize (Grid Lid) MineGrid
 
 
 generate : IntSize -> Generator Board
 generate size =
     Mines.generator size 0.1
-        |> Random.map (Board size (PosDict.filled size Lid.Closed))
+        |> Random.map (Board size (Grid.filled size Lid.Closed))
 
 
 type State
@@ -26,11 +27,11 @@ type State
 
 openLid : ( Int, Int ) -> Board -> Maybe ( State, Board )
 openLid pos (Board size lids mines) =
-    case dictGet2 pos lids (Mines.toDict mines) of
+    case dictGet2 pos (Grid.toDict lids) (Mines.toDict mines) of
         Just ( Lid.Closed, Mines.Mine ) ->
             Just
                 ( Lost
-                , Board size (dictSetExisting pos Lid.Open lids) mines
+                , Board size (Grid.set pos Lid.Open lids) mines
                 )
 
         Just ( Lid.Closed, Mines.Empty _ ) ->
@@ -43,16 +44,16 @@ openLid pos (Board size lids mines) =
             in
             Just
                 ( PlayerTurn
-                , Board size (dictSetExisting pos Lid.Open nLids) mines
+                , Board size (Grid.set pos Lid.Open nLids) mines
                 )
 
         _ ->
             Nothing
 
 
-lidOpenIfClosed : comparable -> Dict comparable Lid -> Dict comparable Lid
+lidOpenIfClosed : ( Int, Int ) -> Grid Lid -> Grid Lid
 lidOpenIfClosed pos =
-    dictUpdateExisting pos
+    Grid.update pos
         (\lid ->
             if lid == Lid.Closed then
                 Lid.Open
@@ -66,7 +67,7 @@ cycleLabel : ( Int, Int ) -> Board -> Maybe Board
 cycleLabel pos (Board s l m) =
     let
         nl =
-            dictUpdateExisting pos
+            Grid.update pos
                 (\lid ->
                     case lid of
                         Lid.Open ->
@@ -80,7 +81,7 @@ cycleLabel pos (Board s l m) =
                 )
                 l
     in
-    if Dict.get pos l /= Just Lid.Open then
+    if Grid.get pos l /= Just Lid.Open then
         Board s nl m
             |> Just
 
@@ -94,7 +95,7 @@ toDict (Board _ l m) =
         (\_ _ -> identity)
         (\k v1 v2 -> Dict.insert k ( v1, v2 ))
         (\_ _ -> identity)
-        l
+        (Grid.toDict l)
         (Mines.toDict m)
         Dict.empty
 
