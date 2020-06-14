@@ -21,6 +21,90 @@ generator size =
         |> Random.map (Board size (Grid.filled size Lid.Closed))
 
 
+type State
+    = PlayerTurn
+    | Lost
+
+
+openLid : ( Int, Int ) -> Board -> Maybe ( State, Board )
+openLid pos (Board size lids mines) =
+    case dictGet2 pos (Grid.toDict lids) (Grid.toDict mines) of
+        Just ( Lid.Closed, Mine.Mine ) ->
+            Just
+                ( Lost
+                , Board size (Grid.set pos Lid.Open lids) mines
+                )
+
+        Just ( Lid.Closed, Mine.Empty _ ) ->
+            let
+                nLids =
+                    Set.foldl
+                        lidOpenIfClosed
+                        lids
+                        (autoOpenPosSetFrom pos mines)
+            in
+            Just
+                ( PlayerTurn
+                , Board size (Grid.set pos Lid.Open nLids) mines
+                )
+
+        _ ->
+            Nothing
+
+
+lidOpenIfClosed : ( Int, Int ) -> Grid Lid -> Grid Lid
+lidOpenIfClosed pos =
+    Grid.update pos
+        (\lid ->
+            if lid == Lid.Closed then
+                Lid.Open
+
+            else
+                lid
+        )
+
+
+cycleLabel : ( Int, Int ) -> Board -> Maybe Board
+cycleLabel pos (Board s l m) =
+    let
+        nl =
+            Grid.update pos
+                (\lid ->
+                    case lid of
+                        Lid.Open ->
+                            lid
+
+                        Lid.Closed ->
+                            Lid.Flagged
+
+                        Lid.Flagged ->
+                            Lid.Closed
+                )
+                l
+    in
+    if Grid.get pos l /= Just Lid.Open then
+        Board s nl m
+            |> Just
+
+    else
+        Nothing
+
+
+toDict : Board -> PosDict ( Lid, MineCell )
+toDict (Board _ l m) =
+    Dict.merge
+        (\_ _ -> identity)
+        (\k v1 v2 -> Dict.insert k ( v1, v2 ))
+        (\_ _ -> identity)
+        (Grid.toDict l)
+        (Grid.toDict m)
+        Dict.empty
+
+
+
+-- Mine Grid
+
+
 mineGridGenerator : IntSize -> Float -> Generator (Grid MineCell)
 mineGridGenerator size minePct =
     minePosSetGenerator size minePct
@@ -103,86 +187,6 @@ neighboursHavingZeroSurroundingMines grid pos =
 
 isEmptyWithNoSurroundingMines dict pos =
     Grid.get pos dict == Just (Mine.Empty 0)
-
-
-type State
-    = PlayerTurn
-    | Lost
-
-
-openLid : ( Int, Int ) -> Board -> Maybe ( State, Board )
-openLid pos (Board size lids mines) =
-    case dictGet2 pos (Grid.toDict lids) (Grid.toDict mines) of
-        Just ( Lid.Closed, Mine.Mine ) ->
-            Just
-                ( Lost
-                , Board size (Grid.set pos Lid.Open lids) mines
-                )
-
-        Just ( Lid.Closed, Mine.Empty _ ) ->
-            let
-                nLids =
-                    Set.foldl
-                        lidOpenIfClosed
-                        lids
-                        (autoOpenPosSetFrom pos mines)
-            in
-            Just
-                ( PlayerTurn
-                , Board size (Grid.set pos Lid.Open nLids) mines
-                )
-
-        _ ->
-            Nothing
-
-
-lidOpenIfClosed : ( Int, Int ) -> Grid Lid -> Grid Lid
-lidOpenIfClosed pos =
-    Grid.update pos
-        (\lid ->
-            if lid == Lid.Closed then
-                Lid.Open
-
-            else
-                lid
-        )
-
-
-cycleLabel : ( Int, Int ) -> Board -> Maybe Board
-cycleLabel pos (Board s l m) =
-    let
-        nl =
-            Grid.update pos
-                (\lid ->
-                    case lid of
-                        Lid.Open ->
-                            lid
-
-                        Lid.Closed ->
-                            Lid.Flagged
-
-                        Lid.Flagged ->
-                            Lid.Closed
-                )
-                l
-    in
-    if Grid.get pos l /= Just Lid.Open then
-        Board s nl m
-            |> Just
-
-    else
-        Nothing
-
-
-toDict : Board -> PosDict ( Lid, MineCell )
-toDict (Board _ l m) =
-    Dict.merge
-        (\_ _ -> identity)
-        (\k v1 v2 -> Dict.insert k ( v1, v2 ))
-        (\_ _ -> identity)
-        (Grid.toDict l)
-        (Grid.toDict m)
-        Dict.empty
 
 
 
