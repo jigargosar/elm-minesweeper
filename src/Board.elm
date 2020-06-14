@@ -65,7 +65,7 @@ computeLidPositionsToOpen start grid =
                 Mine.Empty 0 ->
                     Just
                         ( PlayerTurn
-                        , computeAutoOpenLidPositions grid (Set.singleton start) Set.empty
+                        , computeAutoOpenPositions grid (Set.singleton start) Set.empty
                         )
 
                 Mine.Empty _ ->
@@ -78,8 +78,8 @@ computeLidPositionsToOpen start grid =
             Nothing
 
 
-computeAutoOpenLidPositions : CellGrid -> Set Int2 -> Set Int2 -> Set Int2
-computeAutoOpenLidPositions grid pending result =
+computeAutoOpenPositions : CellGrid -> Set Int2 -> Set Int2 -> Set Int2
+computeAutoOpenPositions grid pending result =
     case Set.toList pending of
         [] ->
             Set.foldl
@@ -103,7 +103,7 @@ computeAutoOpenLidPositions grid pending result =
                 nPending =
                     Set.union toCompute (Set.fromList rest)
             in
-            computeAutoOpenLidPositions grid nPending (Set.insert current result)
+            computeAutoOpenPositions grid nPending (Set.insert current result)
 
 
 neighbourPositionsWhere : (Int2 -> b -> Bool) -> Int2 -> Grid b -> Set Int2
