@@ -141,17 +141,6 @@ setLid pos lid =
     updateLid pos (always lid)
 
 
-lidOpenIfClosed pos =
-    updateLid pos
-        (\lid ->
-            if lid == Lid.Closed then
-                Lid.Open
-
-            else
-                lid
-        )
-
-
 cycleLabel : Int2 -> Board -> Maybe Board
 cycleLabel pos (Board grid) =
     let
